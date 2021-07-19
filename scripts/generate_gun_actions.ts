@@ -157,6 +157,11 @@ const syntaxPatterns = [
   { pattern: / === null/gm, replace: ' == null' },
   { pattern: /related_projectiles\[1\]/gm, replace: 'related_projectiles[0]' },
   { pattern: /related_projectiles\[2\]/gm, replace: 'related_projectiles[1]' },
+  {
+    pattern:
+      /(sprite: ".*?vacuum_entities.*?related_projectiles: \[".*?)vacuum_liquid/gms,
+    replace: '$1vacuum_entities',
+  },
 ];
 
 let content = Deno.readTextFileSync(srcFile);

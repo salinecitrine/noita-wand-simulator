@@ -128,12 +128,18 @@ export function clickWand(
 
         if (!sourceAction) {
           // fallback to most likely entity source if no action
+          if (!entityToAction[entity]) {
+            throw Error(`missing entity: ${entity}`);
+          }
           sourceAction = entityToAction[entity][0];
         }
         if (entity !== sourceAction.related_projectiles?.[0]) {
           // this probably means another action caused this projectile (like ADD_TRIGGER)
           proxy = sourceAction;
-          sourceAction = entityToAction[entity]?.[0];
+          if (!entityToAction[entity]) {
+            throw Error(`missing entity: ${entity}`);
+          }
+          sourceAction = entityToAction[entity][0];
         }
         currentShot.projectiles.push({
           entity: args[0],
