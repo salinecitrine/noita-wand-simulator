@@ -13,6 +13,8 @@ import React, { useMemo } from 'react';
 import SectionHeader from '../SectionHeader';
 import { notNull } from '../../util/util';
 
+const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
+
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -34,6 +36,7 @@ type Props = {
   unlimitedSpells: boolean;
   infiniteSpells: boolean;
   showDivides: boolean;
+  showGreekSpells: boolean;
   showDirectActionCalls: boolean;
 };
 
@@ -80,6 +83,19 @@ export function ShotResultList(props: Props) {
       return shots;
     }
   }, [props.showDivides, shots]);
+
+  shots = useMemo(() => {
+    if (!props.showGreekSpells) {
+      return shots.map((s) => ({
+        ...s,
+        calledActions: s.calledActions.filter(
+          (ac) => !GREEK_SPELLS.includes(ac.action.id)
+        ),
+      }));
+    } else {
+      return shots;
+    }
+  }, [props.showGreekSpells, shots]);
 
   shots = useMemo(() => {
     if (!props.showDirectActionCalls) {

@@ -8,6 +8,7 @@ export interface ConfigState {
     unlimitedSpells: boolean;
     infiniteSpells: boolean;
     showDivides: boolean;
+    showGreekSpells: boolean;
     showDirectActionCalls: boolean;
     showDeckIndexes: boolean;
     showProxies: boolean;
@@ -23,6 +24,7 @@ const initialState: ConfigState = {
     unlimitedSpells: true,
     infiniteSpells: false,
     showDivides: false,
+    showGreekSpells: true,
     showDirectActionCalls: true,
     showDeckIndexes: true,
     showProxies: true,

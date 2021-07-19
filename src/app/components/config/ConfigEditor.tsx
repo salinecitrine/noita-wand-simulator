@@ -26,6 +26,10 @@ const configOptions: Record<
     displayName: 'Show Direct Action Calls',
   },
   showDivides: { type: ConfigType.Boolean, displayName: 'Show Divides' },
+  showGreekSpells: {
+    type: ConfigType.Boolean,
+    displayName: 'Show Greek Spells',
+  },
   showDeckIndexes: {
     type: ConfigType.Boolean,
     displayName: 'Show Deck Indexes',
