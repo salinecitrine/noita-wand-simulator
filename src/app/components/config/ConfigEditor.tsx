@@ -5,8 +5,7 @@ import {
   updateConfig,
 } from '../../redux/configSlice';
 import styled from 'styled-components';
-import SectionHeader from '../SectionHeader';
-import { CloseButton } from '../generic/CloseButton';
+import { useState } from 'react';
 
 enum ConfigType {
   Boolean = 'boolean',
@@ -24,14 +23,17 @@ const configOptions: Record<
   infiniteSpells: { type: ConfigType.Boolean, displayName: 'Infinite Spells' },
   showDirectActionCalls: {
     type: ConfigType.Boolean,
-    displayName: 'Hide Direct Action Calls',
+    displayName: 'Show Direct Action Calls',
   },
-  showDivides: { type: ConfigType.Boolean, displayName: 'Hide Divides' },
+  showDivides: { type: ConfigType.Boolean, displayName: 'Show Divides' },
   showDeckIndexes: {
     type: ConfigType.Boolean,
     displayName: 'Show Deck Indexes',
   },
-  showProxies: { type: ConfigType.Boolean, displayName: 'Show Proxies' },
+  showProxies: {
+    type: ConfigType.Boolean,
+    displayName: 'Show Projectile Proxies',
+  },
   showSources: { type: ConfigType.Boolean, displayName: 'Show Sources' },
   swapOnMove: { type: ConfigType.Boolean, displayName: 'Swap on Move' },
 };

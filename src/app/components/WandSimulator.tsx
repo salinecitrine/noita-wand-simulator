@@ -10,6 +10,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 import { ConfigButton } from './config/ConfigButton';
+import { ResetButton } from './ResetButton';
 
 const Column = styled.div`
   display: flex;
@@ -33,6 +34,7 @@ export function WandSimulator(props: Props) {
     <Column>
       <MainHeader>
         <Row>
+          <ResetButton />
           <ConfigButton />
           <WandPresetButton />
         </Row>

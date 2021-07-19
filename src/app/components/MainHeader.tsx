@@ -18,14 +18,14 @@ const HeaderDiv = styled.div`
 const SpacerDiv = styled.div`
   display: flex;
   align-self: center;
-  width: 200px;
+  width: 220px;
   margin-left: 15px;
 `;
 
 const ExtraDiv = styled.div`
   display: flex;
   align-self: center;
-  width: 200px;
+  width: 220px;
   margin-right: 15px;
 `;
 

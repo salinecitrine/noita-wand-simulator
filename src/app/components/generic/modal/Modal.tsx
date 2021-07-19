@@ -37,7 +37,9 @@ const HeaderDiv = styled.div`
 
 const TitleDiv = styled.div``;
 
-const ContentDiv = styled.div``;
+const ContentDiv = styled.div`
+  padding: 5px;
+`;
 
 type Props = {
   title: string;
