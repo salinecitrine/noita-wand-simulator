@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ActionCall, GroupedProjectile, Projectile } from '../../calc/util';
+import { ActionCall, GroupedProjectile } from '../../calc/util';
 import { DEFAULT_SIZE, WandAction } from './WandAction';
 import {
   GroupedObject,
@@ -8,6 +8,7 @@ import {
   isRawObject,
   simplifyMultipleObject,
 } from '../../util/combineGroups';
+import WandActionBorder from './WandActionBorder';
 
 const MainDiv = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ const MainDiv = styled.div`
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
+  background-color: rgba(64, 128, 64, 0.3);
 `;
 
 const GroupDiv = styled.div`
@@ -43,6 +45,7 @@ const CountDiv = styled.div<{
   font-weight: bold;
   font-size: 12px;
   border: 1px solid #aaa;
+  line-height: ${(props) => props.size / 3}px;
 `;
 
 const SpacerDiv = styled.div<{
@@ -66,7 +69,11 @@ export function WandActionGroup(props: Props) {
   const group = simplifyMultipleObject(props.group);
 
   if (isRawObject(group)) {
-    return <WandAction {...group} size={size} />;
+    return (
+      <WandActionBorder size={size}>
+        <WandAction {...group} size={size} />
+      </WandActionBorder>
+    );
   } else if (isArrayObject(group)) {
     return (
       <GroupDiv>
