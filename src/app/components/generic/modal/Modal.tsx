@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import SectionHeader from '../../SectionHeader';
 import { CloseButton } from '../CloseButton';
 
 const BackgroundDiv = styled.div`
@@ -48,23 +47,36 @@ type Props = {
 };
 
 export function Modal(props: React.PropsWithChildren<Props>) {
-  const { visible } = props;
+  const { title, visible, onClose } = props;
+
+  const handleClose = useCallback(
+    (e?: React.MouseEvent<HTMLDivElement>) => {
+      if (!e || e.target === e.currentTarget) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, [handleClose]);
 
   if (!visible) {
     return null;
   }
 
-  const handleClose = (e?: React.MouseEvent<HTMLDivElement>) => {
-    if (!e || e.target === e.currentTarget) {
-      props.onClose();
-    }
-  };
-
   return (
     <BackgroundDiv onClick={handleClose}>
       <MainDiv>
         <HeaderDiv>
-          <TitleDiv>{props.title}</TitleDiv>
+          <TitleDiv>{title}</TitleDiv>
           <CloseButton onClick={handleClose} />
         </HeaderDiv>
         <ContentDiv>{props.children}</ContentDiv>

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ActionCall, Projectile } from '../../calc/util';
+import { ActionCall, GroupedProjectile, Projectile } from '../../calc/util';
 import { DEFAULT_SIZE, WandAction } from './WandAction';
 import {
   GroupedObject,
@@ -57,7 +57,7 @@ const SpacerDiv = styled.div<{
 
 type Props = {
   size?: number;
-  group: GroupedObject<ActionCall | Projectile>;
+  group: GroupedObject<ActionCall | GroupedProjectile>;
 };
 
 export function WandActionGroup(props: Props) {

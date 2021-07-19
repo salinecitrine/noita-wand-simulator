@@ -41,7 +41,7 @@ export type WandShot = {
 };
 
 export type GroupedWandShot = {
-  projectiles: GroupedObject<Projectile>[];
+  projectiles: GroupedObject<GroupedProjectile>[];
   calledActions: GroupedObject<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
@@ -236,14 +236,18 @@ function condenseActions(calledActions: ActionCall[]) {
 }
 
 function condenseProjectiles(projectiles: Projectile[]) {
-  projectiles.forEach((proj) => {
-    let p = proj as GroupedProjectile;
-    if (p.trigger) {
-      p.trigger = condenseActionsAndProjectiles(p.trigger as WandShot);
+  const projectilesWithProcessedTriggers = projectiles.map((proj) => {
+    if (proj.trigger) {
+      return {
+        ...proj,
+        trigger: condenseActionsAndProjectiles(proj.trigger as WandShot),
+      };
+    } else {
+      return proj;
     }
   });
   return combineGroups(
-    projectiles,
+    projectilesWithProcessedTriggers,
     (p) => p.entity,
     (o) => {
       // deck index and source
