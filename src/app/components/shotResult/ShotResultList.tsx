@@ -63,12 +63,12 @@ export function ShotResultList(props: Props) {
     }
   }, [props.infiniteSpells, props.unlimitedSpells, spellActions]);
 
-  const shots = useMemo(
+  let shots = useMemo(
     () => clickWand(wand, spellActionsWithUses, wand.mana_max, true),
     [spellActionsWithUses, wand]
   );
 
-  const shotsWithDivides = useMemo(() => {
+  shots = useMemo(() => {
     if (!props.showDivides) {
       return shots.map((s) => ({
         ...s,
@@ -81,26 +81,26 @@ export function ShotResultList(props: Props) {
     }
   }, [props.showDivides, shots]);
 
-  const shotsWithDirectActionCalls = useMemo(() => {
+  shots = useMemo(() => {
     if (!props.showDirectActionCalls) {
-      return shotsWithDivides.map((s) => ({
+      return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
           (ac) => ac.source !== ActionSource.ACTION
         ),
       }));
     } else {
-      return shotsWithDivides;
+      return shots;
     }
-  }, [props.showDirectActionCalls, shotsWithDivides]);
+  }, [props.showDirectActionCalls, shots]);
 
   const groupedShots = useMemo(() => {
     if (props.condenseShots) {
-      return shotsWithDirectActionCalls.map(condenseActionsAndProjectiles);
+      return shots.map(condenseActionsAndProjectiles);
     } else {
-      return shotsWithDirectActionCalls;
+      return shots;
     }
-  }, [props.condenseShots, shotsWithDirectActionCalls]);
+  }, [props.condenseShots, shots]);
 
   return (
     <div>
