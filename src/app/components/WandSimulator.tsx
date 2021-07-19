@@ -36,7 +36,7 @@ export function WandSimulator(props: Props) {
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 'z') {
+      if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'z') {
         dispatch(ActionCreators.undo());
       }
     };
@@ -46,7 +46,7 @@ export function WandSimulator(props: Props) {
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'z') {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'z') {
         dispatch(ActionCreators.redo());
       }
     };
