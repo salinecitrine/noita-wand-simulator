@@ -5,7 +5,6 @@ import {
   updateConfig,
 } from '../../redux/configSlice';
 import styled from 'styled-components';
-import { useState } from 'react';
 
 enum ConfigType {
   Boolean = 'boolean',
