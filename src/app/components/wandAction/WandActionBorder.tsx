@@ -5,8 +5,8 @@ const WandActionBorder = styled.div<{
 }>`
   margin: ${(props) => props.size / 48}px;
   border: ${(props) => props.size / 48}px solid '#666';
-  min-width: ${(props) => props.size}px;
-  min-height: ${(props) => props.size}px;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
 
   background-color: #111;
 `;
