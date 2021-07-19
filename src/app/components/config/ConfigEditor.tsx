@@ -6,6 +6,7 @@ import {
 } from '../../redux/configSlice';
 import styled from 'styled-components';
 import SectionHeader from '../SectionHeader';
+import { CloseButton } from '../generic/CloseButton';
 
 enum ConfigType {
   Boolean = 'boolean',
@@ -64,7 +65,7 @@ const MainDiv = styled.div`
 
 const ConfigDiv = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 type Props = {};
@@ -75,7 +76,6 @@ export function ConfigEditor(props: Props) {
 
   return (
     <MainDiv>
-      <SectionHeader>Configuration</SectionHeader>
       <ConfigDiv>
         {Object.entries(configOptions).map(
           ([k, { type, displayName }], index) => {

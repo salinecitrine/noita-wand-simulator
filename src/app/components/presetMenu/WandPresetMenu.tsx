@@ -56,17 +56,10 @@ const PresetButtonDiv = styled.li`
 type Props = {
   presets: (Preset | PresetGroup)[];
   onSelect: (p: Preset) => void;
-  onClose: () => void;
 };
 
 export function WandPresetMenu(props: Props) {
-  const { presets, onSelect, onClose } = props;
-
-  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
+  const { presets, onSelect } = props;
 
   const createPresetList = (
     presetGroup: PresetGroup,
@@ -74,7 +67,7 @@ export function WandPresetMenu(props: Props) {
   ) => {
     const content = (
       <>
-        <PresetGroupNameDiv>{presetGroup.name}</PresetGroupNameDiv>
+        {!first && <PresetGroupNameDiv>{presetGroup.name}</PresetGroupNameDiv>}
         <PresetGroupListDiv>
           {presetGroup.presets.map((p, index) => {
             if (isPresetGroup(p)) {

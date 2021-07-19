@@ -8,7 +8,7 @@ import { Modal } from '../generic/modal/Modal';
 
 type Props = {};
 
-export function WandPresetSelector(props: Props) {
+export function WandPresetButton(props: Props) {
   const { presets } = useAppSelector(selectPresets);
   const dispatch = useAppDispatch();
 
@@ -30,12 +30,8 @@ export function WandPresetSelector(props: Props) {
   return (
     <div>
       <button onClick={() => setMenuVisible(!menuVisible)}>Presets</button>
-      <Modal visible={menuVisible} onClose={handleClose}>
-        <WandPresetMenu
-          presets={presets}
-          onSelect={handleSelect}
-          onClose={handleClose}
-        />
+      <Modal visible={menuVisible} onClose={handleClose} title="Presets">
+        <WandPresetMenu presets={presets} onSelect={handleSelect} />
       </Modal>
     </div>
   );

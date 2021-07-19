@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import SectionHeader from '../../SectionHeader';
+import { CloseButton } from '../CloseButton';
 
 const BackgroundDiv = styled.div`
   z-index: 1;
@@ -22,7 +24,23 @@ const MainDiv = styled.div`
   box-shadow: -10px 10px 50px #000;
 `;
 
+const HeaderDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  color: #111;
+  background-color: #999;
+  font-weight: bold;
+  text-align: center;
+  justify-content: space-between;
+  padding-left: 5px;
+`;
+
+const TitleDiv = styled.div``;
+
+const ContentDiv = styled.div``;
+
 type Props = {
+  title: string;
   visible: boolean;
   onClose: () => void;
 };
@@ -34,15 +52,21 @@ export function Modal(props: React.PropsWithChildren<Props>) {
     return null;
   }
 
-  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+  const handleClose = (e?: React.MouseEvent<HTMLDivElement>) => {
+    if (!e || e.target === e.currentTarget) {
       props.onClose();
     }
   };
 
   return (
     <BackgroundDiv onClick={handleClose}>
-      <MainDiv>{props.children}</MainDiv>
+      <MainDiv>
+        <HeaderDiv>
+          <TitleDiv>{props.title}</TitleDiv>
+          <CloseButton onClick={handleClose} />
+        </HeaderDiv>
+        <ContentDiv>{props.children}</ContentDiv>
+      </MainDiv>
     </BackgroundDiv>
   );
 }
