@@ -12,6 +12,7 @@ export interface ConfigState {
     showDeckIndexes: boolean;
     showProxies: boolean;
     showSources: boolean;
+    swapOnMove: boolean;
   };
 }
 
@@ -26,6 +27,7 @@ const initialState: ConfigState = {
     showDeckIndexes: true,
     showProxies: true,
     showSources: true,
+    swapOnMove: true,
   },
 };
 

@@ -28,6 +28,7 @@ const configOptions: Record<
   },
   showProxies: { type: ConfigType.Boolean, displayName: 'Show Proxies' },
   showSources: { type: ConfigType.Boolean, displayName: 'Show Sources' },
+  swapOnMove: { type: ConfigType.Boolean, displayName: 'Swap on Move' },
 };
 
 type ConfigRenderer<T> = (

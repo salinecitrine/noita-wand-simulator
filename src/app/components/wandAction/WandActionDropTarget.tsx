@@ -1,9 +1,10 @@
 import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { WandActionDragItem } from '../../types';
 import styled from 'styled-components';
-import { moveSpell, setSpellAtIndex } from '../../redux/wandSlice';
+import { moveSpell, setSpellAtIndex, swapSpells } from '../../redux/wandSlice';
+import { selectConfig } from '../../redux/configSlice';
 
 const TargetDiv = styled.div<{ isOver: boolean }>`
   outline: ${(props) => (props.isOver ? '1px' : '0px')} dashed #ff6;
@@ -16,12 +17,14 @@ type Props = {
 export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
   const { wandIndex } = props;
   const dispatch = useAppDispatch();
+  const { config } = useAppSelector(selectConfig);
 
   const handleDrop = useCallback(
     (item: WandActionDragItem) => {
       if (item.actionId && item.sourceWandIndex !== undefined) {
+        const moveFunction = config.swapOnMove ? swapSpells : moveSpell;
         dispatch(
-          moveSpell({ fromIndex: item.sourceWandIndex, toIndex: wandIndex })
+          moveFunction({ fromIndex: item.sourceWandIndex, toIndex: wandIndex })
         );
       } else if (item.actionId) {
         dispatch(setSpellAtIndex({ spell: item.actionId, index: wandIndex }));

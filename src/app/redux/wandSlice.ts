@@ -60,7 +60,7 @@ export const wandSlice = createSlice({
   },
 });
 
-export const { setWand, setSpells, setSpellAtIndex, moveSpell } =
+export const { setWand, setSpells, setSpellAtIndex, moveSpell, swapSpells } =
   wandSlice.actions;
 
 export const selectWand = (state: RootState) => state.wand;
