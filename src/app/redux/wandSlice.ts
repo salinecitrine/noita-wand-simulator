@@ -31,7 +31,7 @@ export const wandSlice = createSlice({
     },
     setSpellAtIndex: (
       state,
-      action: PayloadAction<{ spell: string; index: number }>
+      action: PayloadAction<{ spell: string | null; index: number }>
     ) => {
       const { spell, index } = action.payload;
       state.spells[index] = spell;

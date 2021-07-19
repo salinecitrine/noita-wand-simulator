@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useAppSelector } from '../hooks';
-import { selectWand } from '../redux/wandSlice';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
 import { getActionById } from '../calc/util';
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { WandAction } from './wandAction/WandAction';
@@ -26,11 +26,14 @@ const StyledListItem = styled.li`
 type Props = {};
 
 export function WandActionEditor(props: Props) {
+  const dispatch = useAppDispatch();
   const { spells } = useAppSelector(selectWand);
 
   const spellActions = spells.map((s) => (s ? getActionById(s) : null));
 
-  console.log(spells);
+  const handleDeleteSpell = (wandIndex: number) => {
+    dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
+  };
 
   const createActionComponent = (
     spellAction: Action | null,
@@ -45,7 +48,11 @@ export function WandActionEditor(props: Props) {
             sourceWandIndex={wandIndex}
           >
             <WandActionBorder size={48}>
-              <WandAction action={spellAction} deckIndex={deckIndex} />
+              <WandAction
+                action={spellAction}
+                deckIndex={deckIndex}
+                onDeleteSpell={() => handleDeleteSpell(wandIndex)}
+              />
             </WandActionBorder>
           </WandActionDragSource>
         </WandActionDropTarget>

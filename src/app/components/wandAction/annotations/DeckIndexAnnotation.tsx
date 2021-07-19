@@ -6,8 +6,8 @@ const IndexDiv = styled.div<{
   size: number;
 }>`
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 0;
+  right: 0;
   width: ${(props) => props.size / 4}px;
   height: ${(props) => props.size / 4}px;
   border: 1px solid #999;

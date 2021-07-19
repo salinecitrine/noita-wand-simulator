@@ -19,7 +19,6 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
 
   const handleDrop = useCallback(
     (item: WandActionDragItem) => {
-      console.log('handleDrop', item, wandIndex);
       if (item.actionId && item.sourceWandIndex !== undefined) {
         dispatch(
           moveSpell({ fromIndex: item.sourceWandIndex, toIndex: wandIndex })

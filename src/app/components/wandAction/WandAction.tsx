@@ -4,6 +4,9 @@ import { ActionSource } from '../../calc/util';
 import { DeckIndexAnnotation } from './annotations/DeckIndexAnnotation';
 import { ActionSourceAnnotation } from './annotations/ActionSourceAnnotation';
 import { ActionProxyAnnotation } from './annotations/ActionProxyAnnotation';
+import { DeleteSpellAnnotation } from './annotations/DeleteSpellAnnotation';
+import { useAppDispatch } from '../../hooks';
+import { useState } from 'react';
 
 export const DEFAULT_SIZE = 48;
 
@@ -31,9 +34,12 @@ type Props = {
   proxy?: Action;
   deckIndex?: number | string;
   ref?: any;
+  onDeleteSpell?: () => void;
 };
 
 export function WandAction(props: Props) {
+  const [mouseOver, setMouseOver] = useState(false);
+
   const size = props.size || DEFAULT_SIZE;
 
   if (!props.action) {
@@ -41,10 +47,20 @@ export function WandAction(props: Props) {
   }
 
   return (
-    <ImageBackgroundDiv size={size} imgUrl={props.action.sprite}>
+    <ImageBackgroundDiv
+      size={size}
+      imgUrl={props.action.sprite}
+      onMouseEnter={() => setMouseOver(true)}
+      onMouseLeave={() => setMouseOver(false)}
+    >
       <DeckIndexAnnotation size={size} deckIndex={props.deckIndex} />
       <ActionSourceAnnotation size={size} source={props.source} />
       <ActionProxyAnnotation size={size} proxy={props.proxy} />
+      <DeleteSpellAnnotation
+        size={size}
+        visible={mouseOver}
+        deleteSpell={props.onDeleteSpell}
+      />
     </ImageBackgroundDiv>
   );
 }
