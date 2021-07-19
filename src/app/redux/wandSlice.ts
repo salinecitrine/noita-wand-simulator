@@ -15,19 +15,30 @@ const initialState: WandState = {
   spells: Array(defaultWand.deck_capacity).fill(null),
 };
 
+function fixArraySize<T>(arr: T[], size: number): (T | null)[] {
+  if (size > arr.length) {
+    return [...arr, ...Array(size - arr.length).fill(null)];
+  } else if (size < arr.length) {
+    return arr.slice(0, size);
+  } else {
+    return arr;
+  }
+}
+
 export const wandSlice = createSlice({
   name: 'wand',
   initialState,
   reducers: {
     setWand: (state, action: PayloadAction<Wand>) => {
-      state.wand = action.payload;
+      const wand = action.payload;
+      state.wand = wand;
+
+      state.spells = fixArraySize(state.spells, wand.deck_capacity);
     },
     setSpells: (state, action: PayloadAction<string[]>) => {
       state.spells = action.payload;
 
-      while (state.spells.length < state.wand.deck_capacity) {
-        state.spells.push(null);
-      }
+      state.spells = fixArraySize(state.spells, state.wand.deck_capacity);
     },
     setSpellAtIndex: (
       state,
