@@ -29,9 +29,16 @@ export const wandSlice = createSlice({
   name: 'wand',
   initialState,
   reducers: {
-    setWand: (state, action: PayloadAction<Wand>) => {
-      const wand = action.payload;
+    setWand: (
+      state,
+      action: PayloadAction<{ wand: Wand; spells?: string[] }>
+    ) => {
+      const { wand, spells } = action.payload;
       state.wand = wand;
+
+      if (spells) {
+        state.spells = spells;
+      }
 
       state.spells = fixArraySize(state.spells, wand.deck_capacity);
     },
@@ -74,6 +81,6 @@ export const wandSlice = createSlice({
 export const { setWand, setSpells, setSpellAtIndex, moveSpell, swapSpells } =
   wandSlice.actions;
 
-export const selectWand = (state: RootState) => state.wand;
+export const selectWand = (state: RootState) => state.wand.present;
 
 export default wandSlice.reducer;

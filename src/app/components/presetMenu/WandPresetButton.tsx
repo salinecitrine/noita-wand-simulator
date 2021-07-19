@@ -17,8 +17,7 @@ export function WandPresetButton(props: Props) {
   const handleSelect = useCallback(
     (preset: Preset) => {
       setMenuVisible(false);
-      dispatch(setWand(preset.wand));
-      dispatch(setSpells(preset.spells));
+      dispatch(setWand({ wand: preset.wand, spells: preset.spells }));
     },
     [dispatch]
   );
