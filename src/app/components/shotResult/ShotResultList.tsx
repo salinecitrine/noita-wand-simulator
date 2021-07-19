@@ -31,10 +31,10 @@ const StyledHr = styled.hr`
 
 type Props = {
   condenseShots: boolean;
-  hideDivides: boolean;
-  hideDirectActionCalls: boolean;
   unlimitedSpells: boolean;
   infiniteSpells: boolean;
+  showDivides: boolean;
+  showDirectActionCalls: boolean;
 };
 
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
@@ -69,7 +69,7 @@ export function ShotResultList(props: Props) {
   );
 
   const shotsWithDivides = useMemo(() => {
-    if (props.hideDivides) {
+    if (!props.showDivides) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
@@ -79,10 +79,10 @@ export function ShotResultList(props: Props) {
     } else {
       return shots;
     }
-  }, [props.hideDivides, shots]);
+  }, [props.showDivides, shots]);
 
   const shotsWithDirectActionCalls = useMemo(() => {
-    if (props.hideDirectActionCalls) {
+    if (!props.showDirectActionCalls) {
       return shotsWithDivides.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
@@ -92,7 +92,7 @@ export function ShotResultList(props: Props) {
     } else {
       return shotsWithDivides;
     }
-  }, [props.hideDirectActionCalls, shotsWithDivides]);
+  }, [props.showDirectActionCalls, shotsWithDivides]);
 
   const groupedShots = useMemo(() => {
     if (props.condenseShots) {

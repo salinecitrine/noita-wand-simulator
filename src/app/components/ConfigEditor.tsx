@@ -17,11 +17,17 @@ const configOptions: Record<
     displayName: 'Unlimited Spells',
   },
   infiniteSpells: { type: ConfigType.Boolean, displayName: 'Infinite Spells' },
-  hideDirectActionCalls: {
+  showDirectActionCalls: {
     type: ConfigType.Boolean,
     displayName: 'Hide Direct Action Calls',
   },
-  hideDivides: { type: ConfigType.Boolean, displayName: 'Hide Divides' },
+  showDivides: { type: ConfigType.Boolean, displayName: 'Hide Divides' },
+  showDeckIndexes: {
+    type: ConfigType.Boolean,
+    displayName: 'Show Deck Indexes',
+  },
+  showProxies: { type: ConfigType.Boolean, displayName: 'Show Proxies' },
+  showSources: { type: ConfigType.Boolean, displayName: 'Show Sources' },
 };
 
 type ConfigRenderer<T> = (

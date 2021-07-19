@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { ActionSource } from '../../../calc/util';
+import { useAppSelector } from '../../../hooks';
+import { selectConfig } from '../../../redux/configSlice';
 
 const SourceDiv = styled.div<{
   size: number;
@@ -31,7 +33,8 @@ type Props = {
 };
 
 export function ActionSourceAnnotation(props: Props) {
-  if (props.source === undefined) {
+  const { config } = useAppSelector(selectConfig);
+  if (props.source === undefined || !config.showSources) {
     return null;
   }
 

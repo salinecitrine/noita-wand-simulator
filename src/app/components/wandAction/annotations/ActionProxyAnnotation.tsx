@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { Action } from '../../../calc/extra/types';
+import { useAppSelector } from '../../../hooks';
+import { selectConfig } from '../../../redux/configSlice';
 
 const ProxyDiv = styled.div<{
   size: number;
@@ -21,7 +23,8 @@ type Props = {
 };
 
 export function ActionProxyAnnotation(props: Props) {
-  if (props.proxy === undefined) {
+  const { config } = useAppSelector(selectConfig);
+  if (props.proxy === undefined || !config.showProxies) {
     return null;
   }
 

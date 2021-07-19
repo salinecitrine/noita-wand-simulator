@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useAppSelector } from '../../../hooks';
+import { selectConfig } from '../../../redux/configSlice';
 
 const IndexDiv = styled.div<{
   size: number;
@@ -22,7 +24,8 @@ type Props = {
 };
 
 export function DeckIndexAnnotation(props: Props) {
-  if (props.deckIndex === undefined) {
+  const { config } = useAppSelector(selectConfig);
+  if (props.deckIndex === undefined || !config.showDeckIndexes) {
     return null;
   }
 

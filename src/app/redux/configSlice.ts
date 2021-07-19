@@ -5,10 +5,13 @@ import { RootState } from '../store';
 export interface ConfigState {
   config: {
     condenseShots: boolean;
-    hideDivides: boolean;
-    hideDirectActionCalls: boolean;
     unlimitedSpells: boolean;
     infiniteSpells: boolean;
+    showDivides: boolean;
+    showDirectActionCalls: boolean;
+    showDeckIndexes: boolean;
+    showProxies: boolean;
+    showSources: boolean;
   };
 }
 
@@ -16,10 +19,13 @@ export interface ConfigState {
 const initialState: ConfigState = {
   config: {
     condenseShots: true,
-    hideDivides: true,
-    hideDirectActionCalls: false,
     unlimitedSpells: true,
     infiniteSpells: false,
+    showDivides: false,
+    showDirectActionCalls: true,
+    showDeckIndexes: true,
+    showProxies: true,
+    showSources: true,
   },
 };
 
