@@ -1,7 +1,11 @@
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { ConfigState, selectConfig, updateConfig } from '../redux/configSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import {
+  ConfigState,
+  selectConfig,
+  updateConfig,
+} from '../../redux/configSlice';
 import styled from 'styled-components';
-import SectionHeader from './SectionHeader';
+import SectionHeader from '../SectionHeader';
 
 enum ConfigType {
   Boolean = 'boolean',

@@ -3,27 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { isPresetGroup } from '../../util/util';
 
-const BackgroundDiv = styled.div`
-  z-index: 1;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-`;
-
-const MainDiv = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: #555;
-  color: #eee;
-  max-height: 100%;
-  overflow-y: auto;
-  box-shadow: -10px 10px 50px #000;
-`;
-
 const PresetGroupNameDiv = styled.div`
   font-weight: bold;
 `;
@@ -33,7 +12,7 @@ const PresetGroupListDiv = styled.ul`
   padding: 0;
   margin: 0;
   position: relative;
-  
+
   li:last-child {
     border-left: 2px solid transparent;
   }
@@ -46,15 +25,15 @@ const PresetGroupDiv = styled.li`
   margin-left: 1em;
   padding-left: 1em;
   position: relative;
-  
+
   &:before {
-    content:'┗';
+    content: '┗';
     color: #000;
     position: absolute;
     top: -5px;
     left: -9px;
   }
-  
+
   li {
     margin-left: 0;
   }
@@ -66,7 +45,7 @@ const PresetButtonDiv = styled.li`
   position: relative;
 
   &:before {
-    content:'┗';
+    content: '┗';
     color: #000;
     position: absolute;
     top: -5px;
@@ -123,9 +102,5 @@ export function WandPresetMenu(props: Props) {
     }
   };
 
-  return (
-    <BackgroundDiv onClick={handleClose}>
-      <MainDiv>{createPresetList({ name: 'Presets', presets })}</MainDiv>
-    </BackgroundDiv>
-  );
+  return createPresetList({ name: 'Presets', presets });
 }

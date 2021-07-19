@@ -3,7 +3,7 @@ import { ShotResultList } from './shotResult/ShotResultList';
 import { WandPresetSelector } from './presetMenu/WandPresetSelector';
 import { useAppSelector } from '../hooks';
 import { selectConfig } from '../redux/configSlice';
-import { ConfigEditor } from './ConfigEditor';
+import { ConfigEditor } from './config/ConfigEditor';
 import { WandStatsEditor } from './WandStatsEditor';
 import { MainHeader } from './MainHeader';
 import { SpellSelector } from './SpellSelector';

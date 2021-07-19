@@ -4,6 +4,7 @@ import { Preset } from '../../types';
 import { setSpells, setWand } from '../../redux/wandSlice';
 import React, { useCallback, useState } from 'react';
 import { WandPresetMenu } from './WandPresetMenu';
+import { Modal } from '../generic/modal/Modal';
 
 type Props = {};
 
@@ -29,13 +30,13 @@ export function WandPresetSelector(props: Props) {
   return (
     <div>
       <button onClick={() => setMenuVisible(!menuVisible)}>Presets</button>
-      {menuVisible && (
+      <Modal visible={menuVisible} onClose={handleClose}>
         <WandPresetMenu
           presets={presets}
           onSelect={handleSelect}
           onClose={handleClose}
         />
-      )}
+      </Modal>
     </div>
   );
 }
