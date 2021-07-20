@@ -190,7 +190,6 @@ export function clickWand(
         reloaded = true;
         break;
       default:
-      // console.log(eventType, args);
     }
   });
 
@@ -217,7 +216,7 @@ export function clickWand(
 
     if (
       !fireUntilReload ||
-      (endOnRefresh && lastCalledAction!.action.id === 'RESET') ||
+      (endOnRefresh && lastCalledAction?.action.id === 'RESET') ||
       calledActions!.length === 0
     ) {
       break;
