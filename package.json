@@ -30,7 +30,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "generate-actions": "deno run --allow-read --allow-write scripts/generate_gun_actions.ts",
-    "generate-translations": "python scripts/generate_translations.py"
+    "generate-translations": "python scripts/generate_translations.py",
+    "generate-entity-map": "python scripts/generate_entity_map.py"
   },
   "eslintConfig": {
     "extends": [

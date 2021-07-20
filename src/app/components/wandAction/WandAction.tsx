@@ -5,7 +5,6 @@ import { DeckIndexAnnotation } from './annotations/DeckIndexAnnotation';
 import { ActionSourceAnnotation } from './annotations/ActionSourceAnnotation';
 import { ActionProxyAnnotation } from './annotations/ActionProxyAnnotation';
 import { DeleteSpellAnnotation } from './annotations/DeleteSpellAnnotation';
-import { useAppDispatch } from '../../hooks';
 import { useState } from 'react';
 
 export const DEFAULT_SIZE = 48;

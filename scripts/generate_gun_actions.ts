@@ -138,7 +138,7 @@ const syntaxPatterns = [
     replace: '$1.splice($2 - 1, 1)',
   },
   {
-    pattern: /(deck|actions|hand|discarded)\[([\w.]+)]/gm,
+    pattern: /(deck|actions|hand|discarded|types)\[([\w.]+)]/gm,
     replace: '$1[$2 - 1]',
   },
   {
@@ -157,11 +157,19 @@ const syntaxPatterns = [
   { pattern: / === null/gm, replace: ' == null' },
   { pattern: /related_projectiles\[1\]/gm, replace: 'related_projectiles[0]' },
   { pattern: /related_projectiles\[2\]/gm, replace: 'related_projectiles[1]' },
-  {
-    pattern:
-      /(sprite: ".*?vacuum_entities.*?related_projectiles: \[".*?)vacuum_liquid/gms,
-    replace: '$1vacuum_entities',
-  },
+  // {
+  //   // fix typo
+  //   pattern:
+  //     /(sprite: ".*?vacuum_entities.*?related_projectiles: \[".*?)vacuum_liquid/gms,
+  //   replace: '$1vacuum_entities',
+  // },
+  // {
+  //   // fix typo
+  //   pattern:
+  //     /related_projectiles: \["data\/entities\/projectiles\/deck\/darkflame.xml"\],/gms,
+  //   replace:
+  //     'related_projectiles: ["data/entities/projectiles/darkflame.xml"],',
+  // },
 ];
 
 let content = Deno.readTextFileSync(srcFile);

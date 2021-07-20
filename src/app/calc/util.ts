@@ -14,6 +14,7 @@ import {
   ACTION_TYPE_OTHER,
   ACTION_TYPE_PROJECTILE,
   ACTION_TYPE_STATIC_PROJECTILE,
+  ACTION_TYPE_UTILITY,
 } from './gun_enums';
 import {
   combineGroups,
@@ -21,6 +22,7 @@ import {
   isRawObject,
   mergeProperties,
 } from '../util/combineGroups';
+import { entityToActionId } from './__generated__/entityProjectileMap';
 
 export function getActionById(actionId: string): Readonly<Action> {
   for (let i = 0; i < actions.length; i++) {
@@ -108,7 +110,6 @@ export function clickWand(
   };
 
   const unsub = subscribe((eventType, ...args) => {
-    // console.log(eventType, args);
     switch (eventType) {
       case 'BeginProjectile':
         const validSourceActionCalls = calledActions.filter((a) => {
@@ -117,14 +118,15 @@ export function clickWand(
             ACTION_TYPE_STATIC_PROJECTILE,
             ACTION_TYPE_MATERIAL,
             ACTION_TYPE_OTHER,
+            ACTION_TYPE_UTILITY,
           ].includes(a.action.type);
         });
 
-        const entity = args[0];
+        const entity: string = args[0];
 
         let sourceAction =
           validSourceActionCalls[validSourceActionCalls.length - 1]?.action;
-        let proxy;
+        let proxy: Action | undefined = undefined;
 
         if (!sourceAction) {
           // fallback to most likely entity source if no action
@@ -133,14 +135,20 @@ export function clickWand(
           }
           sourceAction = entityToAction[entity][0];
         }
+
         if (entity !== sourceAction.related_projectiles?.[0]) {
-          // this probably means another action caused this projectile (like ADD_TRIGGER)
-          proxy = sourceAction;
           if (!entityToAction[entity]) {
             throw Error(`missing entity: ${entity}`);
           }
-          sourceAction = entityToAction[entity][0];
+
+          // check for bugged actions (missing the correct related_projectile)
+          if (entityToAction[entity][0].id !== sourceAction.id) {
+            // this probably means another action caused this projectile (like ADD_TRIGGER)
+            proxy = sourceAction;
+            sourceAction = entityToAction[entity][0];
+          }
         }
+
         currentShot.projectiles.push({
           entity: args[0],
           action: sourceAction,
@@ -278,12 +286,20 @@ export function condenseActionsAndProjectiles(
   };
 }
 
-export const entityToAction = actions.reduce((acc, cur) => {
-  if (cur.related_projectiles) {
-    if (!acc[cur.related_projectiles[0]]) {
-      acc[cur.related_projectiles[0]] = [];
-    }
-    acc[cur.related_projectiles[0]].push(cur);
-  }
-  return acc;
-}, {} as { [key: string]: Action[] });
+export const entityToAction = Object.entries(entityToActionId).reduce(
+  (acc, [entityId, actionIds]) => {
+    acc[entityId] = actionIds.map((actionId) => getActionById(actionId));
+    return acc;
+  },
+  {} as { [key: string]: Action[] }
+);
+
+// export const entityToAction = actions.reduce((acc, cur) => {
+//   if (cur.related_projectiles) {
+//     if (!acc[cur.related_projectiles[0]]) {
+//       acc[cur.related_projectiles[0]] = [];
+//     }
+//     acc[cur.related_projectiles[0]].push(cur);
+//   }
+//   return acc;
+// }, {} as { [key: string]: Action[] });
