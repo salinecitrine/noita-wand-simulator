@@ -1,4 +1,5 @@
 import { Gun } from './calc/extra/types';
+import { ConfigState } from './redux/configSlice';
 
 export type Wand = Gun & {
   cast_delay: number;
@@ -22,3 +23,5 @@ export type WandActionDragItem = {
   actionId?: string;
   sourceWandIndex?: number;
 };
+
+export type LocalStorageState = ConfigState;

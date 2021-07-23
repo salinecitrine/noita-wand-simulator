@@ -2,7 +2,7 @@ import { Wand } from '../types';
 
 export const defaultWand: Wand = {
   actions_per_round: 1,
-  deck_capacity: 10,
+  deck_capacity: 26,
   reload_time: 0,
   shuffle_deck_when_empty: false,
   cast_delay: 0,

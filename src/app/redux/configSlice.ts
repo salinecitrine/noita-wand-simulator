@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { observeStore, RootState, store } from '../store';
+import { loadState, saveState } from '../localStorage';
 
 // Define a type for the slice state
 export interface ConfigState {
@@ -33,9 +34,14 @@ const initialState: ConfigState = {
   },
 };
 
+const loadedInitialState = loadState();
+
 export const configSlice = createSlice({
-  name: 'presets',
-  initialState,
+  name: 'config',
+  initialState: {
+    ...initialState,
+    ...(loadedInitialState || {}),
+  },
   reducers: {
     updateConfig: (
       state,
