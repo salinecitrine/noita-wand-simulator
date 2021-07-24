@@ -128,7 +128,7 @@ it('clickWand 2', () => {
     deck_capacity: 10,
   };
   const spells = ['DAMAGE', 'LIGHT_BULLET_TRIGGER', 'BOMB', 'LIGHT_BULLET'].map(
-    getActionById
+    getActionById,
   );
 
   const expected = [

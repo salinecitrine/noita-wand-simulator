@@ -85,7 +85,7 @@ export function clickWand(
   spells: Action[],
   mana: number,
   fireUntilReload: boolean,
-  endOnRefresh: boolean = true
+  endOnRefresh: boolean = true,
 ) {
   if (spells.filter((s) => s != null).length === 0) {
     return [];
@@ -245,7 +245,7 @@ function condenseActions(calledActions: ActionCall[]) {
       } else {
         return o[0];
       }
-    }
+    },
   );
 }
 
@@ -272,12 +272,12 @@ function condenseProjectiles(projectiles: Projectile[]) {
       } else {
         return o[0];
       }
-    }
+    },
   );
 }
 
 export function condenseActionsAndProjectiles(
-  wandShot: WandShot
+  wandShot: WandShot,
 ): GroupedWandShot {
   return {
     ...wandShot,
@@ -291,11 +291,11 @@ export const entityToAction = Object.entries(entityToActionId).reduce(
     acc[entityId] = actionIds.map((actionId) => getActionById(actionId));
     return acc;
   },
-  {} as { [key: string]: Action[] }
+  {} as { [key: string]: Action[] },
 );
 
 export const unlockFlags: string[] = [
   ...new Set(
-    actions.map((a) => a.spawn_requires_flag).filter(notNullOrUndefined)
+    actions.map((a) => a.spawn_requires_flag).filter(notNullOrUndefined),
   ),
 ];

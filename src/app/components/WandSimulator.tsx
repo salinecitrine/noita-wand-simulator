@@ -3,7 +3,6 @@ import { ShotResultList } from './shotResult/ShotResultList';
 import { WandPresetButton } from './presetMenu/WandPresetButton';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { selectConfig } from '../redux/configSlice';
-import { ConfigEditor } from './config/ConfigEditor';
 import { MainHeader } from './MainHeader';
 import { SpellSelector } from './SpellSelector';
 import { DndProvider } from 'react-dnd';

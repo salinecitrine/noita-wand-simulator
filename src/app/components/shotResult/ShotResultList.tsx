@@ -46,7 +46,7 @@ export function ShotResultList(props: Props) {
 
   const spellActions = useMemo(
     () => spells.filter(notNull).map(getActionById),
-    [spells]
+    [spells],
   );
 
   const spellActionsWithUses = useMemo(() => {
@@ -68,7 +68,7 @@ export function ShotResultList(props: Props) {
 
   let shots = useMemo(
     () => clickWand(wand, spellActionsWithUses, wand.mana_max, true),
-    [spellActionsWithUses, wand]
+    [spellActionsWithUses, wand],
   );
 
   shots = useMemo(() => {
@@ -76,7 +76,7 @@ export function ShotResultList(props: Props) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
-          (ac) => !ac.action.id.startsWith('DIVIDE')
+          (ac) => !ac.action.id.startsWith('DIVIDE'),
         ),
       }));
     } else {
@@ -89,7 +89,7 @@ export function ShotResultList(props: Props) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
-          (ac) => !GREEK_SPELLS.includes(ac.action.id)
+          (ac) => !GREEK_SPELLS.includes(ac.action.id),
         ),
       }));
     } else {
@@ -102,7 +102,7 @@ export function ShotResultList(props: Props) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
-          (ac) => ac.source !== ActionSource.ACTION
+          (ac) => ac.source !== ActionSource.ACTION,
         ),
       }));
     } else {

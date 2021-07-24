@@ -44,7 +44,8 @@
   "prettier": {
     "printWidth": 80,
     "singleQuote": true,
-    "quoteProps": "consistent"
+    "quoteProps": "consistent",
+    "trailingComma": "all"
   },
   "browserslist": {
     "production": [

@@ -10,7 +10,7 @@ export function t(key: string) {
 }
 
 export function hasTranslationKey(
-  key: string
+  key: string,
 ): key is keyof typeof translations {
   return translations.hasOwnProperty(key);
 }

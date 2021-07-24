@@ -2,17 +2,27 @@ import { ConfigGun_Init } from './gun_generated';
 import {
   ConfigGunActionInfo_Copy,
   ConfigGunActionInfo_Init,
-  ConfigGunActionInfo_PassToGame
+  ConfigGunActionInfo_PassToGame,
 } from './gunaction_generated';
-import { ConfigGunShotEffects_Init, ConfigGunShotEffects_PassToGame } from './gunshoteffects_generated';
-import { Action, Gun, GunActionState, ModifierName, Shot, ShotEffects } from './extra/types';
+import {
+  ConfigGunShotEffects_Init,
+  ConfigGunShotEffects_PassToGame,
+} from './gunshoteffects_generated';
+import {
+  Action,
+  Gun,
+  GunActionState,
+  ModifierName,
+  Shot,
+  ShotEffects,
+} from './extra/types';
 import { Random } from './extra/util';
 import {
   ACTION_TYPE_MATERIAL,
   ACTION_TYPE_OTHER,
   ACTION_TYPE_PROJECTILE,
   ACTION_TYPE_STATIC_PROJECTILE,
-  ACTION_TYPE_UTILITY
+  ACTION_TYPE_UTILITY,
 } from './gun_enums';
 import { extra_modifiers } from './gun_extra_modifiers';
 import {
@@ -27,11 +37,12 @@ import {
   EndTrigger,
   LogAction,
   OnActionCalled,
+  OnActionFinished,
   OnActionPlayed,
   OnNotEnoughManaForAction,
   Reflection_RegisterProjectile,
   SetProjectileConfigs,
-  StartReload
+  StartReload,
 } from './extra/ext_functions';
 import { init_state_from_game } from './extra/init';
 import { actions } from './__generated__/gun_actions';
@@ -353,7 +364,7 @@ function handle_mana_addition(action: Action) {
 
 export function draw_actions(
   how_many: number,
-  instant_reload_if_empty: boolean
+  instant_reload_if_empty: boolean,
 ) {
   if (!dont_draw_actions) {
     c.action_draw_many_count = how_many;
@@ -397,7 +408,7 @@ export function add_projectile(entity_filename: string) {
 export function add_projectile_trigger_timer(
   entity_filename: string,
   delay_frames: number,
-  action_draw_count: number
+  action_draw_count: number,
 ) {
   if (reflecting) {
     Reflection_RegisterProjectile(entity_filename);
@@ -413,7 +424,7 @@ export function add_projectile_trigger_timer(
 
 export function add_projectile_trigger_hit_world(
   entity_filename: string,
-  action_draw_count: number
+  action_draw_count: number,
 ) {
   if (reflecting) {
     Reflection_RegisterProjectile(entity_filename);
@@ -429,7 +440,7 @@ export function add_projectile_trigger_hit_world(
 
 export function add_projectile_trigger_death(
   entity_filename: string,
-  action_draw_count: number
+  action_draw_count: number,
 ) {
   if (reflecting) {
     Reflection_RegisterProjectile(entity_filename);
@@ -476,7 +487,7 @@ function move_hand_to_discarded() {
           action.uses_remaining = action.uses_remaining - 1;
           let reduce_uses = ActionUsesRemainingChanged(
             action.inventoryitem_id,
-            action.uses_remaining
+            action.uses_remaining,
           );
           if (!reduce_uses) {
             action.uses_remaining = action.uses_remaining + 1; // cancel the reduction
@@ -615,7 +626,7 @@ export function _add_card_to_deck(
   action_id: string,
   inventoryitem_id: number,
   uses_remaining: number | undefined | null,
-  is_identified: boolean
+  is_identified: boolean,
 ) {
   for (let i = 0; i < actions.length; i++) {
     let action = actions[i];
@@ -653,7 +664,7 @@ function _play_permanent_card(action_id: string) {
 
 function _change_action_uses_remaining(
   inventoryitem_id: number,
-  uses_remaining: number
+  uses_remaining: number,
 ) {
   let applied = false;
 
@@ -682,7 +693,7 @@ function _add_extra_modifier_to_shot(name: ModifierName) {
     console.log(
       "_add_extra_modifier_to_shot() - function '" +
         name +
-        "' not found in gun_extra_modifiers.lua"
+        "' not found in gun_extra_modifiers.lua",
     );
     return;
   }

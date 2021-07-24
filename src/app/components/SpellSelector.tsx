@@ -21,7 +21,7 @@ const SpellsDiv = styled.div`
 
 const isSpellUnlocked = (
   unlocks: ConfigState['config']['unlocks'],
-  spell: Action
+  spell: Action,
 ) => {
   return !spell.spawn_requires_flag || unlocks[spell.spawn_requires_flag];
 };
@@ -42,7 +42,7 @@ export function SpellSelector(props: Props) {
             </WandActionBorder>
           </WandActionDragSource>
         )),
-    [config.unlocks]
+    [config.unlocks],
   );
   return (
     <MainDiv>

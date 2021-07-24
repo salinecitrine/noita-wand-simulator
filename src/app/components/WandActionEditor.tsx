@@ -38,7 +38,7 @@ export function WandActionEditor(props: Props) {
   const createActionComponent = (
     spellAction: Action | null,
     wandIndex: number,
-    deckIndex: number
+    deckIndex: number,
   ) => {
     if (spellAction) {
       return (
@@ -73,7 +73,7 @@ export function WandActionEditor(props: Props) {
     result.push(
       <StyledListItem key={index}>
         {createActionComponent(sa, index, deckIndex)}
-      </StyledListItem>
+      </StyledListItem>,
     );
     if (sa) {
       deckIndex += 1;

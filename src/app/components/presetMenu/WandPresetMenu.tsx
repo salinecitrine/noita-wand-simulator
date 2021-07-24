@@ -63,7 +63,7 @@ export function WandPresetMenu(props: Props) {
 
   const createPresetList = (
     presetGroup: PresetGroup,
-    first: boolean = true
+    first: boolean = true,
   ) => {
     const content = (
       <>

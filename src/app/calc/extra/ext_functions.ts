@@ -63,7 +63,7 @@ export function BaabInstruction(name: string) {
 
 export function ActionUsesRemainingChanged(
   item_id: any,
-  uses_remaining: number
+  uses_remaining: number,
 ) {
   onEvent('ActionUsesRemainingChanged', item_id, uses_remaining);
   return false;
@@ -102,7 +102,7 @@ export function EntityGetComponent(entity_id: any, component: string): any {
 
 export function EntityGetFirstComponent(
   entity_id: any,
-  component: string
+  component: string,
 ): any {
   onEvent('EntityGetFirstComponent', entity_id, component);
   return {};
@@ -110,7 +110,7 @@ export function EntityGetFirstComponent(
 
 export function EntityGetFirstComponentIncludingDisabled(
   entity_id: any,
-  component: string
+  component: string,
 ): any {
   onEvent('EntityGetFirstComponentIncludingDisabled', entity_id, component);
   return {};
@@ -141,7 +141,7 @@ export function EntityInflictDamage(
   arg1: string,
   arg2: number,
   arg3: number,
-  entityId2: any
+  entityId2: any,
 ) {
   onEvent(
     'EntityInflictDamage',
@@ -152,7 +152,7 @@ export function EntityInflictDamage(
     arg1,
     arg2,
     arg3,
-    entityId2
+    entityId2,
   );
 }
 
@@ -185,7 +185,7 @@ export function EntityGetInRadiusWithTag(
   x: number,
   y: number,
   radius: number,
-  tag: string
+  tag: string,
 ): any {
   onEvent('EntityGetInRadiusWithTag', x, y, radius, tag);
   return {};
@@ -211,6 +211,15 @@ export function OnActionPlayed(action_id: any) {
 // custom
 
 export function OnActionCalled(
+  source: string,
+  action: Action,
+  c: GunActionState,
+  ...args: number[]
+) {
+  onEvent('OnActionCalled', source, action, c, ...args);
+}
+
+export function OnActionFinished(
   source: string,
   action: Action,
   c: GunActionState,

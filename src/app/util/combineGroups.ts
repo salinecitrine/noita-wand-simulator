@@ -10,7 +10,7 @@ export type GroupedObject<T extends Object> =
   | GroupedObject<T>[];
 
 export function isRawObject<T extends Object>(
-  grouped: GroupedObject<T>
+  grouped: GroupedObject<T>,
 ): grouped is T {
   return (
     !Array.isArray(grouped) &&
@@ -20,7 +20,7 @@ export function isRawObject<T extends Object>(
 }
 
 export function isMultipleObject<T extends Object>(
-  grouped: GroupedObject<T>
+  grouped: GroupedObject<T>,
 ): grouped is MultipleObject<T> {
   return (
     !Array.isArray(grouped) &&
@@ -30,13 +30,13 @@ export function isMultipleObject<T extends Object>(
 }
 
 export function isArrayObject<T extends Object>(
-  grouped: GroupedObject<T>
+  grouped: GroupedObject<T>,
 ): grouped is GroupedObject<T>[] {
   return Array.isArray(grouped);
 }
 
 export function simplifyMultipleObject<T extends Object>(
-  grouped: GroupedObject<T>
+  grouped: GroupedObject<T>,
 ): GroupedObject<T> {
   if (isMultipleObject(grouped) && grouped.count === 1) {
     const nested = simplifyMultipleObject(grouped.first);
@@ -51,7 +51,7 @@ export function simplifyMultipleObject<T extends Object>(
 export function combineGroups<T>(
   arr: T[],
   keyFn?: (o: T) => any,
-  merge?: (o: GroupedObject<T>[]) => GroupedObject<T>
+  merge?: (o: GroupedObject<T>[]) => GroupedObject<T>,
 ): GroupedObject<T>[] {
   let lastLength = -1;
   let result: GroupedObject<T>[] = arr;
@@ -64,7 +64,7 @@ export function combineGroups<T>(
 
 function mergeMatches<T, U extends GroupedObject<T>[]>(
   matches: U[],
-  merge: (o: GroupedObject<T>[]) => GroupedObject<T>
+  merge: (o: GroupedObject<T>[]) => GroupedObject<T>,
 ) {
   if (new Set(matches.map((m) => m.length)).size > 1) {
     throw Error('mismatched match sizes');
@@ -81,7 +81,7 @@ function mergeMatches<T, U extends GroupedObject<T>[]>(
 export function _combineGroups<T>(
   arr: GroupedObject<T>[],
   keyFn?: (o: T) => any,
-  merge?: (o: GroupedObject<T>[]) => GroupedObject<T>
+  merge?: (o: GroupedObject<T>[]) => GroupedObject<T>,
 ): GroupedObject<T>[] {
   const keyCache = new Map<GroupedObject<T>, any>();
 
@@ -143,7 +143,7 @@ export function _combineGroups<T>(
           first: merge
             ? mergeMatches(
                 chunk(result.slice(i, i + seqLen * (matches + 1)), seqLen),
-                merge
+                merge,
               )
             : first,
           count: matches + 1,
@@ -158,7 +158,7 @@ export function _combineGroups<T>(
 
 export function mergeProperties<T, K extends keyof T>(
   group: T[],
-  properties: { prop: K; conflictValue: T[K] }[]
+  properties: { prop: K; conflictValue: T[K] }[],
 ): T {
   return {
     ...group[0],
@@ -166,7 +166,7 @@ export function mergeProperties<T, K extends keyof T>(
       properties.map(({ prop, conflictValue }) => [
         prop,
         _mergedProperty(group, prop, conflictValue),
-      ])
+      ]),
     ),
   };
 }
@@ -174,7 +174,7 @@ export function mergeProperties<T, K extends keyof T>(
 function _mergedProperty<T, K extends keyof T>(
   group: T[],
   prop: K,
-  conflictValue: T[K]
+  conflictValue: T[K],
 ): T[K] {
   const allValues = new Set(group.map((o) => o[prop]));
   if (allValues.size === 1) {

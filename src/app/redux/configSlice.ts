@@ -80,7 +80,7 @@ export const configSlice = createSlice({
   reducers: {
     updateConfig: (
       state,
-      action: PayloadAction<Partial<ConfigState['config']>>
+      action: PayloadAction<Partial<ConfigState['config']>>,
     ) => {
       state.config = { ...state.config, ...action.payload };
     },

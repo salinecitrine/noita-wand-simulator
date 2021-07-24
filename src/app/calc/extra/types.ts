@@ -87,7 +87,7 @@ export type Action = {
   action: (
     c: GunActionState,
     recursion_level?: number,
-    iteration?: number
+    iteration?: number,
   ) => number | void;
   never_unlimited?: boolean;
   spawn_requires_flag?: string;

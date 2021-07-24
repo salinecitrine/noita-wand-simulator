@@ -22,7 +22,7 @@ export type AppDispatch = typeof store.dispatch;
 
 export function observeStore<T>(
   select: (rootState: RootState) => T,
-  onChange: (newState: T) => void
+  onChange: (newState: T) => void,
 ) {
   let currentState: T;
 

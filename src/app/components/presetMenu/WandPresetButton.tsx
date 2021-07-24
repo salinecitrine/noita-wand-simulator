@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectPresets } from '../../redux/presetsSlice';
 import { Preset } from '../../types';
-import { setSpells, setWand } from '../../redux/wandSlice';
+import { setWand } from '../../redux/wandSlice';
 import React, { useCallback, useState } from 'react';
 import { WandPresetMenu } from './WandPresetMenu';
 import { Modal } from '../generic/modal/Modal';
@@ -19,7 +19,7 @@ export function WandPresetButton(props: Props) {
       setMenuVisible(false);
       dispatch(setWand({ wand: preset.wand, spells: preset.spells }));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleClose = () => {

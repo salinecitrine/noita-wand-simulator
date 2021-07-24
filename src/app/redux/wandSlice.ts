@@ -31,7 +31,7 @@ export const wandSlice = createSlice({
   reducers: {
     setWand: (
       state,
-      action: PayloadAction<{ wand: Wand; spells?: string[] }>
+      action: PayloadAction<{ wand: Wand; spells?: string[] }>,
     ) => {
       const { wand, spells } = action.payload;
       state.wand = wand;
@@ -49,14 +49,14 @@ export const wandSlice = createSlice({
     },
     setSpellAtIndex: (
       state,
-      action: PayloadAction<{ spell: string | null; index: number }>
+      action: PayloadAction<{ spell: string | null; index: number }>,
     ) => {
       const { spell, index } = action.payload;
       state.spells[index] = spell;
     },
     moveSpell: (
       state,
-      action: PayloadAction<{ fromIndex: number; toIndex: number }>
+      action: PayloadAction<{ fromIndex: number; toIndex: number }>,
     ) => {
       const { fromIndex, toIndex } = action.payload;
       const sourceSpell = state.spells[fromIndex];
@@ -66,7 +66,7 @@ export const wandSlice = createSlice({
     },
     swapSpells: (
       state,
-      action: PayloadAction<{ fromIndex: number; toIndex: number }>
+      action: PayloadAction<{ fromIndex: number; toIndex: number }>,
     ) => {
       const { fromIndex, toIndex } = action.payload;
       const sourceSpell = state.spells[fromIndex];

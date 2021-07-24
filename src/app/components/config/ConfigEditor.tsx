@@ -29,20 +29,20 @@ function makeConfigField<T>(
   displayName: string,
   type: ConfigType,
   get: (config: ConfigState['config']) => T,
-  set: (config: ConfigState['config'], value: T) => void
+  set: (config: ConfigState['config'], value: T) => void,
 ): ConfigField<T> {
   return { displayName, type, get, set };
 }
 
 function makeConfigFieldGroup(
   displayName: string,
-  fields: (ConfigField<any> | ConfigFieldGroup)[]
+  fields: (ConfigField<any> | ConfigFieldGroup)[],
 ): ConfigFieldGroup {
   return { displayName, fields };
 }
 
 function isConfigFieldGroup(
-  field: ConfigField<any> | ConfigFieldGroup
+  field: ConfigField<any> | ConfigFieldGroup,
 ): field is ConfigFieldGroup {
   return field.hasOwnProperty('fields');
 }
@@ -52,61 +52,61 @@ const configOptions = [
     'Condense Actions',
     ConfigType.Boolean,
     (c) => c.condenseShots,
-    (c, v) => (c.condenseShots = v)
+    (c, v) => (c.condenseShots = v),
   ),
   makeConfigField(
     'Unlimited Spells',
     ConfigType.Boolean,
     (c) => c.unlimitedSpells,
-    (c, v) => (c.unlimitedSpells = v)
+    (c, v) => (c.unlimitedSpells = v),
   ),
   makeConfigField(
     'Infinite Spells',
     ConfigType.Boolean,
     (c) => c.infiniteSpells,
-    (c, v) => (c.infiniteSpells = v)
+    (c, v) => (c.infiniteSpells = v),
   ),
   makeConfigField(
     'Show Direct Action Calls',
     ConfigType.Boolean,
     (c) => c.showDirectActionCalls,
-    (c, v) => (c.showDirectActionCalls = v)
+    (c, v) => (c.showDirectActionCalls = v),
   ),
   makeConfigField(
     'Show Divides',
     ConfigType.Boolean,
     (c) => c.showDivides,
-    (c, v) => (c.showDivides = v)
+    (c, v) => (c.showDivides = v),
   ),
   makeConfigField(
     'Show Greek Spells',
     ConfigType.Boolean,
     (c) => c.showGreekSpells,
-    (c, v) => (c.showGreekSpells = v)
+    (c, v) => (c.showGreekSpells = v),
   ),
   makeConfigField(
     'Show Deck Indexes',
     ConfigType.Boolean,
     (c) => c.showDeckIndexes,
-    (c, v) => (c.showDeckIndexes = v)
+    (c, v) => (c.showDeckIndexes = v),
   ),
   makeConfigField(
     'Show Projectile Proxies',
     ConfigType.Boolean,
     (c) => c.showProxies,
-    (c, v) => (c.showProxies = v)
+    (c, v) => (c.showProxies = v),
   ),
   makeConfigField(
     'Show Action Sources',
     ConfigType.Boolean,
     (c) => c.showSources,
-    (c, v) => (c.showSources = v)
+    (c, v) => (c.showSources = v),
   ),
   makeConfigField(
     'Swap When Moving Actions',
     ConfigType.Boolean,
     (c) => c.swapOnMove,
-    (c, v) => (c.swapOnMove = v)
+    (c, v) => (c.swapOnMove = v),
   ),
   makeConfigFieldGroup('Unlocks', [
     makeConfigField(
@@ -115,8 +115,8 @@ const configOptions = [
       (c) => null,
       (c, v) =>
         Object.keys(initialConfigState.config.unlocks).forEach(
-          (k) => (c.unlocks[k] = true)
-        )
+          (k) => (c.unlocks[k] = true),
+        ),
     ),
     makeConfigField(
       'Disable All',
@@ -124,8 +124,8 @@ const configOptions = [
       (c) => null,
       (c, v) =>
         Object.keys(initialConfigState.config.unlocks).forEach(
-          (k) => (c.unlocks[k] = false)
-        )
+          (k) => (c.unlocks[k] = false),
+        ),
     ),
     ...Object.keys(initialConfigState.config.unlocks).map((unlockField) =>
       makeConfigField(
@@ -137,8 +137,8 @@ const configOptions = [
           }),
         ConfigType.Boolean,
         (c) => c.unlocks[unlockField],
-        (c, v) => (c.unlocks[unlockField] = v)
-      )
+        (c, v) => (c.unlocks[unlockField] = v),
+      ),
     ),
   ]),
 ];
@@ -146,7 +146,7 @@ const configOptions = [
 type ConfigTypeRenderer<T> = (
   key: string,
   value: T,
-  update: (value: T) => void
+  update: (value: T) => void,
 ) => JSX.Element;
 
 const booleanRenderer: ConfigTypeRenderer<boolean> = (name, value, update) => (
@@ -200,7 +200,7 @@ export function ConfigEditor(props: Props) {
 
   const renderConfigField = (
     field: ConfigField<any> | ConfigFieldGroup,
-    showTitle = true
+    showTitle = true,
   ) => {
     if (isConfigFieldGroup(field)) {
       return (
@@ -218,7 +218,7 @@ export function ConfigEditor(props: Props) {
       const renderer = configRenderers[type](
         displayName,
         get(config),
-        makeUpdateFunction(set)
+        makeUpdateFunction(set),
       );
       return <div>{renderer}</div>;
     }
@@ -232,7 +232,7 @@ export function ConfigEditor(props: Props) {
             displayName: 'Configuration',
             fields: configOptions,
           },
-          false
+          false,
         )}
       </ConfigDiv>
     </MainDiv>

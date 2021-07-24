@@ -55,7 +55,7 @@ export function Modal(props: React.PropsWithChildren<Props>) {
         onClose();
       }
     },
-    [onClose]
+    [onClose],
   );
 
   useEffect(() => {

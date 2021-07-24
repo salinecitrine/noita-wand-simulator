@@ -38,7 +38,7 @@ type Fields = {
 function field<K extends keyof Fields = keyof Fields>(
   name: K,
   displayName: string,
-  render: (v: string | number) => string
+  render: (v: string | number) => string,
 ) {
   return { name, displayName, render };
 }

@@ -24,7 +24,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
       if (item.actionId && item.sourceWandIndex !== undefined) {
         const moveFunction = config.swapOnMove ? swapSpells : moveSpell;
         dispatch(
-          moveFunction({ fromIndex: item.sourceWandIndex, toIndex: wandIndex })
+          moveFunction({ fromIndex: item.sourceWandIndex, toIndex: wandIndex }),
         );
       } else if (item.actionId) {
         dispatch(setSpellAtIndex({ spell: item.actionId, index: wandIndex }));
@@ -32,7 +32,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
         throw Error(`invalid drag item ${item}`);
       }
     },
-    [dispatch, wandIndex]
+    [dispatch, wandIndex],
   );
   const [{ isOver }, drop] = useDrop(
     () => ({
@@ -43,7 +43,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
         isOver: monitor.isOver() && monitor.canDrop(),
       }),
     }),
-    [handleDrop]
+    [handleDrop],
   );
 
   return (
