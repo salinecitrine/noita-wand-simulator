@@ -6,8 +6,19 @@ import styled from 'styled-components';
 import { moveSpell, setSpellAtIndex, swapSpells } from '../../redux/wandSlice';
 import { selectConfig } from '../../redux/configSlice';
 
-const TargetDiv = styled.div<{ isOver: boolean }>`
-  outline: ${(props) => (props.isOver ? '1px' : '0px')} dashed #ff6;
+const TargetDiv = styled.div`
+  position: relative;
+`;
+
+const MarkerDiv = styled.div<{ isOver: boolean }>`
+  border: ${(props) => (props.isOver ? '2px' : '0px')} dashed #ff6;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  z-index: 1;
+  pointer-events: none;
 `;
 
 type Props = {
@@ -32,7 +43,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
         throw Error(`invalid drag item ${item}`);
       }
     },
-    [dispatch, wandIndex],
+    [config.swapOnMove, dispatch, wandIndex],
   );
   const [{ isOver }, drop] = useDrop(
     () => ({
@@ -47,7 +58,8 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
   );
 
   return (
-    <TargetDiv ref={drop} isOver={isOver}>
+    <TargetDiv ref={drop}>
+      <MarkerDiv isOver={isOver} />
       {props.children}
     </TargetDiv>
   );
