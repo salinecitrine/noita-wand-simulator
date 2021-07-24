@@ -226,5 +226,5 @@ export function OnActionFinished(
   returnValue: any,
   ...args: number[]
 ) {
-  onEvent('OnActionCalled', source, action, c, ...args);
+  onEvent('OnActionFinished', source, action, c, returnValue, ...args);
 }

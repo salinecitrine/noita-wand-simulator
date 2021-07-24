@@ -75,16 +75,25 @@ export function condenseActionsAndProjectiles(
   };
 }
 
-export const entityToAction = Object.entries(entityToActionId).reduce(
-  (acc, [entityId, actionIds]) => {
+export const lazy = <T>(callback: () => T) => {
+  let val: T | undefined = undefined;
+  return () => {
+    if (val === undefined) {
+      val = callback();
+    }
+    return val;
+  };
+};
+
+export const entityToAction = lazy(() =>
+  Object.entries(entityToActionId).reduce((acc, [entityId, actionIds]) => {
     acc[entityId] = actionIds.map((actionId) => getActionById(actionId));
     return acc;
-  },
-  {} as { [key: string]: Action[] },
+  }, {} as { [key: string]: Action[] }),
 );
 
-export const unlockFlags: string[] = [
+export const unlockFlags = lazy(() => [
   ...new Set(
     actions.map((a) => a.spawn_requires_flag).filter(notNullOrUndefined),
   ),
-];
+]);
