@@ -28,6 +28,7 @@ const ChildrenDiv = styled.div`
   border-left: 4px solid #777;
   border-top: 0;
   border-bottom: 0;
+  margin-bottom: 10px;
 `;
 
 type ActionTreeComponentProps = {

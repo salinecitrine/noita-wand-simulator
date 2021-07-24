@@ -121,21 +121,21 @@ export function ShotResultList(props: Props) {
 
   return (
     <div>
-      <SectionHeader>Actions Called</SectionHeader>
-      <StyledDiv>
-        {groupedShots.map((shot, index) => (
-          <React.Fragment key={index}>
-            {index > 0 && <StyledHr />}
-            <ActionCalledShotResult key={index} shot={shot} />
-          </React.Fragment>
-        ))}
-      </StyledDiv>
       <SectionHeader>Projectiles</SectionHeader>
       <StyledDiv>
         {groupedShots.map((shot, index) => (
           <React.Fragment key={index}>
             {index > 0 && <StyledHr />}
             <ProjectileTreeShotResult shot={shot} indent={false} />
+          </React.Fragment>
+        ))}
+      </StyledDiv>
+      <SectionHeader>Actions Called</SectionHeader>
+      <StyledDiv>
+        {groupedShots.map((shot, index) => (
+          <React.Fragment key={index}>
+            {index > 0 && <StyledHr />}
+            <ActionCalledShotResult key={index} shot={shot} />
           </React.Fragment>
         ))}
       </StyledDiv>

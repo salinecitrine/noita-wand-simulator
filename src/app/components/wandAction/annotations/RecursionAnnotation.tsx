@@ -51,7 +51,8 @@ export function RecursionAnnotation(props: Props) {
   }
 
   const rec =
-    props.recursion !== undefined && (props.recursive || props.recursion > 0);
+    props.recursion !== undefined &&
+    (props.recursive || (props.iterative && props.recursion > 0));
   const itr = props.iteration !== undefined && props.iterative;
 
   return (
