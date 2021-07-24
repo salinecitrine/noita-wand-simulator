@@ -7,7 +7,7 @@ import {
   shot_effects,
 } from './gun';
 import { GunActionState } from './extra/types';
-import { ActionSource } from './util';
+import { ActionSource } from './eval/clickWand';
 
 export const extra_modifiers = {
   critical_hit_boost: (c: GunActionState) => {

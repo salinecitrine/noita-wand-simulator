@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { Action } from '../../calc/extra/types';
-import { ActionSource } from '../../calc/util';
 import { DeckIndexAnnotation } from './annotations/DeckIndexAnnotation';
 import { ActionSourceAnnotation } from './annotations/ActionSourceAnnotation';
 import { ActionProxyAnnotation } from './annotations/ActionProxyAnnotation';
 import { DeleteSpellAnnotation } from './annotations/DeleteSpellAnnotation';
 import { useState } from 'react';
+import { ActionSource } from '../../calc/eval/clickWand';
 
 export const DEFAULT_SIZE = 48;
 

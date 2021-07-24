@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { ActionSource } from '../../../calc/util';
 import { useAppSelector } from '../../../hooks';
 import { selectConfig } from '../../../redux/configSlice';
+import { ActionSource } from '../../../calc/eval/clickWand';
 
 const SourceDiv = styled.div<{
   size: number;

@@ -46,7 +46,7 @@ import {
 } from './extra/ext_functions';
 import { init_state_from_game } from './extra/init';
 import { actions } from './__generated__/gun_actions';
-import { ActionSource } from './util';
+import { ActionSource } from './eval/clickWand';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;

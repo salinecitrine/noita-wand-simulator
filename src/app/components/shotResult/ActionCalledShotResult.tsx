@@ -1,6 +1,6 @@
-import { GroupedWandShot } from '../../calc/util';
 import styled from 'styled-components';
 import { WandActionGroup } from '../wandAction/WandActionGroup';
+import { GroupedWandShot } from '../../calc/eval/clickWand';
 
 const StyledDiv = styled.div`
   display: flex;

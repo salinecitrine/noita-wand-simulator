@@ -8,8 +8,9 @@ import {
   hand,
 } from '../gun';
 import * as ext from '../extra/ext_functions';
-import { clickWand, getActionById } from '../util';
+import { getActionById } from '../eval/util';
 import { Gun } from '../extra/types';
+import { clickWand } from '../eval/clickWand';
 
 beforeEach(() => {
   jest.spyOn(ext, 'BeginProjectile');

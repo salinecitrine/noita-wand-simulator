@@ -1,6 +1,12 @@
-import { Action, Gun, GunActionState } from './extra/types';
-import { actions } from './__generated__/gun_actions';
-import { subscribe } from './extra/ext_functions';
+import { Action, Gun, GunActionState } from '../extra/types';
+import { subscribe } from '../extra/ext_functions';
+import {
+  ACTION_TYPE_MATERIAL,
+  ACTION_TYPE_OTHER,
+  ACTION_TYPE_PROJECTILE,
+  ACTION_TYPE_STATIC_PROJECTILE,
+  ACTION_TYPE_UTILITY,
+} from '../gun_enums';
 import {
   _add_card_to_deck,
   _clear_deck,
@@ -8,33 +14,9 @@ import {
   _set_gun,
   _start_shot,
   mana as gunMana,
-} from './gun';
-import {
-  ACTION_TYPE_MATERIAL,
-  ACTION_TYPE_OTHER,
-  ACTION_TYPE_PROJECTILE,
-  ACTION_TYPE_STATIC_PROJECTILE,
-  ACTION_TYPE_UTILITY,
-} from './gun_enums';
-import {
-  combineGroups,
-  GroupedObject,
-  isRawObject,
-  mergeProperties,
-} from '../util/combineGroups';
-import { entityToActionId } from './__generated__/entityProjectileMap';
-import { notNullOrUndefined } from '../util/util';
-
-export function getActionById(actionId: string): Readonly<Action> {
-  for (let i = 0; i < actions.length; i++) {
-    let action = actions[i];
-    if (action.id === actionId) {
-      return action;
-    }
-  }
-
-  throw Error(`Action not found: ${actionId}`);
-}
+} from '../gun';
+import { GroupedObject } from '../../util/combineGroups';
+import { entityToAction } from './util';
 
 export type WandShot = {
   projectiles: Projectile[];
@@ -42,14 +24,12 @@ export type WandShot = {
   castState?: GunActionState;
   manaDrain?: number;
 };
-
 export type GroupedWandShot = {
   projectiles: GroupedObject<GroupedProjectile>[];
   calledActions: GroupedObject<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
 };
-
 export type Projectile = {
   entity: string;
   action?: Action;
@@ -57,7 +37,6 @@ export type Projectile = {
   trigger?: WandShot;
   deckIndex?: string | number;
 };
-
 export type GroupedProjectile = {
   entity: string;
   action?: Action;
@@ -131,22 +110,22 @@ export function clickWand(
 
         if (!sourceAction) {
           // fallback to most likely entity source if no action
-          if (!entityToAction[entity]) {
+          if (!entityToAction()[entity]) {
             throw Error(`missing entity: ${entity}`);
           }
-          sourceAction = entityToAction[entity][0];
+          sourceAction = entityToAction()[entity][0];
         }
 
         if (entity !== sourceAction.related_projectiles?.[0]) {
-          if (!entityToAction[entity]) {
+          if (!entityToAction()[entity]) {
             throw Error(`missing entity: ${entity}`);
           }
 
           // check for bugged actions (missing the correct related_projectile)
-          if (entityToAction[entity][0].id !== sourceAction.id) {
+          if (entityToAction()[entity][0].id !== sourceAction.id) {
             // this probably means another action caused this projectile (like ADD_TRIGGER)
             proxy = sourceAction;
-            sourceAction = entityToAction[entity][0];
+            sourceAction = entityToAction()[entity][0];
           }
         }
 
@@ -232,72 +211,3 @@ export function clickWand(
 
   return wandShots;
 }
-
-function condenseActions(calledActions: ActionCall[]) {
-  return combineGroups(
-    calledActions,
-    (a) => a.action.id,
-    (o) => {
-      // deck index and source
-      if (o.map(isRawObject).every((v) => v)) {
-        return mergeProperties(o as ActionCall[], [
-          { prop: 'deckIndex', conflictValue: '*' },
-          { prop: 'source', conflictValue: 'multiple' },
-        ]);
-      } else {
-        return o[0];
-      }
-    },
-  );
-}
-
-function condenseProjectiles(projectiles: Projectile[]) {
-  const projectilesWithProcessedTriggers = projectiles.map((proj) => {
-    if (proj.trigger) {
-      return {
-        ...proj,
-        trigger: condenseActionsAndProjectiles(proj.trigger as WandShot),
-      };
-    } else {
-      return proj;
-    }
-  });
-  return combineGroups(
-    projectilesWithProcessedTriggers,
-    (p) => p.entity,
-    (o) => {
-      // deck index and source
-      if (o.map(isRawObject).every((v) => v)) {
-        return mergeProperties(o as Projectile[], [
-          { prop: 'deckIndex', conflictValue: '*' },
-        ]);
-      } else {
-        return o[0];
-      }
-    },
-  );
-}
-
-export function condenseActionsAndProjectiles(
-  wandShot: WandShot,
-): GroupedWandShot {
-  return {
-    ...wandShot,
-    calledActions: condenseActions(wandShot.calledActions),
-    projectiles: condenseProjectiles(wandShot.projectiles),
-  };
-}
-
-export const entityToAction = Object.entries(entityToActionId).reduce(
-  (acc, [entityId, actionIds]) => {
-    acc[entityId] = actionIds.map((actionId) => getActionById(actionId));
-    return acc;
-  },
-  {} as { [key: string]: Action[] },
-);
-
-export const unlockFlags: string[] = [
-  ...new Set(
-    actions.map((a) => a.spawn_requires_flag).filter(notNullOrUndefined),
-  ),
-];

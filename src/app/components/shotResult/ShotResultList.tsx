@@ -1,9 +1,7 @@
 import {
-  ActionSource,
-  clickWand,
   condenseActionsAndProjectiles,
   getActionById,
-} from '../../calc/util';
+} from '../../calc/eval/util';
 import { useAppSelector } from '../../hooks';
 import { selectWand } from '../../redux/wandSlice';
 import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
@@ -12,6 +10,7 @@ import { ActionCalledShotResult } from './ActionCalledShotResult';
 import React, { useMemo } from 'react';
 import SectionHeader from '../SectionHeader';
 import { notNull } from '../../util/util';
+import { ActionSource, clickWand } from '../../calc/eval/clickWand';
 
 const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
 

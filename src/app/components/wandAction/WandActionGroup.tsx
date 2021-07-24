@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ActionCall, GroupedProjectile } from '../../calc/util';
 import { DEFAULT_SIZE, WandAction } from './WandAction';
 import {
   GroupedObject,
@@ -9,6 +8,7 @@ import {
   simplifyMultipleObject,
 } from '../../util/combineGroups';
 import WandActionBorder from './WandActionBorder';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/clickWand';
 
 const MainDiv = styled.div`
   display: flex;
