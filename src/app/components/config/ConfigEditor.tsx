@@ -91,6 +91,12 @@ const configOptions = [
     (c, v) => (c.showDeckIndexes = v),
   ),
   makeConfigField(
+    'Show Recursion',
+    ConfigType.Boolean,
+    (c) => c.showRecursion,
+    (c, v) => (c.showRecursion = v),
+  ),
+  makeConfigField(
     'Show Projectile Proxies',
     ConfigType.Boolean,
     (c) => c.showProxies,

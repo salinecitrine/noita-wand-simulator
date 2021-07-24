@@ -12,6 +12,7 @@ export interface ConfigState {
     showGreekSpells: boolean;
     showDirectActionCalls: boolean;
     showDeckIndexes: boolean;
+    showRecursion: boolean;
     showProxies: boolean;
     showSources: boolean;
     swapOnMove: boolean;
@@ -32,6 +33,7 @@ export const initialState: ConfigState = {
     showGreekSpells: true,
     showDirectActionCalls: true,
     showDeckIndexes: true,
+    showRecursion: true,
     showProxies: true,
     showSources: true,
     swapOnMove: true,

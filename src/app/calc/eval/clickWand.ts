@@ -129,6 +129,8 @@ export function clickWand(
           source: args[0],
           currentMana: gunMana,
           deckIndex: args[1].deck_index,
+          recursion: args[1].recursive ? args?.[3] || 0 : undefined,
+          iteration: args?.[4],
         };
 
         if (!currentNode) {

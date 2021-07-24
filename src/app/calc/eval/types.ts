@@ -42,6 +42,8 @@ export type ActionCall = {
   source: ActionSource;
   currentMana: number;
   deckIndex?: string | number;
+  recursion?: number;
+  iteration?: number;
 };
 export type TreeNode<T> = {
   value: T;

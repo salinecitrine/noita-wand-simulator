@@ -14,6 +14,7 @@ function condenseActions(calledActions: ActionCall[]) {
       if (o.map(isRawObject).every((v) => v)) {
         return mergeProperties(o as ActionCall[], [
           { prop: 'deckIndex', conflictValue: '*' },
+          { prop: 'recursion', conflictValue: '*' },
           { prop: 'source', conflictValue: 'multiple' },
         ]);
       } else {

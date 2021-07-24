@@ -5,7 +5,12 @@ import { ActionSourceAnnotation } from './annotations/ActionSourceAnnotation';
 import { ActionProxyAnnotation } from './annotations/ActionProxyAnnotation';
 import { DeleteSpellAnnotation } from './annotations/DeleteSpellAnnotation';
 import { useState } from 'react';
-import { ActionSource } from '../../calc/eval/types';
+import {
+  ActionCall,
+  ActionSource,
+  GroupedProjectile,
+} from '../../calc/eval/types';
+import { RecursionAnnotation } from './annotations/RecursionAnnotation';
 
 export const DEFAULT_SIZE = 48;
 
@@ -27,14 +32,9 @@ const ImageBackgroundDiv = styled.div<{
 
 type Props = {
   size?: number;
-  action?: Action;
-  count?: number;
-  source?: ActionSource;
-  proxy?: Action;
-  deckIndex?: number | string;
-  ref?: any;
   onDeleteSpell?: () => void;
-};
+} & Partial<ActionCall> &
+  Partial<GroupedProjectile>;
 
 export function WandAction(props: Props) {
   const [mouseOver, setMouseOver] = useState(false);
@@ -53,6 +53,7 @@ export function WandAction(props: Props) {
       onMouseLeave={() => setMouseOver(false)}
     >
       <DeckIndexAnnotation size={size} deckIndex={props.deckIndex} />
+      <RecursionAnnotation size={size} recursion={props.recursion} />
       <ActionSourceAnnotation size={size} source={props.source} />
       <ActionProxyAnnotation size={size} proxy={props.proxy} />
       <DeleteSpellAnnotation
