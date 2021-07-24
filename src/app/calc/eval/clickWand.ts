@@ -21,12 +21,14 @@ import { entityToAction } from './util';
 export type WandShot = {
   projectiles: Projectile[];
   calledActions: ActionCall[];
+  actionTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
 };
 export type GroupedWandShot = {
   projectiles: GroupedObject<GroupedProjectile>[];
   calledActions: GroupedObject<ActionCall>[];
+  actionTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
 };
@@ -59,6 +61,12 @@ export type ActionCall = {
   deckIndex?: string | number;
 };
 
+export type TreeNode<T> = {
+  value: T;
+  parent?: TreeNode<T>;
+  children: TreeNode<T>[];
+};
+
 export function clickWand(
   wand: Gun,
   spells: Action[],
@@ -80,13 +88,20 @@ export function clickWand(
   let calledActions: ActionCall[];
   let parentShot;
 
+  // action call tree
+  let rootNodes: TreeNode<ActionCall>[] = [];
+  let currentNode: TreeNode<ActionCall> | undefined;
+
   const resetState = () => {
     currentShot = {
       projectiles: [],
       calledActions: [],
+      actionTree: [],
     };
     calledActions = [];
     currentShotStack = [];
+    rootNodes = [];
+    currentNode = undefined;
   };
 
   const unsub = subscribe((eventType, ...args) => {
@@ -144,6 +159,7 @@ export function clickWand(
         currentShot = {
           projectiles: [],
           calledActions: [],
+          actionTree: [],
         };
         parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
           currentShot;
@@ -152,7 +168,6 @@ export function clickWand(
         currentShot = currentShotStack.pop()!;
         break;
       case 'EndProjectile':
-        //
         break;
       case 'RegisterGunAction':
         currentShot.castState = Object.assign({}, args[0]);
@@ -164,9 +179,58 @@ export function clickWand(
           currentMana: gunMana,
           deckIndex: args[1].deck_index,
         };
+
+        console.group('OnActionCalled');
+
+        console.log(
+          'before',
+          'action=',
+          args[1].deck_index,
+          'current=',
+          currentNode?.value.deckIndex,
+        );
+
+        //no current node, add a new one, and make it a root
+
+        if (!currentNode) {
+          currentNode = {
+            value: lastCalledAction,
+            children: [],
+          };
+          rootNodes.push(currentNode);
+        } else {
+          const newNode = {
+            value: lastCalledAction,
+            children: [],
+            parent: currentNode,
+          };
+          currentNode?.children.push(newNode);
+          currentNode = newNode;
+        }
+
+        console.log(
+          'after',
+          'action=',
+          args[1].deck_index,
+          'current=',
+          currentNode?.value.deckIndex,
+        );
+
+        console.groupEnd();
         calledActions.push(lastCalledAction);
         break;
       case 'OnActionFinished':
+        console.group('OnActionFinished');
+        console.log(
+          'action=',
+          args[1].deck_index,
+          'current=',
+          currentNode?.value.deckIndex,
+          'new current=',
+          currentNode?.parent?.value.deckIndex,
+        );
+        console.groupEnd();
+        currentNode = currentNode?.parent;
         break;
       case 'StartReload':
         reloaded = true;
@@ -192,6 +256,7 @@ export function clickWand(
     _draw_actions_for_shot(true);
     iterations++;
     currentShot!.calledActions = calledActions!;
+    currentShot!.actionTree = rootNodes;
     currentShot!.manaDrain = mana - gunMana;
     wandShots.push(currentShot!);
     mana = gunMana;

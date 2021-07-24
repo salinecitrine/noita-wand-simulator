@@ -11,6 +11,7 @@ import React, { useMemo } from 'react';
 import SectionHeader from '../SectionHeader';
 import { notNull } from '../../util/util';
 import { ActionSource, clickWand } from '../../calc/eval/clickWand';
+import { ActionTreeShotResult } from './ActionTreeShotResult';
 
 const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
 
@@ -134,6 +135,15 @@ export function ShotResultList(props: Props) {
           <React.Fragment key={index}>
             {index > 0 && <StyledHr />}
             <ProjectileTreeShotResult shot={shot} indent={false} />
+          </React.Fragment>
+        ))}
+      </StyledDiv>
+      <SectionHeader>Action Call Tree</SectionHeader>
+      <StyledDiv>
+        {groupedShots.map((shot, index) => (
+          <React.Fragment key={index}>
+            {index > 0 && <StyledHr />}
+            <ActionTreeShotResult key={index} shot={shot} />
           </React.Fragment>
         ))}
       </StyledDiv>
