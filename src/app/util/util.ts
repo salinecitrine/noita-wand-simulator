@@ -50,3 +50,7 @@ export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
 export function notNull<T>(x: T | null): x is T {
   return x !== null;
 }
+
+export function notNullOrUndefined<T>(x: T | null | undefined): x is T {
+  return x !== null && x !== undefined;
+}

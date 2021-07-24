@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { observeStore, RootState, store } from '../store';
-import { loadState, saveState } from '../localStorage';
+import { RootState } from '../store';
+import { loadState } from '../localStorage';
 
 // Define a type for the slice state
 export interface ConfigState {
@@ -15,11 +15,14 @@ export interface ConfigState {
     showProxies: boolean;
     showSources: boolean;
     swapOnMove: boolean;
+    unlocks: {
+      [key: string]: boolean;
+    };
   };
 }
 
 // Define the initial state using that type
-const initialState: ConfigState = {
+export const initialState: ConfigState = {
   config: {
     condenseShots: true,
     unlimitedSpells: true,
@@ -31,6 +34,38 @@ const initialState: ConfigState = {
     showProxies: true,
     showSources: true,
     swapOnMove: true,
+    unlocks: {
+      card_unlocked_black_hole: false,
+      card_unlocked_everything: false,
+      card_unlocked_exploding_deer: false,
+      card_unlocked_tentacle: false,
+      card_unlocked_spiral_shot: false,
+      card_unlocked_funky: false,
+      card_unlocked_bomb_holy: false,
+      card_unlocked_bomb_holy_giga: false,
+      card_unlocked_crumbling_earth: false,
+      card_unlocked_material_cement: false,
+      card_unlocked_nuke: false,
+      card_unlocked_nukegiga: false,
+      card_unlocked_firework: false,
+      card_unlocked_destruction: false,
+      card_unlocked_musicbox: false,
+      card_unlocked_pyramid: false,
+      card_unlocked_maths: false,
+      card_unlocked_mestari: false,
+      card_unlocked_necromancy: false,
+      card_unlocked_sea_lava: false,
+      card_unlocked_cloud_thunder: false,
+      card_unlocked_dragon: false,
+      card_unlocked_ocarina: false,
+      card_unlocked_kantele: false,
+      card_unlocked_alchemy: false,
+      card_unlocked_duplicate: false,
+      card_unlocked_divide: false,
+      card_unlocked_rain: false,
+      card_unlocked_paint: false,
+      card_unlocked_rainbow_trail: false,
+    },
   },
 };
 

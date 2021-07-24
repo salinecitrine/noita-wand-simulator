@@ -1,53 +1,155 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
   ConfigState,
+  initialState as initialConfigState,
   selectConfig,
   updateConfig,
 } from '../../redux/configSlice';
 import styled from 'styled-components';
+import _ from 'lodash';
 
 enum ConfigType {
   Boolean = 'boolean',
+  Button = 'button',
 }
 
-const configOptions: Record<
-  keyof ConfigState['config'],
-  { type: ConfigType; displayName: string }
-> = {
-  condenseShots: { type: ConfigType.Boolean, displayName: 'Condense Actions' },
-  unlimitedSpells: {
-    type: ConfigType.Boolean,
-    displayName: 'Unlimited Spells',
-  },
-  infiniteSpells: { type: ConfigType.Boolean, displayName: 'Infinite Spells' },
-  showDirectActionCalls: {
-    type: ConfigType.Boolean,
-    displayName: 'Show Direct Action Calls',
-  },
-  showDivides: { type: ConfigType.Boolean, displayName: 'Show Divides' },
-  showGreekSpells: {
-    type: ConfigType.Boolean,
-    displayName: 'Show Greek Spells',
-  },
-  showDeckIndexes: {
-    type: ConfigType.Boolean,
-    displayName: 'Show Deck Indexes',
-  },
-  showProxies: {
-    type: ConfigType.Boolean,
-    displayName: 'Show Projectile Proxies',
-  },
-  showSources: { type: ConfigType.Boolean, displayName: 'Show Sources' },
-  swapOnMove: { type: ConfigType.Boolean, displayName: 'Swap on Move' },
+type ConfigField<T> = {
+  displayName: string;
+  type: ConfigType;
+  get: (config: ConfigState['config']) => T;
+  set: (config: ConfigState['config'], v: T) => void;
 };
 
-type ConfigRenderer<T> = (
+type ConfigFieldGroup = {
+  displayName: string;
+  fields: (ConfigField<any> | ConfigFieldGroup)[];
+};
+
+function makeConfigField<T>(
+  displayName: string,
+  type: ConfigType,
+  get: (config: ConfigState['config']) => T,
+  set: (config: ConfigState['config'], value: T) => void
+): ConfigField<T> {
+  return { displayName, type, get, set };
+}
+
+function makeConfigFieldGroup(
+  displayName: string,
+  fields: (ConfigField<any> | ConfigFieldGroup)[]
+): ConfigFieldGroup {
+  return { displayName, fields };
+}
+
+function isConfigFieldGroup(
+  field: ConfigField<any> | ConfigFieldGroup
+): field is ConfigFieldGroup {
+  return field.hasOwnProperty('fields');
+}
+
+const configOptions = [
+  makeConfigField(
+    'Condense Actions',
+    ConfigType.Boolean,
+    (c) => c.condenseShots,
+    (c, v) => (c.condenseShots = v)
+  ),
+  makeConfigField(
+    'Unlimited Spells',
+    ConfigType.Boolean,
+    (c) => c.unlimitedSpells,
+    (c, v) => (c.unlimitedSpells = v)
+  ),
+  makeConfigField(
+    'Infinite Spells',
+    ConfigType.Boolean,
+    (c) => c.infiniteSpells,
+    (c, v) => (c.infiniteSpells = v)
+  ),
+  makeConfigField(
+    'Show Direct Action Calls',
+    ConfigType.Boolean,
+    (c) => c.showDirectActionCalls,
+    (c, v) => (c.showDirectActionCalls = v)
+  ),
+  makeConfigField(
+    'Show Divides',
+    ConfigType.Boolean,
+    (c) => c.showDivides,
+    (c, v) => (c.showDivides = v)
+  ),
+  makeConfigField(
+    'Show Greek Spells',
+    ConfigType.Boolean,
+    (c) => c.showGreekSpells,
+    (c, v) => (c.showGreekSpells = v)
+  ),
+  makeConfigField(
+    'Show Deck Indexes',
+    ConfigType.Boolean,
+    (c) => c.showDeckIndexes,
+    (c, v) => (c.showDeckIndexes = v)
+  ),
+  makeConfigField(
+    'Show Projectile Proxies',
+    ConfigType.Boolean,
+    (c) => c.showProxies,
+    (c, v) => (c.showProxies = v)
+  ),
+  makeConfigField(
+    'Show Action Sources',
+    ConfigType.Boolean,
+    (c) => c.showSources,
+    (c, v) => (c.showSources = v)
+  ),
+  makeConfigField(
+    'Swap When Moving Actions',
+    ConfigType.Boolean,
+    (c) => c.swapOnMove,
+    (c, v) => (c.swapOnMove = v)
+  ),
+  makeConfigFieldGroup('Unlocks', [
+    makeConfigField(
+      'Enable All',
+      ConfigType.Button,
+      (c) => null,
+      (c, v) =>
+        Object.keys(initialConfigState.config.unlocks).forEach(
+          (k) => (c.unlocks[k] = true)
+        )
+    ),
+    makeConfigField(
+      'Disable All',
+      ConfigType.Button,
+      (c) => null,
+      (c, v) =>
+        Object.keys(initialConfigState.config.unlocks).forEach(
+          (k) => (c.unlocks[k] = false)
+        )
+    ),
+    ...Object.keys(initialConfigState.config.unlocks).map((unlockField) =>
+      makeConfigField(
+        unlockField
+          .replace(/card_unlocked_(.*)/, '$1')
+          .replace(/_/g, ' ')
+          .replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+          }),
+        ConfigType.Boolean,
+        (c) => c.unlocks[unlockField],
+        (c, v) => (c.unlocks[unlockField] = v)
+      )
+    ),
+  ]),
+];
+
+type ConfigTypeRenderer<T> = (
   key: string,
   value: T,
   update: (value: T) => void
 ) => JSX.Element;
 
-const booleanRenderer: ConfigRenderer<boolean> = (name, value, update) => (
+const booleanRenderer: ConfigTypeRenderer<boolean> = (name, value, update) => (
   <label>
     <input
       type="checkbox"
@@ -58,8 +160,13 @@ const booleanRenderer: ConfigRenderer<boolean> = (name, value, update) => (
   </label>
 );
 
-const configRenderers = {
+const buttonRenderer: ConfigTypeRenderer<string> = (name, value, update) => (
+  <button onClick={(e) => update(value)}>{name}</button>
+);
+
+const configRenderers: { [T in ConfigType]: ConfigTypeRenderer<any> } = {
   boolean: booleanRenderer,
+  button: buttonRenderer,
 };
 
 const MainDiv = styled.div`
@@ -73,23 +180,59 @@ const ConfigDiv = styled.div`
   flex-direction: column;
 `;
 
+const ConfigSubtitle = styled.div`
+  font-weight: bold;
+`;
+
 type Props = {};
 
 export function ConfigEditor(props: Props) {
   const { config } = useAppSelector(selectConfig);
   const dispatch = useAppDispatch();
 
+  const makeUpdateFunction =
+    <T extends any>(set: (config: ConfigState['config'], value: T) => void) =>
+    (v: T) => {
+      let newConfig = _.cloneDeep(config);
+      set(newConfig, v);
+      dispatch(updateConfig(newConfig));
+    };
+
+  const renderConfigField = (
+    field: ConfigField<any> | ConfigFieldGroup,
+    showTitle = true
+  ) => {
+    if (isConfigFieldGroup(field)) {
+      return (
+        <div>
+          {showTitle && <ConfigSubtitle>{field.displayName}</ConfigSubtitle>}
+          <div>
+            {field.fields.map((f, index) => (
+              <div key={index}>{renderConfigField(f)}</div>
+            ))}
+          </div>
+        </div>
+      );
+    } else {
+      const { displayName, type, get, set } = field;
+      const renderer = configRenderers[type](
+        displayName,
+        get(config),
+        makeUpdateFunction(set)
+      );
+      return <div>{renderer}</div>;
+    }
+  };
+
   return (
     <MainDiv>
       <ConfigDiv>
-        {Object.entries(configOptions).map(
-          ([k, { type, displayName }], index) => {
-            const kt = k as keyof ConfigState['config'];
-            const c = configRenderers[type](displayName, config[kt], (v) =>
-              dispatch(updateConfig({ [kt]: v }))
-            );
-            return <div key={index}>{c}</div>;
-          }
+        {renderConfigField(
+          {
+            displayName: 'Configuration',
+            fields: configOptions,
+          },
+          false
         )}
       </ConfigDiv>
     </MainDiv>

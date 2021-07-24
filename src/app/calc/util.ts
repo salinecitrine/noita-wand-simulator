@@ -23,6 +23,7 @@ import {
   mergeProperties,
 } from '../util/combineGroups';
 import { entityToActionId } from './__generated__/entityProjectileMap';
+import { notNullOrUndefined } from '../util/util';
 
 export function getActionById(actionId: string): Readonly<Action> {
   for (let i = 0; i < actions.length; i++) {
@@ -293,12 +294,8 @@ export const entityToAction = Object.entries(entityToActionId).reduce(
   {} as { [key: string]: Action[] }
 );
 
-// export const entityToAction = actions.reduce((acc, cur) => {
-//   if (cur.related_projectiles) {
-//     if (!acc[cur.related_projectiles[0]]) {
-//       acc[cur.related_projectiles[0]] = [];
-//     }
-//     acc[cur.related_projectiles[0]].push(cur);
-//   }
-//   return acc;
-// }, {} as { [key: string]: Action[] });
+export const unlockFlags: string[] = [
+  ...new Set(
+    actions.map((a) => a.spawn_requires_flag).filter(notNullOrUndefined)
+  ),
+];
