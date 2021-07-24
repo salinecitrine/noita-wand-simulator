@@ -37,7 +37,7 @@ function condenseProjectiles(projectiles: Projectile[]) {
   });
   return combineGroups(
     projectilesWithProcessedTriggers,
-    (p) => p.entity,
+    (p) => [p.entity, !!p.trigger],
     (o) => {
       // deck index and source
       if (o.map(isRawObject).every((v) => v)) {
