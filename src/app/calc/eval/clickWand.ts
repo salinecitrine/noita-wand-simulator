@@ -1,4 +1,4 @@
-import { Action, Gun, GunActionState } from '../extra/types';
+import { Action, Gun } from '../extra/types';
 import { subscribe } from '../extra/ext_functions';
 import {
   ACTION_TYPE_MATERIAL,
@@ -15,57 +15,8 @@ import {
   _start_shot,
   mana as gunMana,
 } from '../gun';
-import { GroupedObject } from '../../util/combineGroups';
-import { entityToAction } from './util';
-
-export type WandShot = {
-  projectiles: Projectile[];
-  calledActions: ActionCall[];
-  actionTree: TreeNode<ActionCall>[];
-  castState?: GunActionState;
-  manaDrain?: number;
-};
-export type GroupedWandShot = {
-  projectiles: GroupedObject<GroupedProjectile>[];
-  calledActions: GroupedObject<ActionCall>[];
-  actionTree: TreeNode<ActionCall>[];
-  castState?: GunActionState;
-  manaDrain?: number;
-};
-export type Projectile = {
-  entity: string;
-  action?: Action;
-  proxy?: Action;
-  trigger?: WandShot;
-  deckIndex?: string | number;
-};
-export type GroupedProjectile = {
-  entity: string;
-  action?: Action;
-  proxy?: Action;
-  trigger?: GroupedWandShot;
-  deckIndex?: string | number;
-};
-
-export enum ActionSource {
-  DRAW = 'draw',
-  ACTION = 'action',
-  PERK = 'perk',
-  MULTIPLE = 'multiple',
-}
-
-export type ActionCall = {
-  action: Action;
-  source: ActionSource;
-  currentMana: number;
-  deckIndex?: string | number;
-};
-
-export type TreeNode<T> = {
-  value: T;
-  parent?: TreeNode<T>;
-  children: TreeNode<T>[];
-};
+import { entityToAction } from './lookups';
+import { ActionCall, TreeNode, WandShot } from './types';
 
 export function clickWand(
   wand: Gun,

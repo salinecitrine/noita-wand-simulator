@@ -1,7 +1,4 @@
-import {
-  condenseActionsAndProjectiles,
-  getActionById,
-} from '../../calc/eval/util';
+import { getActionById } from '../../calc/eval/util';
 import { useAppSelector } from '../../hooks';
 import { selectWand } from '../../redux/wandSlice';
 import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
@@ -10,9 +7,11 @@ import { ActionCalledShotResult } from './ActionCalledShotResult';
 import React, { useMemo } from 'react';
 import SectionHeader from '../SectionHeader';
 import { notNull } from '../../util/util';
-import { ActionSource, clickWand } from '../../calc/eval/clickWand';
+import { clickWand } from '../../calc/eval/clickWand';
 import { selectConfig } from '../../redux/configSlice';
 import { ActionTreeShotResult } from './ActionTreeShotResult';
+import { condenseActionsAndProjectiles } from '../../calc/eval/condense';
+import { ActionSource } from '../../calc/eval/types';
 
 const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
 

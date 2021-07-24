@@ -54,3 +54,13 @@ export function notNull<T>(x: T | null): x is T {
 export function notNullOrUndefined<T>(x: T | null | undefined): x is T {
   return x !== null && x !== undefined;
 }
+
+export const lazy = <T>(callback: () => T) => {
+  let val: T | undefined = undefined;
+  return () => {
+    if (val === undefined) {
+      val = callback();
+    }
+    return val;
+  };
+};

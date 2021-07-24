@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { ProjectileCastState } from './ProjectileCastState';
 import { WandActionGroup } from '../wandAction/WandActionGroup';
 import { isRawObject } from '../../util/combineGroups';
-import { GroupedWandShot } from '../../calc/eval/clickWand';
+import { GroupedWandShot } from '../../calc/eval/types';
 
 const StyledShotDiv = styled.div`
   display: flex;

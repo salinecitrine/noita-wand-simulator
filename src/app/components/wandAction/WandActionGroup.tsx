@@ -8,7 +8,7 @@ import {
   simplifyMultipleObject,
 } from '../../util/combineGroups';
 import WandActionBorder from './WandActionBorder';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/clickWand';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 
 const MainDiv = styled.div`
   display: flex;

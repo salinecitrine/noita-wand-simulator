@@ -5,7 +5,7 @@ import { ActionSourceAnnotation } from './annotations/ActionSourceAnnotation';
 import { ActionProxyAnnotation } from './annotations/ActionProxyAnnotation';
 import { DeleteSpellAnnotation } from './annotations/DeleteSpellAnnotation';
 import { useState } from 'react';
-import { ActionSource } from '../../calc/eval/clickWand';
+import { ActionSource } from '../../calc/eval/types';
 
 export const DEFAULT_SIZE = 48;
 

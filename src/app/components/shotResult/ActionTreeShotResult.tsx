@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import { WandActionGroup } from '../wandAction/WandActionGroup';
-import {
-  ActionCall,
-  GroupedWandShot,
-  TreeNode,
-} from '../../calc/eval/clickWand';
+import { ActionCall, GroupedWandShot, TreeNode } from '../../calc/eval/types';
 
 const MainDiv = styled.div`
   display: flex;
