@@ -62,7 +62,7 @@ import {
   GlobalsSetValue,
 } from "../extra/ext_functions";
 import { Random } from "../extra/util";
-import { ActionSource } from "../util";
+import { ActionSource } from "../eval/clickWand";
 
 
 `;
