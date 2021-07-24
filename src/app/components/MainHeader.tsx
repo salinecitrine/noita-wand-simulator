@@ -11,15 +11,13 @@ const HeaderDiv = styled.div`
 
   h2 {
     font-weight: bold;
-    margin: 0;
+    margin: 0 0 0 20px;
   }
 `;
 
 const SpacerDiv = styled.div`
   display: flex;
   align-self: center;
-  width: 220px;
-  margin-left: 15px;
 `;
 
 const ExtraDiv = styled.div`
@@ -32,8 +30,8 @@ const ExtraDiv = styled.div`
 export function MainHeader(props: React.PropsWithChildren<Props>) {
   return (
     <HeaderDiv>
-      <SpacerDiv />
       <h2>Noita Wand Simulator</h2>
+      <SpacerDiv />
       <ExtraDiv>{props.children}</ExtraDiv>
     </HeaderDiv>
   );
