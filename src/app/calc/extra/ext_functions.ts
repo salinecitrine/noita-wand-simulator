@@ -223,6 +223,7 @@ export function OnActionFinished(
   source: string,
   action: Action,
   c: GunActionState,
+  returnValue: any,
   ...args: number[]
 ) {
   onEvent('OnActionCalled', source, action, c, ...args);

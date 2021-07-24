@@ -187,6 +187,8 @@ export function clickWand(
         };
         calledActions.push(lastCalledAction);
         break;
+      case 'OnActionFinished':
+        break;
       case 'StartReload':
         reloaded = true;
         break;

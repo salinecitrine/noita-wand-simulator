@@ -709,5 +709,7 @@ export function call_action(
   ...args: number[]
 ) {
   OnActionCalled(source, action, c, ...args);
-  return action.action(c, ...args);
+  const returnValue = action.action(c, ...args);
+  OnActionFinished(source, action, c, returnValue, ...args);
+  return returnValue;
 }
