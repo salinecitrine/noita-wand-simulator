@@ -108,6 +108,12 @@ const configOptions = [
     (c) => c.swapOnMove,
     (c, v) => (c.swapOnMove = v),
   ),
+  makeConfigField(
+    'Show Action Tree',
+    ConfigType.Boolean,
+    (c) => c.showActionTree,
+    (c, v) => (c.showActionTree = v),
+  ),
   makeConfigFieldGroup('Unlocks', [
     makeConfigField(
       'Enable All',

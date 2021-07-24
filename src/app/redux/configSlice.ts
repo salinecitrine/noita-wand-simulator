@@ -15,6 +15,7 @@ export interface ConfigState {
     showProxies: boolean;
     showSources: boolean;
     swapOnMove: boolean;
+    showActionTree: boolean;
     unlocks: {
       [key: string]: boolean;
     };
@@ -34,6 +35,7 @@ export const initialState: ConfigState = {
     showProxies: true,
     showSources: true,
     swapOnMove: true,
+    showActionTree: true,
     unlocks: {
       card_unlocked_black_hole: false,
       card_unlocked_everything: false,

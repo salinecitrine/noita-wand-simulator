@@ -11,6 +11,7 @@ import React, { useMemo } from 'react';
 import SectionHeader from '../SectionHeader';
 import { notNull } from '../../util/util';
 import { ActionSource, clickWand } from '../../calc/eval/clickWand';
+import { selectConfig } from '../../redux/configSlice';
 import { ActionTreeShotResult } from './ActionTreeShotResult';
 
 const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
@@ -43,6 +44,7 @@ type Props = {
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
 export function ShotResultList(props: Props) {
   const { wand, spells } = useAppSelector(selectWand);
+  const { config } = useAppSelector(selectConfig);
 
   const spellActions = useMemo(
     () => spells.filter(notNull).map(getActionById),
@@ -138,15 +140,19 @@ export function ShotResultList(props: Props) {
           </React.Fragment>
         ))}
       </StyledDiv>
-      <SectionHeader>Action Call Tree</SectionHeader>
-      <StyledDiv>
-        {groupedShots.map((shot, index) => (
-          <React.Fragment key={index}>
-            {index > 0 && <StyledHr />}
-            <ActionTreeShotResult key={index} shot={shot} />
-          </React.Fragment>
-        ))}
-      </StyledDiv>
+      {config.showActionTree && (
+        <>
+          <SectionHeader>Action Call Tree</SectionHeader>
+          <StyledDiv>
+            {groupedShots.map((shot, index) => (
+              <React.Fragment key={index}>
+                {index > 0 && <StyledHr />}
+                <ActionTreeShotResult key={index} shot={shot} />
+              </React.Fragment>
+            ))}
+          </StyledDiv>
+        </>
+      )}
     </div>
   );
 }
