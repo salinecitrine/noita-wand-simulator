@@ -31,7 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate-actions": "deno run --allow-read --allow-write scripts/generate_gun_actions.ts",
+    "generate-actions": "python scripts/generate_gun_actions.py",
     "generate-translations": "python scripts/generate_translations.py",
     "generate-entity-map": "python scripts/generate_entity_map.py"
   },
