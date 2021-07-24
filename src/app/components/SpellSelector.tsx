@@ -36,7 +36,7 @@ export function SpellSelector(props: Props) {
       actions
         .filter((a) => isSpellUnlocked(config.unlocks, a))
         .map((a, index) => (
-          <WandActionDragSource actionId={a.id} key={index}>
+          <WandActionDragSource actionId={a.id} key={a.id}>
             <WandActionBorder size={24}>
               <WandAction action={a} size={24} />
             </WandActionBorder>
