@@ -112,12 +112,12 @@ const fields: FieldDescription[] = [
   {
     field: 'spread_degrees',
     displayName: 'Spread',
-    render: (v) => `${numSign(Number(v))} deg`,
+    render: (v) => `${numSign(Number(v), 0)} deg`,
   },
   {
     field: 'pattern_degrees',
     displayName: 'Pattern Angle',
-    render: (v) => `±${Number(v)} deg`,
+    render: (v) => `±${round(Number(v), 0)} deg`,
   },
   // {field: 'screenshake', displayName: 'screenshake', render: (v) => `${v}`},
   { field: 'recoil', displayName: 'Recoil', render: (v) => `${v}` },
