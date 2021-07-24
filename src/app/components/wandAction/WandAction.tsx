@@ -24,6 +24,7 @@ const ImageBackgroundDiv = styled.div<{
   font-family: monospace;
   font-weight: bold;
   user-select: none;
+  image-rendering: pixelated;
 `;
 
 type Props = {
