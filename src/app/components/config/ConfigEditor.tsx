@@ -91,7 +91,7 @@ const configOptions = [
     (c, v) => (c.showDeckIndexes = v),
   ),
   makeConfigField(
-    'Show Recursion',
+    'Show Recursion and Iteration',
     ConfigType.Boolean,
     (c) => c.showRecursion,
     (c, v) => (c.showRecursion = v),

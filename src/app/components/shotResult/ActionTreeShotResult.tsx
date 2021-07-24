@@ -19,13 +19,13 @@ const DummyDiv = styled.div`
 const NodeDiv = styled.div`
   display: flex;
   flex-direction: row;
-  //border-left: 4px solid #ccc;
+  //border-bottom: 1px solid #ccc;
 `;
 
 const ChildrenDiv = styled.div`
   display: flex;
   flex-direction: column;
-  border-left: 4px solid #66c;
+  border-left: 4px solid #777;
   border-top: 0;
   border-bottom: 0;
 `;
@@ -52,12 +52,7 @@ function ActionTreeComponent(props: ActionTreeComponentProps) {
   return (
     <NodeDiv>
       <WandActionGroup group={node.value} />
-      {node.children.length > 0 && (
-        <>
-          <span style={{ color: 'white' }}>{''}</span>
-          {childrenComponent}
-        </>
-      )}
+      {node.children.length > 0 && childrenComponent}
     </NodeDiv>
   );
 }

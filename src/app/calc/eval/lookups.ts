@@ -10,8 +10,20 @@ export const entityToAction = lazy(() =>
     return acc;
   }, {} as { [key: string]: Action[] }),
 );
+
 export const unlockFlags = lazy(() => [
   ...new Set(
     actions.map((a) => a.spawn_requires_flag).filter(notNullOrUndefined),
   ),
+]);
+
+export const recursiveActions = lazy(() => [
+  ...new Set(actions.filter((a) => a.recursive).map((a) => a.id)),
+]);
+
+export const iterativeActions = lazy(() => [
+  'DIVIDE_2',
+  'DIVIDE_3',
+  'DIVIDE_4',
+  'DIVIDE_10',
 ]);

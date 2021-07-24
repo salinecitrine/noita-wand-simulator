@@ -1,16 +1,12 @@
 import styled from 'styled-components';
-import { Action } from '../../calc/extra/types';
 import { DeckIndexAnnotation } from './annotations/DeckIndexAnnotation';
 import { ActionSourceAnnotation } from './annotations/ActionSourceAnnotation';
 import { ActionProxyAnnotation } from './annotations/ActionProxyAnnotation';
 import { DeleteSpellAnnotation } from './annotations/DeleteSpellAnnotation';
 import { useState } from 'react';
-import {
-  ActionCall,
-  ActionSource,
-  GroupedProjectile,
-} from '../../calc/eval/types';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { RecursionAnnotation } from './annotations/RecursionAnnotation';
+import { iterativeActions, recursiveActions } from '../../calc/eval/lookups';
 
 export const DEFAULT_SIZE = 48;
 
@@ -53,7 +49,13 @@ export function WandAction(props: Props) {
       onMouseLeave={() => setMouseOver(false)}
     >
       <DeckIndexAnnotation size={size} deckIndex={props.deckIndex} />
-      <RecursionAnnotation size={size} recursion={props.recursion} />
+      <RecursionAnnotation
+        size={size}
+        recursive={recursiveActions().includes(props.action?.id)}
+        iterative={iterativeActions().includes(props.action?.id)}
+        recursion={props.recursion}
+        iteration={props.iteration}
+      />
       <ActionSourceAnnotation size={size} source={props.source} />
       <ActionProxyAnnotation size={size} proxy={props.proxy} />
       <DeleteSpellAnnotation
