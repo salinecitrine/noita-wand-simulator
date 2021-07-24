@@ -37,6 +37,15 @@ const StyledMetadataDiv = styled.div<StyledCastStateDivProps>`
   margin-top: ${(props) => (props.indent ? 24 : 0)}px;
 `;
 
+const TriggerDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-left: 4px solid #777;
+  border-top: 0;
+  border-bottom: 0;
+  margin-bottom: 10px;
+`;
+
 type Props = {
   shot: GroupedWandShot;
   indent: boolean;
@@ -61,7 +70,9 @@ export function ProjectileTreeShotResult(props: Props) {
         let triggerComponent;
         if (isRawObject(p)) {
           triggerComponent = p.trigger && (
-            <ProjectileTreeShotResult shot={p.trigger} indent={true} />
+            <TriggerDiv>
+              <ProjectileTreeShotResult shot={p.trigger} indent={true} />
+            </TriggerDiv>
           );
         }
         return (
