@@ -180,18 +180,6 @@ export function clickWand(
           deckIndex: args[1].deck_index,
         };
 
-        console.group('OnActionCalled');
-
-        console.log(
-          'before',
-          'action=',
-          args[1].deck_index,
-          'current=',
-          currentNode?.value.deckIndex,
-        );
-
-        //no current node, add a new one, and make it a root
-
         if (!currentNode) {
           currentNode = {
             value: lastCalledAction,
@@ -207,29 +195,9 @@ export function clickWand(
           currentNode?.children.push(newNode);
           currentNode = newNode;
         }
-
-        console.log(
-          'after',
-          'action=',
-          args[1].deck_index,
-          'current=',
-          currentNode?.value.deckIndex,
-        );
-
-        console.groupEnd();
         calledActions.push(lastCalledAction);
         break;
       case 'OnActionFinished':
-        console.group('OnActionFinished');
-        console.log(
-          'action=',
-          args[1].deck_index,
-          'current=',
-          currentNode?.value.deckIndex,
-          'new current=',
-          currentNode?.parent?.value.deckIndex,
-        );
-        console.groupEnd();
         currentNode = currentNode?.parent;
         break;
       case 'StartReload':
