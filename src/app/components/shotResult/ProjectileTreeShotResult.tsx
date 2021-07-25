@@ -69,7 +69,7 @@ export function ProjectileTreeShotResult(props: Props) {
       {shot.projectiles.map((p, index) => {
         let triggerComponent;
         if (isRawObject(p)) {
-          triggerComponent = p.trigger && (
+          triggerComponent = p.trigger && p.trigger.projectiles.length > 0 && (
             <TriggerDiv>
               <ProjectileTreeShotResult shot={p.trigger} indent={true} />
             </TriggerDiv>
