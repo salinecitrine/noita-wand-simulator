@@ -358,45 +358,6 @@ const defaultPresets = [
       },
     ],
   },
-  {
-    name: 'Discord 1M damage',
-    wand: { ...defaultWand, deck_capacity: 5 },
-    spells: [
-      'DIVIDE_10',
-      'MONEY_MAGIC',
-      'ALPHA',
-      'CRITICAL_HIT',
-      'LIGHT_BULLET',
-    ],
-  },
-  {
-    name: 'weird',
-    wand: { ...defaultWand, deck_capacity: 26, actions_per_round: 1 },
-    spells: [
-      'DIVIDE_2',
-      'ADD_TIMER',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-    ],
-  },
-  {
-    name: 'weird 2',
-    wand: { ...defaultWand, deck_capacity: 26, actions_per_round: 1 },
-    spells: [
-      'DIVIDE_4',
-      'ADD_TRIGGER',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-      'LIGHT_BULLET',
-    ],
-  },
 ];
 
 export default defaultPresets;
