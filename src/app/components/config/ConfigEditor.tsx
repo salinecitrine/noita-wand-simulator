@@ -7,6 +7,7 @@ import {
 } from '../../redux/configSlice';
 import styled from 'styled-components';
 import _ from 'lodash';
+import { constToDisplayString } from '../../util/util';
 
 enum ConfigType {
   Boolean = 'boolean',
@@ -141,12 +142,7 @@ const configOptions = [
     ),
     ...Object.keys(initialConfigState.config.unlocks).map((unlockField) =>
       makeConfigField(
-        unlockField
-          .replace(/card_unlocked_(.*)/, '$1')
-          .replace(/_/g, ' ')
-          .replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-          }),
+        constToDisplayString(unlockField.replace(/card_unlocked_(.*)/, '$1')),
         ConfigType.Boolean,
         (c) => c.unlocks[unlockField],
         (c, v) => (c.unlocks[unlockField] = v),

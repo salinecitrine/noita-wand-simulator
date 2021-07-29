@@ -64,3 +64,31 @@ export const lazy = <T>(callback: () => T) => {
     return val;
   };
 };
+
+export const ACTION_TYPES = [
+  'PROJECTILE',
+  'STATIC_PROJECTILE',
+  'MODIFIER',
+  'DRAW_MANY',
+  'MATERIAL',
+  'OTHER',
+  'UTILITY',
+  'PASSIVE',
+];
+
+export function groupBy<T, K extends string>(arr: T[], keyFn: (x: T) => K) {
+  return arr.reduce((acc, cur) => {
+    const k = keyFn(cur);
+    if (!acc[k]) {
+      acc[k] = [];
+    }
+    acc[k].push(cur);
+    return acc;
+  }, {} as Record<K, T[]>);
+}
+
+export function constToDisplayString(c: string) {
+  return c.replace(/_/g, ' ').replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}
