@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@reduxjs/toolkit": "^1.6.0",
+    "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.1.9",
+    "@testing-library/user-event": "^13.2.0",
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.171",
-    "@types/node": "^16.3.3",
-    "@types/react": "^17.0.14",
+    "@types/node": "^16.4.2",
+    "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
     "@types/styled-components": "^5.1.11",
     "lodash": "^4.17.21",
@@ -31,6 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "serve": "npx serve -s build",
     "generate-actions": "python scripts/generate_gun_actions.py",
     "generate-translations": "python scripts/generate_translations.py",
     "generate-entity-map": "python scripts/generate_entity_map.py"
@@ -58,5 +59,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "serve": "^12.0.0"
   }
 }
