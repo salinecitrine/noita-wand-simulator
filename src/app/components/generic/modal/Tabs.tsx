@@ -26,6 +26,7 @@ const TitleDiv = styled.div`
 const ContentDiv = styled.div`
   display: flex;
   width: 100%;
+  background-color: #333;
 `;
 
 export type Tab = {
