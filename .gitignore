@@ -2,8 +2,8 @@
 *.iml
 .idea
 /data
-/save00
-data_base
+/saves
+/data_base
 
 # dependencies
 /node_modules
