@@ -1,6 +1,7 @@
 import { GunActionState } from '../../calc/extra/types';
 import { defaultGunActionState } from '../../calc/gunaction_generated';
 import styled from 'styled-components';
+import { numSign, round } from '../../util/util';
 
 const StyledList = styled.div`
   display: flex;
@@ -35,19 +36,6 @@ type FieldDescription = {
   field: keyof GunActionState;
   displayName: string;
   render: (value: ValueOf<GunActionState>) => string;
-};
-
-const numSign = (v: any, round?: number) => {
-  if (round !== undefined) {
-    v = Math.round(Number(v) * Math.pow(10, round)) / Math.pow(10, round);
-  }
-  return (v < 0 ? '' : '+') + v;
-};
-
-const round = (v: any, position: number) => {
-  return (
-    Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position)
-  );
 };
 
 const fields: FieldDescription[] = [
@@ -112,7 +100,7 @@ const fields: FieldDescription[] = [
   {
     field: 'spread_degrees',
     displayName: 'Spread',
-    render: (v) => `${numSign(Number(v), 0)} deg`,
+    render: (v) => `${numSign(Number(v), 1)} deg`,
   },
   {
     field: 'pattern_degrees',

@@ -116,3 +116,23 @@ export function fixArraySize<T>(arr: T[], size: number): (T | null)[] {
     return arr;
   }
 }
+
+export type TypedProperties<T, U> = Pick<
+  T,
+  {
+    [K in keyof T]: T[K] extends U ? K : never;
+  }[keyof T]
+>;
+
+export const numSign = (v: any, round?: number) => {
+  if (round !== undefined) {
+    v = Math.round(Number(v) * Math.pow(10, round)) / Math.pow(10, round);
+  }
+  return (v < 0 ? '' : '+') + v;
+};
+
+export const round = (v: any, position: number) => {
+  return (
+    Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position)
+  );
+};
