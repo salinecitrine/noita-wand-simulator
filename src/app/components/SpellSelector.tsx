@@ -38,8 +38,8 @@ type WandActionSelectProps = {
 
 const WandActionSelect = (props: WandActionSelectProps) => (
   <WandActionDragSource actionId={props.action.id} key={props.action.id}>
-    <WandActionBorder size={24}>
-      <WandAction action={props.action} size={24} />
+    <WandActionBorder size={props.size}>
+      <WandAction action={props.action} size={props.size} />
     </WandActionBorder>
   </WandActionDragSource>
 );
@@ -71,7 +71,7 @@ export function SpellSelector(props: Props) {
         content: (
           <SpellCategorySpellsDiv>
             {actions.map((a) => (
-              <WandActionSelect action={a} size={24} key={a.id} />
+              <WandActionSelect action={a} size={32} key={a.id} />
             ))}
           </SpellCategorySpellsDiv>
         ),

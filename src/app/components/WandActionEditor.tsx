@@ -31,6 +31,8 @@ export function WandActionEditor(props: Props) {
 
   const spellActions = spells.map((s) => (s ? getActionById(s) : null));
 
+  const size = 48;
+
   const handleDeleteSpell = (wandIndex: number) => {
     dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
   };
@@ -47,7 +49,7 @@ export function WandActionEditor(props: Props) {
             actionId={spellAction.id}
             sourceWandIndex={wandIndex}
           >
-            <WandActionBorder size={48}>
+            <WandActionBorder size={size}>
               <WandAction
                 action={spellAction}
                 deckIndex={deckIndex}
@@ -60,7 +62,7 @@ export function WandActionEditor(props: Props) {
     } else {
       return (
         <WandActionDropTarget wandIndex={wandIndex}>
-          <WandActionBorder size={48} />
+          <WandActionBorder size={size} />
         </WandActionDropTarget>
       );
     }
