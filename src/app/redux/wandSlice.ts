@@ -81,6 +81,6 @@ export const wandSlice = createSlice({
 export const { setWand, setSpells, setSpellAtIndex, moveSpell, swapSpells } =
   wandSlice.actions;
 
-export const selectWand = (state: RootState) => state.wand.present;
+export const selectWand = (state: RootState): WandState => state.wand.present;
 
 export default wandSlice.reducer;

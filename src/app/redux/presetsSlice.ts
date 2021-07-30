@@ -25,6 +25,6 @@ export const presetsSlice = createSlice({
 
 export const { setPresets } = presetsSlice.actions;
 
-export const selectPresets = (state: RootState) => state.presets;
+export const selectPresets = (state: RootState): PresetsState => state.presets;
 
 export default presetsSlice.reducer;
