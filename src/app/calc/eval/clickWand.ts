@@ -131,7 +131,7 @@ export function clickWand(
           deckIndex: args[1].deck_index,
           recursion: args[1].recursive ? args?.[3] || 0 : args?.[3],
           iteration: iterativeActions().includes(args[1].id)
-            ? args?.[4] || 0
+            ? args?.[4] || 1
             : undefined,
         };
 
