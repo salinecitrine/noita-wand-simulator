@@ -9,31 +9,12 @@ import { useAppSelector } from '../hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
 import { Action } from '../calc/extra/types';
 import { ACTION_TYPES, constToDisplayString, groupBy } from '../util/util';
+import { Tabs } from './generic/modal/Tabs';
 
 const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const AllSpellsDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const SpellCategoryDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #333;
-  min-width: 100px;
-`;
-
-const SpellCategoryHeaderDiv = styled.div`
-  display: flex;
-  white-space: nowrap;
-  background-color: #444;
-  color: #ddd;
-  justify-content: center;
-  padding: 0 2px;
+  width: 100%;
 `;
 
 const SpellCategorySpellsDiv = styled.div`
@@ -83,25 +64,25 @@ export function SpellSelector(props: Props) {
     }
   }, [config.showSpellsInCategories, unlockedActions]);
 
-  const wandActionSelects = useMemo(() => {
+  const tabs = useMemo(() => {
     return Object.entries(actionsByType).map(([category, actions]) => {
-      return (
-        <SpellCategoryDiv>
-          <SpellCategoryHeaderDiv>{category}</SpellCategoryHeaderDiv>
+      return {
+        title: category,
+        content: (
           <SpellCategorySpellsDiv>
             {actions.map((a) => (
-              <WandActionSelect action={a} size={24} />
+              <WandActionSelect action={a} size={24} key={a.id} />
             ))}
           </SpellCategorySpellsDiv>
-        </SpellCategoryDiv>
-      );
+        ),
+      };
     });
   }, [actionsByType]);
 
   return (
     <MainDiv>
       <SectionHeader>Spells</SectionHeader>
-      <AllSpellsDiv>{wandActionSelects}</AllSpellsDiv>
+      <Tabs tabs={tabs} />
     </MainDiv>
   );
 }
