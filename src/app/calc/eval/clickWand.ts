@@ -24,9 +24,9 @@ export function clickWand(
   mana: number,
   fireUntilReload: boolean,
   endOnRefresh: boolean = true,
-) {
+): [WandShot[], number | undefined] {
   if (spells.filter((s) => s != null).length === 0) {
-    return [];
+    return [[], undefined];
   }
 
   let iterations = 0;
@@ -42,6 +42,8 @@ export function clickWand(
   // action call tree
   let rootNodes: TreeNode<ActionCall>[] = [];
   let currentNode: TreeNode<ActionCall> | undefined;
+
+  let reloadTime: number | undefined;
 
   const resetState = () => {
     currentShot = {
@@ -157,6 +159,7 @@ export function clickWand(
         break;
       case 'StartReload':
         reloaded = true;
+        reloadTime = args[0];
         break;
       default:
     }
@@ -197,5 +200,5 @@ export function clickWand(
 
   unsub();
 
-  return wandShots;
+  return [wandShots, reloadTime];
 }

@@ -12,7 +12,7 @@ const StyledList = styled.div`
   color: #fff;
   font-weight: bold;
   min-width: 230px;
-  border: 2px solid black;
+  border: 1px solid black;
 `;
 const StyledListItem = styled.div`
   display: flex;

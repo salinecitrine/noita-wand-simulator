@@ -6,11 +6,12 @@ const StyledList = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   font-family: monospace;
-  background-color: #333;
+  background-color: #555;
   color: #fff;
   font-weight: bold;
   min-width: 230px;
-  border: 2px solid black;
+  border: 1px solid black;
+  border-bottom: none;
 `;
 
 const StyledListItem = styled.div`
@@ -31,14 +32,15 @@ const StyledValue = styled.span`
 `;
 
 type Fields = {
-  mana_drain?: number;
-  other_fields?: string;
+  manaDrain?: number;
+  castDelay?: number;
+  rechargeDelay?: number;
 };
 
 function field<K extends keyof Fields = keyof Fields>(
   name: K,
   displayName: string,
-  render: (v: string | number) => string,
+  render: (v: string | number) => React.ReactElement,
 ) {
   return { name, displayName, render };
 }
@@ -55,19 +57,22 @@ function round(v: number, decimalPlaces: number) {
 }
 
 const fieldRenderers = [
-  field('mana_drain', 'Mana Drain', (v) => `${sign(round(Number(v), 0))}`),
-  field('other_fields', 'Mana Drain', (v) => `${v}`),
+  field('manaDrain', 'Mana Drain', (v) => <span>{round(Number(v), 0)}</span>),
+  field('castDelay', 'Cast Delay', (v) => (
+    <span>{round(Math.max(0, Number(v) / 60), 2)}s</span>
+  )),
+  field('rechargeDelay', 'Recharge Delay', (v) => (
+    <span>{round(Math.max(0, Number(v) / 60), 2)}s</span>
+  )),
 ];
 
-type Props = {
-  fields: Fields;
-};
+type Props = Fields & {};
 
-export function ProjectileMetadata(props: Props) {
+export function ShotMetadata(props: Props) {
   return (
     <StyledList>
       {fieldRenderers.map(({ name, displayName, render }) => {
-        const value = props.fields[name];
+        const value = props[name];
         if (value == null) {
           return null;
         }

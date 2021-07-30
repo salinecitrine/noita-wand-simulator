@@ -12,6 +12,7 @@ import { selectConfig } from '../../redux/configSlice';
 import { ActionTreeShotResult } from './ActionTreeShotResult';
 import { condenseActionsAndProjectiles } from '../../calc/eval/condense';
 import { ActionSource } from '../../calc/eval/types';
+import { ShotMetadata } from './ShotMetadata';
 
 const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
 
@@ -67,7 +68,7 @@ export function ShotResultList(props: Props) {
     }
   }, [props.infiniteSpells, props.unlimitedSpells, spellActions]);
 
-  let shots = useMemo(
+  let [shots, reloadTime] = useMemo(
     () => clickWand(wand, spellActionsWithUses, wand.mana_max, true),
     [spellActionsWithUses, wand],
   );
@@ -123,6 +124,7 @@ export function ShotResultList(props: Props) {
     <div>
       <SectionHeader>Projectiles</SectionHeader>
       <StyledDiv>
+        {groupedShots.length > 0 && <ShotMetadata rechargeDelay={reloadTime} />}
         {groupedShots.map((shot, index) => (
           <React.Fragment key={index}>
             {index > 0 && <StyledHr />}

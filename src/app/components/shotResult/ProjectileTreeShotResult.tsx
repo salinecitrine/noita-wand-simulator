@@ -3,6 +3,9 @@ import { ProjectileCastState } from './ProjectileCastState';
 import { WandActionGroup } from '../wandAction/WandActionGroup';
 import { isRawObject } from '../../util/combineGroups';
 import { GroupedWandShot } from '../../calc/eval/types';
+import { ShotMetadata } from './ShotMetadata';
+import { useAppSelector } from '../../hooks';
+import { selectWand } from '../../redux/wandSlice';
 
 const StyledShotDiv = styled.div`
   display: flex;
@@ -11,14 +14,6 @@ const StyledShotDiv = styled.div`
   align-items: flex-start;
   //background-color: #999;
 `;
-
-const StyledManaDrainDiv = styled.div`
-  font-size: 12px;
-  font-weight: bold;
-  color: #eee;
-  background-color: #33c;
-`;
-
 type StyledProjectileDivProps = {
   indent: boolean;
 };
@@ -53,16 +48,21 @@ type Props = {
 
 // list of all actions played, and sub-ShotResults for triggers
 export function ProjectileTreeShotResult(props: Props) {
+  const { wand } = useAppSelector(selectWand);
   const { shot } = props;
+
   return (
     <StyledShotDiv>
       <div>
-        {shot.manaDrain && (
-          <StyledMetadataDiv indent={props.indent}>
-            <StyledManaDrainDiv>{shot.manaDrain}</StyledManaDrainDiv>
-          </StyledMetadataDiv>
-        )}
         <StyledMetadataDiv indent={props.indent}>
+          {!props.indent && (
+            <ShotMetadata
+              manaDrain={shot.manaDrain}
+              castDelay={
+                wand.cast_delay + (shot.castState?.fire_rate_wait || 0)
+              }
+            />
+          )}
           <ProjectileCastState castState={shot.castState} />
         </StyledMetadataDiv>
       </div>
