@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from '../generic/modal/Modal';
+import { Modal } from '../generic/Modal';
 import { ConfigEditor } from './ConfigEditor';
 
 type Props = {};

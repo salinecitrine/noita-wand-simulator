@@ -4,7 +4,7 @@ import { Preset } from '../../types';
 import { setWand } from '../../redux/wandSlice';
 import React, { useCallback, useState } from 'react';
 import { WandPresetMenu } from './WandPresetMenu';
-import { Modal } from '../generic/modal/Modal';
+import { Modal } from '../generic/Modal';
 
 type Props = {};
 

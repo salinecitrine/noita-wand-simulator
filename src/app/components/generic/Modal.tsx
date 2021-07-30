@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import { CloseButton } from '../CloseButton';
+import { CloseButton } from './CloseButton';
 
 const BackgroundDiv = styled.div`
   z-index: 1;

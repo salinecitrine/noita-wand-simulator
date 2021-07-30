@@ -9,7 +9,7 @@ import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
 import { Action } from '../calc/extra/types';
 import { ACTION_TYPES, constToDisplayString, groupBy } from '../util/util';
-import { Tabs } from './generic/modal/Tabs';
+import { Tabs } from './generic/Tabs';
 
 const MainDiv = styled.div`
   display: flex;
