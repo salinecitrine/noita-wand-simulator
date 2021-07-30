@@ -121,6 +121,12 @@ const configOptions = [
     (c) => c.showActionTree,
     (c, v) => (c.showActionTree = v),
   ),
+  makeConfigField(
+    'Show Spells in Categories',
+    ConfigType.Boolean,
+    (c) => c.showSpellsInCategories,
+    (c, v) => (c.showSpellsInCategories = v),
+  ),
   makeConfigFieldGroup('Unlocks', [
     makeConfigField(
       'Enable All',

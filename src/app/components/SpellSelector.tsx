@@ -73,10 +73,15 @@ export function SpellSelector(props: Props) {
     [config.unlocks],
   );
 
-  const actionsByType = useMemo(
-    () => groupBy(unlockedActions, (a) => categoryDisplayNames[a.type]),
-    [unlockedActions],
-  );
+  const actionsByType = useMemo(() => {
+    if (config.showSpellsInCategories) {
+      return groupBy(unlockedActions, (a) => categoryDisplayNames[a.type]);
+    } else {
+      return {
+        'All Spells': unlockedActions,
+      };
+    }
+  }, [config.showSpellsInCategories, unlockedActions]);
 
   const wandActionSelects = useMemo(() => {
     return Object.entries(actionsByType).map(([category, actions]) => {

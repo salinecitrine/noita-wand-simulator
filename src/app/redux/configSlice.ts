@@ -17,6 +17,7 @@ export interface ConfigState {
     showSources: boolean;
     swapOnMove: boolean;
     showActionTree: boolean;
+    showSpellsInCategories: boolean;
     unlocks: {
       [key: string]: boolean;
     };
@@ -38,6 +39,7 @@ export const initialState: ConfigState = {
     showSources: true,
     swapOnMove: true,
     showActionTree: true,
+    showSpellsInCategories: false,
     unlocks: {
       card_unlocked_black_hole: false,
       card_unlocked_everything: false,
