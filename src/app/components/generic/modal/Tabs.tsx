@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const MainDiv = styled.div``;
@@ -43,6 +43,14 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
 
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
+  const displayIndex = Math.min(tabs.length - 1, selectedTabIndex);
+
+  useEffect(() => {
+    if (displayIndex !== selectedTabIndex) {
+      setSelectedTabIndex(displayIndex);
+    }
+  }, [displayIndex, selectedTabIndex]);
+
   if (tabs.length === 0) {
     return null;
   }
@@ -56,7 +64,7 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
           </TitleDiv>
         ))}
       </TabTitlesDiv>
-      <ContentDiv>{tabs[selectedTabIndex].content}</ContentDiv>
+      <ContentDiv>{tabs[displayIndex].content}</ContentDiv>
     </MainDiv>
   );
 }
