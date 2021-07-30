@@ -14,6 +14,7 @@ const StyledList = styled.div`
   font-weight: bold;
   min-width: 230px;
   border: 1px solid black;
+  padding: 1px;
 `;
 const StyledListItem = styled.div`
   display: flex;

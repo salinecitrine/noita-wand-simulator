@@ -124,15 +124,19 @@ export type TypedProperties<T, U> = Pick<
   }[keyof T]
 >;
 
-export const numSign = (v: any, round?: number) => {
+export function numSign(v: any, round?: number) {
   if (round !== undefined) {
     v = Math.round(Number(v) * Math.pow(10, round)) / Math.pow(10, round);
   }
   return (v < 0 ? '' : '+') + v;
-};
+}
 
-export const round = (v: any, position: number) => {
+export function round(v: any, position: number) {
   return (
     Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position)
   );
-};
+}
+
+export function sign(v: number) {
+  return (v < 0 ? '' : '+') + v;
+}

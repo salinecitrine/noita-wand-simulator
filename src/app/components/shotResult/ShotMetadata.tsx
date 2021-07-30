@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { round } from '../../util/util';
 
 const StyledList = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const StyledList = styled.div`
   min-width: 230px;
   border: 1px solid black;
   border-bottom: none;
+  padding: 1px;
 `;
 
 const StyledListItem = styled.div`
@@ -45,23 +47,12 @@ function field<K extends keyof Fields = keyof Fields>(
   return { name, displayName, render };
 }
 
-function sign(v: number) {
-  return (v < 0 ? '' : '+') + v;
-}
-
-function round(v: number, decimalPlaces: number) {
-  return (
-    Math.round(Number(v) * Math.pow(10, decimalPlaces)) /
-    Math.pow(10, decimalPlaces)
-  );
-}
-
 const fieldRenderers = [
-  field('manaDrain', 'Mana Drain', (v) => <span>{round(Number(v), 0)}</span>),
-  field('castDelay', 'Cast Delay', (v) => (
+  field('manaDrain', 'Σ Mana Drain', (v) => <span>{round(Number(v), 0)}</span>),
+  field('castDelay', 'Σ Cast Delay', (v) => (
     <span>{round(Math.max(0, Number(v) / 60), 2)}s</span>
   )),
-  field('rechargeDelay', 'Recharge Delay', (v) => (
+  field('rechargeDelay', 'Σ Recharge Delay', (v) => (
     <span>{round(Math.max(0, Number(v) / 60), 2)}s</span>
   )),
 ];
