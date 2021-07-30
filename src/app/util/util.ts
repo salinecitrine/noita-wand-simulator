@@ -92,3 +92,27 @@ export function constToDisplayString(c: string) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }
+
+export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([k, v]) => !keys.includes(k as K)),
+  ) as Partial<T>;
+}
+
+export function trimArray<T>(arr: T[], predicate: (o: T) => boolean): T[] {
+  let result = [...arr];
+  while (predicate(result[result.length - 1]) && arr.length > 0) {
+    result.pop();
+  }
+  return result;
+}
+
+export function fixArraySize<T>(arr: T[], size: number): (T | null)[] {
+  if (size > arr.length) {
+    return [...arr, ...Array(size - arr.length).fill(null)];
+  } else if (size < arr.length) {
+    return arr.slice(0, size);
+  } else {
+    return arr;
+  }
+}

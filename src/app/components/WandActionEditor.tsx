@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
 import { getActionById } from '../calc/eval/util';
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';

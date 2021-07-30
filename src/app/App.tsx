@@ -1,7 +1,7 @@
 import React from 'react';
 import { WandSimulator } from './components/WandSimulator';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { store } from './redux/store';
 
 function App() {
   return (

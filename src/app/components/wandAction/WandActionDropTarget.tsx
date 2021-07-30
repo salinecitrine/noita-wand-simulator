@@ -1,6 +1,6 @@
 import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { WandActionDragItem } from '../../types';
 import styled from 'styled-components';
 import { moveSpell, setSpellAtIndex, swapSpells } from '../../redux/wandSlice';

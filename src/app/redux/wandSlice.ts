@@ -1,29 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { RootState } from './store';
 import { Wand } from '../types';
 import { defaultWand } from './presets';
+import { generateWandStateFromSearch } from './util';
+import { fixArraySize } from '../util/util';
 
-// Define a type for the slice state
-interface WandState {
+export interface WandState {
   wand: Wand;
   spells: (string | null)[];
 }
 
-// Define the initial state using that type
-const initialState: WandState = {
-  wand: defaultWand,
-  spells: Array(defaultWand.deck_capacity).fill(null),
-};
+const stateFromUrl = generateWandStateFromSearch(window.location.search);
 
-function fixArraySize<T>(arr: T[], size: number): (T | null)[] {
-  if (size > arr.length) {
-    return [...arr, ...Array(size - arr.length).fill(null)];
-  } else if (size < arr.length) {
-    return arr.slice(0, size);
-  } else {
-    return arr;
-  }
-}
+const initialState: WandState = {
+  wand: {
+    ...defaultWand,
+    ...stateFromUrl.wand,
+  },
+  spells: stateFromUrl.spells || Array(defaultWand.deck_capacity).fill(null),
+};
 
 export const wandSlice = createSlice({
   name: 'wand',

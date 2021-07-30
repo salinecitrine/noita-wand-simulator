@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectPresets } from '../../redux/presetsSlice';
 import { Preset } from '../../types';
 import { setWand } from '../../redux/wandSlice';

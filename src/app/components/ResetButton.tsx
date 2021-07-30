@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../hooks';
+import { useAppDispatch } from '../redux/hooks';
 import { setWand } from '../redux/wandSlice';
 import { defaultWand } from '../redux/presets';
 

@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   ConfigState,
   initialState as initialConfigState,

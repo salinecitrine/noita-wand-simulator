@@ -1,4 +1,4 @@
-import { useAppSelector } from '../hooks';
+import { useAppSelector } from '../redux/hooks';
 import { selectWand } from '../redux/wandSlice';
 import { Wand } from '../types';
 import styled from 'styled-components';

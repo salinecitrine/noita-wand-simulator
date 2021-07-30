@@ -4,7 +4,7 @@ import { WandActionGroup } from '../wandAction/WandActionGroup';
 import { isRawObject } from '../../util/combineGroups';
 import { GroupedWandShot } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../redux/hooks';
 import { selectWand } from '../../redux/wandSlice';
 
 const StyledShotDiv = styled.div`

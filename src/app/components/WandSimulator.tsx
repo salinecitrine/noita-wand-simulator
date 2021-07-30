@@ -1,7 +1,7 @@
 import { WandBuilder } from './WandBuilder';
 import { ShotResultList } from './shotResult/ShotResultList';
 import { WandPresetButton } from './presetMenu/WandPresetButton';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { SpellSelector } from './SpellSelector';

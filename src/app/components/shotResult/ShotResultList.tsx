@@ -1,5 +1,5 @@
 import { getActionById } from '../../calc/eval/util';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../redux/hooks';
 import { selectWand } from '../../redux/wandSlice';
 import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
 import styled from 'styled-components';

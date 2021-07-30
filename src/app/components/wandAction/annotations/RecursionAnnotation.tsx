@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useAppSelector } from '../../../hooks';
+import { useAppSelector } from '../../../redux/hooks';
 import { selectConfig } from '../../../redux/configSlice';
 
 const RecursionDiv = styled.div<{
