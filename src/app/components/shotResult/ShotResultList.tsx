@@ -4,7 +4,7 @@ import { selectWand } from '../../redux/wandSlice';
 import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
 import styled from 'styled-components';
 import { ActionCalledShotResult } from './ActionCalledShotResult';
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import SectionHeader from '../SectionHeader';
 import { notNull } from '../../util/util';
 import { clickWand } from '../../calc/eval/clickWand';
@@ -13,6 +13,7 @@ import { ActionTreeShotResult } from './ActionTreeShotResult';
 import { condenseActionsAndProjectiles } from '../../calc/eval/condense';
 import { ActionSource } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
+import { exportComponentAsPNG } from 'react-component-export-image';
 
 const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
 
@@ -32,6 +33,10 @@ const StyledHr = styled.hr`
   margin: 2px 0;
 `;
 
+const SaveButton = styled.span`
+  cursor: pointer;
+`;
+
 type Props = {
   condenseShots: boolean;
   unlimitedSpells: boolean;
@@ -45,6 +50,10 @@ type Props = {
 export function ShotResultList(props: Props) {
   const { wand, spells } = useAppSelector(selectWand);
   const { config } = useAppSelector(selectConfig);
+
+  const projectilesRef = useRef<HTMLDivElement>();
+  const actionsCalledRef = useRef<HTMLDivElement>();
+  const actionCallTreeRef = useRef<HTMLDivElement>();
 
   const spellActions = useMemo(
     () => spells.filter(notNull).map(getActionById),
@@ -120,10 +129,24 @@ export function ShotResultList(props: Props) {
     }
   }, [props.condenseShots, shots]);
 
+  const handleSaveProjectiles =
+    (ref: React.MutableRefObject<any>, fileName: string) => () => {
+      if (ref.current) {
+        exportComponentAsPNG(ref as any, { fileName });
+      }
+    };
+
   return (
     <div>
-      <SectionHeader>Projectiles</SectionHeader>
-      <StyledDiv>
+      <SectionHeader>
+        <SaveButton
+          onClick={handleSaveProjectiles(projectilesRef, 'projectiles')}
+        >
+          📷
+        </SaveButton>
+        Projectiles
+      </SectionHeader>
+      <StyledDiv ref={projectilesRef as any}>
         {groupedShots.length > 0 && <ShotMetadata rechargeDelay={reloadTime} />}
         {groupedShots.map((shot, index) => (
           <React.Fragment key={index}>
@@ -132,8 +155,15 @@ export function ShotResultList(props: Props) {
           </React.Fragment>
         ))}
       </StyledDiv>
-      <SectionHeader>Actions Called</SectionHeader>
-      <StyledDiv>
+      <SectionHeader>
+        <SaveButton
+          onClick={handleSaveProjectiles(actionsCalledRef, 'actions_called')}
+        >
+          📷
+        </SaveButton>
+        Actions Called
+      </SectionHeader>
+      <StyledDiv ref={actionsCalledRef as any}>
         {groupedShots.map((shot, index) => (
           <React.Fragment key={index}>
             {index > 0 && <StyledHr />}
@@ -143,8 +173,15 @@ export function ShotResultList(props: Props) {
       </StyledDiv>
       {config.showActionTree && (
         <>
-          <SectionHeader>Action Call Tree</SectionHeader>
-          <StyledDiv>
+          <SectionHeader>
+            <SaveButton
+              onClick={handleSaveProjectiles(actionCallTreeRef, 'action_tree')}
+            >
+              📷
+            </SaveButton>
+            Action Call Tree
+          </SectionHeader>
+          <StyledDiv ref={actionCallTreeRef as any}>
             {groupedShots.map((shot, index) => (
               <React.Fragment key={index}>
                 {index > 0 && <StyledHr />}
