@@ -17,7 +17,6 @@ import { forceDisableCanvasSmoothing } from '../util/util';
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
 `;
 
 const Row = styled.div`
@@ -25,7 +24,6 @@ const Row = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-self: center;
-  width: 100%;
 `;
 
 type Props = {};

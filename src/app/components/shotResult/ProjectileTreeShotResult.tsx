@@ -12,7 +12,6 @@ const StyledShotDiv = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  //background-color: #999;
   overflow-x: hidden;
 `;
 type StyledProjectileDivProps = {

@@ -14,7 +14,7 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: 100%;
+  //width: 100%;
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
@@ -39,7 +39,6 @@ const CountDiv = styled.div<{
   justify-content: center;
   color: white;
   background-color: green;
-  width: 100%;
   height: ${(props) => props.size / 3}px;
   font-family: monospace;
   font-weight: bold;

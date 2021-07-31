@@ -20,7 +20,12 @@ const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
 const ParentDiv = styled.div`
   background-color: #333;
 `;
-const StyledDiv = styled.div`
+
+const ScrollWrapper = styled.div`
+  overflow-x: auto;
+`;
+
+const SectionDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -138,15 +143,19 @@ export function ShotResultList(props: Props) {
           enabled={groupedShots.length > 0}
         />
       </SectionHeader>
-      <StyledDiv ref={projectilesRef as any} className={'saveImageRoot'}>
-        {groupedShots.length > 0 && <ShotMetadata rechargeDelay={reloadTime} />}
-        {groupedShots.map((shot, index) => (
-          <React.Fragment key={index}>
-            {index > 0 && <StyledHr />}
-            <ProjectileTreeShotResult shot={shot} indent={false} />
-          </React.Fragment>
-        ))}
-      </StyledDiv>
+      <ScrollWrapper>
+        <SectionDiv ref={projectilesRef as any} className={'saveImageRoot'}>
+          {groupedShots.length > 0 && (
+            <ShotMetadata rechargeDelay={reloadTime} />
+          )}
+          {groupedShots.map((shot, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <StyledHr />}
+              <ProjectileTreeShotResult shot={shot} indent={false} />
+            </React.Fragment>
+          ))}
+        </SectionDiv>
+      </ScrollWrapper>
       <SectionHeader title={'Actions Called'}>
         <SaveImageButton
           targetRef={actionsCalledRef}
@@ -154,14 +163,16 @@ export function ShotResultList(props: Props) {
           enabled={groupedShots.length > 0}
         />
       </SectionHeader>
-      <StyledDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
-        {groupedShots.map((shot, index) => (
-          <React.Fragment key={index}>
-            {index > 0 && <StyledHr />}
-            <ActionCalledShotResult key={index} shot={shot} />
-          </React.Fragment>
-        ))}
-      </StyledDiv>
+      <ScrollWrapper>
+        <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
+          {groupedShots.map((shot, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <StyledHr />}
+              <ActionCalledShotResult key={index} shot={shot} />
+            </React.Fragment>
+          ))}
+        </SectionDiv>
+      </ScrollWrapper>
       {config.showActionTree && (
         <>
           <SectionHeader title={'Action Call Tree'}>
@@ -171,14 +182,19 @@ export function ShotResultList(props: Props) {
               enabled={groupedShots.length > 0}
             />
           </SectionHeader>
-          <StyledDiv ref={actionCallTreeRef as any} className={'saveImageRoot'}>
-            {groupedShots.map((shot, index) => (
-              <React.Fragment key={index}>
-                {index > 0 && <StyledHr />}
-                <ActionTreeShotResult key={index} shot={shot} />
-              </React.Fragment>
-            ))}
-          </StyledDiv>
+          <ScrollWrapper>
+            <SectionDiv
+              ref={actionCallTreeRef as any}
+              className={'saveImageRoot'}
+            >
+              {groupedShots.map((shot, index) => (
+                <React.Fragment key={index}>
+                  {index > 0 && <StyledHr />}
+                  <ActionTreeShotResult key={index} shot={shot} />
+                </React.Fragment>
+              ))}
+            </SectionDiv>
+          </ScrollWrapper>
         </>
       )}
     </ParentDiv>

@@ -14,7 +14,6 @@ const ContentDiv = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #555;
-  width: fit-content;
 `;
 
 const WandActionEditorWrapper = styled.div`

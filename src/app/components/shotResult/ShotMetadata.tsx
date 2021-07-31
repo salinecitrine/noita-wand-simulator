@@ -20,7 +20,6 @@ const StyledListItem = styled.div`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
-  width: 100%;
 `;
 
 const StyledName = styled.span`

@@ -44,7 +44,9 @@ export function SaveImageButton(props: Props) {
               )) {
                 console.log(elem);
                 (elem as any).style.width = 'fit-content';
+                (elem as any).style.height = 'fit-content';
                 (elem as any).style.overflowX = 'clip';
+                (elem as any).style.overflowY = 'clip';
               }
             },
           },

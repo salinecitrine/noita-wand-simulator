@@ -12,14 +12,13 @@ const StyledList = styled.ul`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  width: 100%;
   margin: 0;
   padding: 0;
 `;
 
 const StyledListItem = styled.li`
   display: block;
-  flex: 0 1 auto; /* Default */
+  flex: 0 1 auto;
   list-style-type: none;
 `;
 
