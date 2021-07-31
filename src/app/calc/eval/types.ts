@@ -8,6 +8,7 @@ export type WandShot = {
   castState?: GunActionState;
   manaDrain?: number;
 };
+
 export type GroupedWandShot = {
   projectiles: GroupedObject<GroupedProjectile>[];
   calledActions: GroupedObject<ActionCall>[];
@@ -15,6 +16,7 @@ export type GroupedWandShot = {
   castState?: GunActionState;
   manaDrain?: number;
 };
+
 export type Projectile = {
   entity: string;
   action?: Action;
@@ -22,6 +24,7 @@ export type Projectile = {
   trigger?: WandShot;
   deckIndex?: string | number;
 };
+
 export type GroupedProjectile = {
   entity: string;
   action?: Action;
@@ -45,6 +48,7 @@ export type ActionCall = {
   recursion?: number;
   iteration?: number;
 };
+
 export type TreeNode<T> = {
   value: T;
   parent?: TreeNode<T>;
