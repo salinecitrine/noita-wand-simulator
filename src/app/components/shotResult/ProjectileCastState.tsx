@@ -16,19 +16,21 @@ const StyledList = styled.div`
   border: 1px solid black;
   padding: 1px;
 `;
+
 const StyledListItem = styled.div`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
-  //width: 100%;
 `;
+
 const StyledName = styled.span`
   text-align: left;
   flex: 0 0 150px;
 `;
+
 const StyledValue = styled.span`
   text-align: left;
-  flex: 0 0 100%;
+  flex: 0 0 auto;
 `;
 
 type ValueOf<T> = T[keyof T];

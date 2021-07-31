@@ -29,7 +29,7 @@ const StyledName = styled.span`
 
 const StyledValue = styled.span`
   text-align: left;
-  flex: 0 0 100%;
+  flex: 0 0 auto;
 `;
 
 type Fields = {
