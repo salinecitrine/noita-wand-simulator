@@ -4,8 +4,6 @@ import { WandActionGroup } from '../wandAction/WandActionGroup';
 import { isRawObject } from '../../util/combineGroups';
 import { GroupedWandShot } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
-import { useAppSelector } from '../../redux/hooks';
-import { selectWand } from '../../redux/wandSlice';
 
 const StyledShotDiv = styled.div`
   display: flex;
@@ -13,10 +11,13 @@ const StyledShotDiv = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   overflow-x: hidden;
+  margin: 1px;
 `;
+
 type StyledProjectileDivProps = {
   indent: boolean;
 };
+
 const StyledProjectileDiv = styled.div<StyledProjectileDivProps>`
   display: flex;
   flex-direction: row;
@@ -28,6 +29,7 @@ const StyledProjectileDiv = styled.div<StyledProjectileDivProps>`
 type StyledCastStateDivProps = {
   indent: boolean;
 };
+
 const StyledMetadataDiv = styled.div<StyledCastStateDivProps>`
   margin-top: ${(props) => (props.indent ? 24 : 0)}px;
 `;
@@ -48,7 +50,6 @@ type Props = {
 
 // list of all actions played, and sub-ShotResults for triggers
 export function ProjectileTreeShotResult(props: Props) {
-  const { wand } = useAppSelector(selectWand);
   const { shot } = props;
 
   return (

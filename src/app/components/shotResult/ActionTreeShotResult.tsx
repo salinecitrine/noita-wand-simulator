@@ -8,6 +8,7 @@ const MainDiv = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   transform: rotateX(180deg);
+  margin: 1px;
 `;
 
 const DummyDiv = styled.div`
