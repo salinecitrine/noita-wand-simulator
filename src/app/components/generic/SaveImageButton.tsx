@@ -25,7 +25,7 @@ export function SaveImageButton(props: Props) {
   const wandState = useAppSelector(selectWand);
 
   const stateHash = useMemo(() => {
-    return hashString(JSON.stringify(wandState)).toString(16);
+    return Math.abs(hashString(JSON.stringify(wandState))).toString(16);
   }, [wandState]);
 
   const saveImageHandler = useMemo(
