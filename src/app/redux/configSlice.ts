@@ -15,6 +15,7 @@ export interface ConfigState {
     showRecursion: boolean;
     showProxies: boolean;
     showSources: boolean;
+    showDontDraw: boolean;
     swapOnMove: boolean;
     showActionTree: boolean;
     showSpellsInCategories: boolean;
@@ -30,13 +31,14 @@ export const initialState: ConfigState = {
     condenseShots: true,
     unlimitedSpells: true,
     infiniteSpells: false,
-    showDivides: false,
+    showDivides: true,
     showGreekSpells: true,
     showDirectActionCalls: true,
     showDeckIndexes: true,
     showRecursion: true,
     showProxies: true,
     showSources: true,
+    showDontDraw: true,
     swapOnMove: true,
     showActionTree: true,
     showSpellsInCategories: false,

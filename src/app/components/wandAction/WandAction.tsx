@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { RecursionAnnotation } from './annotations/RecursionAnnotation';
 import { iterativeActions, recursiveActions } from '../../calc/eval/lookups';
+import { DontDrawAnnotation } from './annotations/DontDrawAnnotation';
 
 export const DEFAULT_SIZE = 48;
 
@@ -63,6 +64,10 @@ export function WandAction(props: Props) {
         size={size}
         visible={mouseOver}
         deleteSpell={props.onDeleteSpell}
+      />
+      <DontDrawAnnotation
+        size={size}
+        dontDrawActions={props.dont_draw_actions}
       />
     </ImageBackgroundDiv>
   );

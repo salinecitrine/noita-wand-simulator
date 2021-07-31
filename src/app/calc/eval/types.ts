@@ -1,5 +1,6 @@
 import { Action, GunActionState } from '../extra/types';
 import { GroupedObject } from '../../util/combineGroups';
+import { dont_draw_actions } from '../gun';
 
 export type WandShot = {
   projectiles: Projectile[];
@@ -47,6 +48,7 @@ export type ActionCall = {
   deckIndex?: string | number;
   recursion?: number;
   iteration?: number;
+  dont_draw_actions?: boolean;
 };
 
 export type TreeNode<T> = {

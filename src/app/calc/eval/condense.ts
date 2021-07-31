@@ -16,6 +16,7 @@ function condenseActions(calledActions: ActionCall[]) {
           { prop: 'deckIndex', conflictValue: '*' },
           { prop: 'recursion', conflictValue: '*' },
           { prop: 'source', conflictValue: 'multiple' },
+          { prop: 'dont_draw_actions', conflictValue: false },
         ]);
       } else {
         return o[0];

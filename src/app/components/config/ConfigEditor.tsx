@@ -110,6 +110,12 @@ const configOptions = [
     (c, v) => (c.showSources = v),
   ),
   makeConfigField(
+    "Show Don't Draw",
+    ConfigType.Boolean,
+    (c) => c.showDontDraw,
+    (c, v) => (c.showDontDraw = v),
+  ),
+  makeConfigField(
     'Swap When Moving Actions',
     ConfigType.Boolean,
     (c) => c.swapOnMove,

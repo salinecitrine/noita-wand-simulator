@@ -13,6 +13,7 @@ import {
   _draw_actions_for_shot,
   _set_gun,
   _start_shot,
+  dont_draw_actions,
   mana as gunMana,
   state_from_game,
 } from '../gun';
@@ -137,6 +138,7 @@ export function clickWand(
           iteration: iterativeActions().includes(args[1].id)
             ? args?.[4] || 1
             : undefined,
+          dont_draw_actions: dont_draw_actions,
         };
 
         if (!currentNode) {

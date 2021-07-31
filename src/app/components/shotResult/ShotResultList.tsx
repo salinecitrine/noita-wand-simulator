@@ -37,7 +37,7 @@ const SectionDiv = styled.div`
 `;
 
 const StyledHr = styled.hr`
-  width: 99%;
+  width: 98%;
   border-color: #666;
   margin: 2px 0;
 `;
