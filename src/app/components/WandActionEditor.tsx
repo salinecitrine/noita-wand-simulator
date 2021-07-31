@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
 import { getActionById } from '../calc/eval/util';
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
-import { WandAction } from './wandAction/WandAction';
+import { DEFAULT_SIZE, WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import WandActionBorder from './wandAction/WandActionBorder';
 import { Action } from '../calc/extra/types';
@@ -30,7 +30,7 @@ export function WandActionEditor(props: Props) {
 
   const spellActions = spells.map((s) => (s ? getActionById(s) : null));
 
-  const size = 48;
+  const size = DEFAULT_SIZE;
 
   const handleDeleteSpell = (wandIndex: number) => {
     dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
