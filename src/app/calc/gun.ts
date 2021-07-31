@@ -237,7 +237,7 @@ export function order_deck() {
     let iterations = deck.length;
     let new_deck: Action[] = [];
 
-    for (let i = iterations; i >= 0; i--) {
+    for (let i = iterations - 1; i >= 0; i--) {
       // looping from iterations to 1 (inclusive)
       let index = rand(0, i);
       let action = deck[index];
