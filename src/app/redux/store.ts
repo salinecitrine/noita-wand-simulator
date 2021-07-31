@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { default as wandReducer, selectWand, WandState } from './wandSlice';
+import { default as wandReducer, selectWand } from './wandSlice';
 import { default as presetsReducer } from './presetsSlice';
 import { default as configReducer, selectConfig } from './configSlice';
 import undoable from 'redux-undo';
 import { saveState } from '../localStorage';
-import { notNullOrUndefined, trimArray } from '../util/util';
-import { Wand } from '../types';
 import { generateSearchFromWandState } from './util';
 
 export const store = configureStore({
@@ -46,14 +44,7 @@ observeStore(selectWand, (state) => {
   const newSearch = generateSearchFromWandState(state);
   const currentSearch = window.location.search;
 
-  // console.log(generateWandStateFromSearch(currentSearch));
-  // console.log(generateWandStateFromSearch(newSearch));
-
   if (currentSearch !== newSearch) {
-    // console.group('updating URL');
-    // console.log(currentSearch);
-    // console.log(newSearch);
-    // console.groupEnd();
     const url = new URL(window.location.href);
     url.search = newSearch;
     window.history.pushState({}, '', url.toString());

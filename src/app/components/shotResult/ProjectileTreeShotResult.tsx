@@ -13,6 +13,7 @@ const StyledShotDiv = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   //background-color: #999;
+  overflow-x: hidden;
 `;
 type StyledProjectileDivProps = {
   indent: boolean;

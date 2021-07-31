@@ -81,7 +81,7 @@ export function SpellSelector(props: Props) {
 
   return (
     <MainDiv>
-      <SectionHeader>Spells</SectionHeader>
+      <SectionHeader title={'Spells'} />
       <Tabs tabs={tabs} />
     </MainDiv>
   );

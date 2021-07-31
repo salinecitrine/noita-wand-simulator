@@ -140,3 +140,28 @@ export function round(v: any, position: number) {
 export function sign(v: number) {
   return (v < 0 ? '' : '+') + v;
 }
+
+export function forceDisableCanvasSmoothing() {
+  // https://stackoverflow.com/a/22018649
+  // save old getContext
+  const oldGetContext = HTMLCanvasElement.prototype.getContext;
+
+  // get a context, set it to smoothed if it was a 2d context, and return it.
+  function getSmoothContext(this: any, contextType: any) {
+    let resCtx = oldGetContext.apply(this, arguments as any);
+    if (contextType === '2d') {
+      setToFalse(resCtx, 'imageSmoothingEnabled');
+      setToFalse(resCtx, 'mozImageSmoothingEnabled');
+      setToFalse(resCtx, 'oImageSmoothingEnabled');
+      setToFalse(resCtx, 'webkitImageSmoothingEnabled');
+    }
+    return resCtx;
+  }
+
+  function setToFalse(obj: any, prop: any) {
+    if (obj[prop] !== undefined) obj[prop] = false;
+  }
+
+  // inject new smoothed getContext
+  HTMLCanvasElement.prototype.getContext = getSmoothContext as any;
+}

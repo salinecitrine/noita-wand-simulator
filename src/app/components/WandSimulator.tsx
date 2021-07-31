@@ -12,6 +12,7 @@ import { ConfigButton } from './config/ConfigButton';
 import { ResetButton } from './ResetButton';
 import { useEffect } from 'react';
 import { ActionCreators } from 'redux-undo';
+import { forceDisableCanvasSmoothing } from '../util/util';
 
 const Column = styled.div`
   display: flex;
@@ -32,6 +33,10 @@ type Props = {};
 export function WandSimulator(props: Props) {
   const { config } = useAppSelector(selectConfig);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    forceDisableCanvasSmoothing();
+  }, []);
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {

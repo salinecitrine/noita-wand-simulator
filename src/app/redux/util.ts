@@ -31,6 +31,5 @@ export function generateWandStateFromSearch(search: string) {
   if (result.wand && result.wand.deck_capacity) {
     result.spells = fixArraySize(result.spells, result.wand.deck_capacity);
   }
-  console.log('generateWandStateFromSearch', search, result);
   return result;
 }

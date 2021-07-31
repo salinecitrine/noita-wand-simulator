@@ -13,7 +13,7 @@ const MainDiv = styled.div`
 const DummyDiv = styled.div`
   transform: rotateX(180deg);
   overflow-x: auto;
-  width: 100%;
+  //width: 100%;
 `;
 
 const NodeDiv = styled.div`

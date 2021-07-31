@@ -13,10 +13,13 @@ import { ActionTreeShotResult } from './ActionTreeShotResult';
 import { condenseActionsAndProjectiles } from '../../calc/eval/condense';
 import { ActionSource } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
-import { exportComponentAsPNG } from 'react-component-export-image';
+import { SaveImageButton } from '../generic/SaveImageButton';
 
 const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
 
+const ParentDiv = styled.div`
+  background-color: #333;
+`;
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,16 +28,13 @@ const StyledDiv = styled.div`
   background-color: #333;
   overflow-x: auto;
   overflow-y: hidden;
+  width: fit-content;
 `;
 
 const StyledHr = styled.hr`
   width: 99%;
   border-color: #666;
   margin: 2px 0;
-`;
-
-const SaveButton = styled.span`
-  cursor: pointer;
 `;
 
 type Props = {
@@ -129,24 +129,16 @@ export function ShotResultList(props: Props) {
     }
   }, [props.condenseShots, shots]);
 
-  const handleSaveProjectiles =
-    (ref: React.MutableRefObject<any>, fileName: string) => () => {
-      if (ref.current) {
-        exportComponentAsPNG(ref as any, { fileName });
-      }
-    };
-
   return (
-    <div>
-      <SectionHeader>
-        <SaveButton
-          onClick={handleSaveProjectiles(projectilesRef, 'projectiles')}
-        >
-          📷
-        </SaveButton>
-        Projectiles
+    <ParentDiv>
+      <SectionHeader title={'Projectiles'}>
+        <SaveImageButton
+          targetRef={projectilesRef}
+          fileName={'projectiles'}
+          enabled={groupedShots.length > 0}
+        />
       </SectionHeader>
-      <StyledDiv ref={projectilesRef as any}>
+      <StyledDiv ref={projectilesRef as any} className={'saveImageRoot'}>
         {groupedShots.length > 0 && <ShotMetadata rechargeDelay={reloadTime} />}
         {groupedShots.map((shot, index) => (
           <React.Fragment key={index}>
@@ -155,15 +147,14 @@ export function ShotResultList(props: Props) {
           </React.Fragment>
         ))}
       </StyledDiv>
-      <SectionHeader>
-        <SaveButton
-          onClick={handleSaveProjectiles(actionsCalledRef, 'actions_called')}
-        >
-          📷
-        </SaveButton>
-        Actions Called
+      <SectionHeader title={'Actions Called'}>
+        <SaveImageButton
+          targetRef={actionsCalledRef}
+          fileName={'actions_called'}
+          enabled={groupedShots.length > 0}
+        />
       </SectionHeader>
-      <StyledDiv ref={actionsCalledRef as any}>
+      <StyledDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
         {groupedShots.map((shot, index) => (
           <React.Fragment key={index}>
             {index > 0 && <StyledHr />}
@@ -173,15 +164,14 @@ export function ShotResultList(props: Props) {
       </StyledDiv>
       {config.showActionTree && (
         <>
-          <SectionHeader>
-            <SaveButton
-              onClick={handleSaveProjectiles(actionCallTreeRef, 'action_tree')}
-            >
-              📷
-            </SaveButton>
-            Action Call Tree
+          <SectionHeader title={'Action Call Tree'}>
+            <SaveImageButton
+              targetRef={actionCallTreeRef}
+              fileName={'action_tree'}
+              enabled={groupedShots.length > 0}
+            />
           </SectionHeader>
-          <StyledDiv ref={actionCallTreeRef as any}>
+          <StyledDiv ref={actionCallTreeRef as any} className={'saveImageRoot'}>
             {groupedShots.map((shot, index) => (
               <React.Fragment key={index}>
                 {index > 0 && <StyledHr />}
@@ -191,6 +181,6 @@ export function ShotResultList(props: Props) {
           </StyledDiv>
         </>
       )}
-    </div>
+    </ParentDiv>
   );
 }

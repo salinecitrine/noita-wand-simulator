@@ -16,7 +16,7 @@ const SourceDiv = styled.div<{
   color: ${(props) => props.colors[0]};
   background-color: ${(props) => props.colors[1]};
   font-size: 12px;
-  line-height: ${(props) => props.size / 3}px;
+  line-height: ${(props) => props.size / 3 - 1}px;
   text-align: center;
 `;
 
