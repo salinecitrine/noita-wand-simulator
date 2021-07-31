@@ -19,7 +19,11 @@ export function generateWandStateFromSearch(search: string) {
   const params = new URLSearchParams(search);
   const result = [...params.entries()].reduce((acc, [k, v]) => {
     if (k === 'spells') {
-      acc.spells = v.split(',').filter((s) => !!s);
+      acc.spells = trimArray(
+        v.split(',').map((s) => (s.length === 0 ? null : s)),
+        (s) => !s,
+      );
+      console.log(acc.spells);
     } else {
       if (!acc.wand) {
         acc.wand = {};
