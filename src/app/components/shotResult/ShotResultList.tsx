@@ -83,7 +83,14 @@ export function ShotResultList(props: Props) {
   }, [props.infiniteSpells, props.unlimitedSpells, spellActions]);
 
   let [shots, reloadTime] = useMemo(
-    () => clickWand(wand, spellActionsWithUses, wand.mana_max, true),
+    () =>
+      clickWand(
+        wand,
+        spellActionsWithUses,
+        wand.mana_max,
+        wand.cast_delay,
+        true,
+      ),
     [spellActionsWithUses, wand],
   );
 

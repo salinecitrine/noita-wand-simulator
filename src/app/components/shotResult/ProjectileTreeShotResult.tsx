@@ -58,9 +58,7 @@ export function ProjectileTreeShotResult(props: Props) {
           {!props.indent && (
             <ShotMetadata
               manaDrain={shot.manaDrain}
-              castDelay={
-                wand.cast_delay + (shot.castState?.fire_rate_wait || 0)
-              }
+              castDelay={shot.castState?.fire_rate_wait}
             />
           )}
           <ProjectileCastState castState={shot.castState} />

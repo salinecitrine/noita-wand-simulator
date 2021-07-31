@@ -65,7 +65,7 @@ let reloading = false;
 let start_reload = false;
 let got_projectiles = false;
 
-let state_from_game: GunActionState = init_state_from_game();
+export let state_from_game: GunActionState = init_state_from_game();
 
 export let discarded: Action[] = [];
 

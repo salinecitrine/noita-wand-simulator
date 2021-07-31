@@ -14,6 +14,7 @@ import {
   _set_gun,
   _start_shot,
   mana as gunMana,
+  state_from_game,
 } from '../gun';
 import { entityToAction, iterativeActions } from './lookups';
 import { ActionCall, TreeNode, WandShot } from './types';
@@ -22,6 +23,7 @@ export function clickWand(
   wand: Gun,
   spells: Action[],
   mana: number,
+  castDelay: number,
   fireUntilReload: boolean,
   endOnRefresh: boolean = true,
 ): [WandShot[], number | undefined] {
@@ -178,6 +180,7 @@ export function clickWand(
   });
 
   while (!reloaded && iterations < iterationLimit) {
+    state_from_game.fire_rate_wait = castDelay;
     _start_shot(mana);
     _draw_actions_for_shot(true);
     iterations++;
