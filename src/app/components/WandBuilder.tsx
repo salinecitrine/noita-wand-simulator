@@ -32,7 +32,7 @@ export function WandBuilder(props: Props) {
       <SectionHeader title={'Wand'}>
         <SaveImageButton
           targetRef={spellsRef}
-          fileName={'wand'}
+          fileName={'spells'}
           enabled={true}
         />
         (spells only)
