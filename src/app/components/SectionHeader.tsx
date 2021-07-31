@@ -8,7 +8,7 @@ const ParentDiv = styled.div`
   justify-content: center;
   position: relative;
   align-items: center;
-  margin 1px 0;
+  margin: 1px 0;
 `;
 
 const HeaderDiv = styled.div`
