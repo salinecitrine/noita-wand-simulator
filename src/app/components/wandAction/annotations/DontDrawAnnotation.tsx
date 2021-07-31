@@ -14,7 +14,7 @@ const DontDrawDiv = styled.div<{
   color: black;
   background-color: #c55;
   font-size: 12px;
-  line-height: ${(props) => props.size / 3 - 1}px;
+  line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
   text-decoration: line-through;
 `;

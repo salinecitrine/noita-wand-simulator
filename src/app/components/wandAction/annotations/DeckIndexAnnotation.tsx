@@ -14,7 +14,7 @@ const IndexDiv = styled.div<{
   color: black;
   background-color: #ddd;
   font-size: 10px;
-  line-height: ${(props) => props.size / 3}px;
+  line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
 `;
 
