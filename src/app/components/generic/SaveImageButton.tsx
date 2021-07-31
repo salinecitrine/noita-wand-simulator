@@ -25,7 +25,7 @@ export function SaveImageButton(props: Props) {
   const wandState = useAppSelector(selectWand);
 
   const stateHash = useMemo(() => {
-    return Math.abs(hashString(JSON.stringify(wandState))).toString(16);
+    return Math.abs(hashString(JSON.stringify(wandState))).toString(36);
   }, [wandState]);
 
   const saveImageHandler = useMemo(
@@ -38,15 +38,11 @@ export function SaveImageButton(props: Props) {
             backgroundColor: '#000',
             imageTimeout: 0,
             onclone: (document) => {
-              console.log(document);
               for (const elem of document.getElementsByClassName(
                 'saveImageRoot',
               )) {
-                console.log(elem);
                 (elem as any).style.width = 'fit-content';
-                (elem as any).style.height = 'fit-content';
                 (elem as any).style.overflowX = 'clip';
-                (elem as any).style.overflowY = 'clip';
               }
             },
           },
