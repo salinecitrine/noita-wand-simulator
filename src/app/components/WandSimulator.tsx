@@ -24,6 +24,7 @@ const Row = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-self: center;
+  width: 100%;
 `;
 
 type Props = {};

@@ -14,6 +14,7 @@ import { Tabs } from './generic/Tabs';
 const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const SpellCategorySpellsDiv = styled.div`
