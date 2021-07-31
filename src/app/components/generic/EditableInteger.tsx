@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const StaticValue = styled.div`
@@ -24,6 +24,8 @@ type EditableIntegerProps = {
 export function EditableInteger(props: EditableIntegerProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(props.value);
+  const [isInvalidValue, setIsInvalidValue] = useState(false);
+  const [invalidValue, setInvalidValue] = useState('');
   const inputRef = useRef<HTMLInputElement>();
 
   const {
@@ -35,10 +37,20 @@ export function EditableInteger(props: EditableIntegerProps) {
     convertDisplayValue,
   } = props;
 
-  const handleSaveChange = () => {
-    onChange(currentValue);
+  const handleSaveChange = useCallback(() => {
+    if (!isInvalidValue) {
+      onChange(currentValue);
+    } else {
+      setCurrentValue(value);
+      setIsInvalidValue(false);
+    }
     setIsEditing(false);
-  };
+  }, [currentValue, isInvalidValue, onChange, value]);
+
+  const handleStartEditing = useCallback(() => {
+    setCurrentValue(value);
+    setIsEditing(true);
+  }, [value]);
 
   useEffect(() => {
     if (inputRef && inputRef.current && isEditing) {
@@ -47,19 +59,33 @@ export function EditableInteger(props: EditableIntegerProps) {
   }, [isEditing]);
 
   if (isEditing) {
+    let elementValue;
+    if (isInvalidValue) {
+      elementValue = invalidValue;
+    } else {
+      elementValue = currentValue;
+      if (convertRawValue) {
+        elementValue = convertRawValue(currentValue);
+      }
+    }
     return (
       <EditingValue
         ref={inputRef as any}
+        step={step}
         type="number"
-        value={convertRawValue ? convertRawValue(currentValue) : currentValue}
+        value={elementValue}
         onChange={(e) => {
-          const displayValue = Number.parseFloat(e.target.value || '0');
+          const displayValue = Number.parseFloat(e.target.value);
           if (!Number.isNaN(displayValue)) {
+            setIsInvalidValue(false);
             setCurrentValue(
               convertDisplayValue
                 ? convertDisplayValue(displayValue)
                 : displayValue,
             );
+          } else {
+            setIsInvalidValue(true);
+            setInvalidValue(e.target.value);
           }
         }}
         onBlur={(e) => handleSaveChange()}
@@ -72,7 +98,7 @@ export function EditableInteger(props: EditableIntegerProps) {
     );
   } else {
     return (
-      <StaticValue onClick={() => setIsEditing(true)}>
+      <StaticValue onClick={handleStartEditing}>
         {formatValue ? formatValue(value) : value}
       </StaticValue>
     );

@@ -70,7 +70,7 @@ const fields = [
     name: 'Cast delay',
     render: renderNumberField({
       field: 'cast_delay',
-      step: 1 / 60,
+      step: 0.01,
       formatValue: (v) => `${round(Number(v) / 60, 2)}s`,
       convertRawValue: (v) => round(v / 60, 2),
       convertDisplayValue: (v) => round(v * 60, 2),
@@ -80,7 +80,7 @@ const fields = [
     name: 'Rechrg. Time',
     render: renderNumberField({
       field: 'reload_time',
-      step: 1 / 60,
+      step: 0.01,
       formatValue: (v) => `${round(Number(v) / 60, 2)}s`,
       convertRawValue: (v) => round(v / 60, 2),
       convertDisplayValue: (v) => round(v * 60, 2),
