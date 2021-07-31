@@ -1,7 +1,10 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ProcessingModal } from './ProcessingModal';
 import { exportComponentAsPNG } from 'react-component-export-image';
+import { useAppSelector } from '../../redux/hooks';
+import { selectWand } from '../../redux/wandSlice';
+import { hashString } from '../../util/util';
 
 const StyledSpan = styled.span<{ enabled: boolean }>`
   cursor: pointer;
@@ -19,13 +22,18 @@ type Props = {
 
 export function SaveImageButton(props: Props) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const wandState = useAppSelector(selectWand);
 
-  const saveImageHandler =
-    (ref: React.MutableRefObject<any>, fileName: string) => () => {
+  const stateHash = useMemo(() => {
+    return hashString(JSON.stringify(wandState)).toString(16);
+  }, [wandState]);
+
+  const saveImageHandler = useMemo(
+    () => (ref: React.MutableRefObject<any>, fileName: string) => () => {
       if (ref.current) {
         setIsProcessing(true);
         exportComponentAsPNG(ref as any, {
-          fileName,
+          fileName: `${stateHash}_${fileName}`,
           html2CanvasOptions: {
             backgroundColor: '#000',
             imageTimeout: 0,
@@ -44,7 +52,9 @@ export function SaveImageButton(props: Props) {
           setIsProcessing(false);
         });
       }
-    };
+    },
+    [stateHash],
+  );
 
   return (
     <>
