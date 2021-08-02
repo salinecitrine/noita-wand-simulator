@@ -50,7 +50,7 @@ function isConfigFieldGroup(
 
 const configOptions = [
   makeConfigField(
-    'Condense Actions and Projectiles',
+    'Combine Similar Actions and Projectiles',
     ConfigType.Boolean,
     (c) => c.condenseShots,
     (c, v) => (c.condenseShots = v),
