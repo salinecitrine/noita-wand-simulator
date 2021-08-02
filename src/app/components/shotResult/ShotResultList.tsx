@@ -31,8 +31,6 @@ const SectionDiv = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   background-color: #333;
-  overflow-x: auto;
-  overflow-y: hidden;
   width: fit-content;
 `;
 
