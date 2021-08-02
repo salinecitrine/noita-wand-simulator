@@ -1,4 +1,4 @@
-import { combineGroups } from '../util/combineGroups';
+import { combineGroups } from '../combineGroups';
 
 describe('combineGroups', () => {
   it('no-op', () => {
@@ -50,6 +50,23 @@ describe('combineGroups', () => {
         count: 2,
       },
       { first: 'd', count: 2 },
+    ];
+    const actual = combineGroups(input);
+    expect(actual).toEqual(expected);
+  });
+
+  it('nested 3', () => {
+    const input = 'oogbgb oogbgb oogbgb oogbgb oogbgb oogbgb oogbgb oogbgb'
+      .replace(/\s+/g, '')
+      .split('');
+    const expected = [
+      {
+        first: [
+          { first: 'o', count: 2 },
+          { first: ['g', 'b'], count: 2 },
+        ],
+        count: 8,
+      },
     ];
     const actual = combineGroups(input);
     expect(actual).toEqual(expected);

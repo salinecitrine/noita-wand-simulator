@@ -1,4 +1,5 @@
 import { chunk } from './util';
+import _ from 'lodash';
 
 export type MultipleObject<T> = {
   first: GroupedObject<T>;
@@ -94,7 +95,7 @@ export function _combineGroups<T>(
       if (isArrayObject(o)) {
         return o.map((oi) => k(oi));
       } else if (isMultipleObject(o)) {
-        return JSON.stringify({ first: k(o.first), count: o.count });
+        return { first: k(o.first), count: o.count };
       } else if (isRawObject(o)) {
         return keyFn(o);
       } else {
@@ -107,6 +108,7 @@ export function _combineGroups<T>(
 
   for (let seqLen = 1; seqLen <= result.length; seqLen++) {
     // compare all subsequences of length seqLen
+    let foundAtLeastOneMatch = false;
     for (let i = 0; i < result.length - seqLen; i++) {
       // i = start of comparison
       // compare arr[i] to arr[i+seqLen] for seqLen elements
@@ -122,7 +124,9 @@ export function _combineGroups<T>(
         let match = true;
         for (let cmpi = 0; cmpi < seqLen; cmpi++) {
           // index within comparison
-          if (k(result[i + cmpi]) !== k(result[i + matchi * seqLen + cmpi])) {
+          const cmpA = k(result[i + cmpi]);
+          const cmpB = k(result[i + matchi * seqLen + cmpi]);
+          if (!_.isEqual(cmpA, cmpB)) {
             match = false;
             break;
           }
@@ -135,6 +139,7 @@ export function _combineGroups<T>(
       }
 
       if (matches > 0) {
+        foundAtLeastOneMatch = true;
         let first: any = result.slice(i, i + seqLen);
         if (first.length === 1) {
           first = first[0];
@@ -150,6 +155,9 @@ export function _combineGroups<T>(
         };
         result.splice(i, (matches + 1) * seqLen, newObj as any);
       }
+    }
+    if (foundAtLeastOneMatch) {
+      seqLen--;
     }
   }
 
