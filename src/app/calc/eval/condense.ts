@@ -39,7 +39,7 @@ function condenseProjectiles(projectiles: Projectile[]) {
   return combineGroups(
     projectilesWithProcessedTriggers,
     // NaN always compares false, so projectiles with triggers will never combine
-    (p) => (p.trigger && p.trigger.projectiles.length > 0 ? NaN : p.entity),
+    (p) => (p.trigger && p.trigger.projectiles.length > 0 ? null : p.entity),
     (o) => {
       // deck index and source
       if (o.map(isRawObject).every((v) => v)) {

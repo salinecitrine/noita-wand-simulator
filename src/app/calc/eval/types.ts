@@ -1,6 +1,5 @@
 import { Action, GunActionState } from '../extra/types';
 import { GroupedObject } from '../../util/combineGroups';
-import { dont_draw_actions } from '../gun';
 
 export type WandShot = {
   projectiles: Projectile[];

@@ -126,7 +126,7 @@ export function _combineGroups<T>(
           // index within comparison
           const cmpA = k(result[i + cmpi]);
           const cmpB = k(result[i + matchi * seqLen + cmpi]);
-          if (!_.isEqual(cmpA, cmpB)) {
+          if (cmpA === null || cmpB === null || !_.isEqual(cmpA, cmpB)) {
             match = false;
             break;
           }
