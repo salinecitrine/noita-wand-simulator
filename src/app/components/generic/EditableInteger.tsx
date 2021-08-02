@@ -4,12 +4,17 @@ import styled from 'styled-components';
 const StaticValue = styled.div`
   height: 15px;
 `;
+
 const EditingValue = styled.input`
   height: 15px;
   margin: 0;
   padding: 0 2px;
   border: none;
   width: 70%;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 type EditableIntegerProps = {
