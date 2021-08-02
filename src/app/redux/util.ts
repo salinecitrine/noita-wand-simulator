@@ -23,7 +23,6 @@ export function generateWandStateFromSearch(search: string) {
         v.split(',').map((s) => (s.length === 0 ? null : s)),
         (s) => !s,
       );
-      console.log(acc.spells);
     } else {
       if (!acc.wand) {
         acc.wand = {};
