@@ -53,9 +53,13 @@ export function SaveImageButton(props: Props) {
               }
             },
           },
-        }).then(() => {
-          setIsProcessing(false);
-        });
+        })
+          .then(() => {
+            setIsProcessing(false);
+          })
+          .catch(() => {
+            setIsProcessing(false);
+          });
       }
     },
     [stateHash],
