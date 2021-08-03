@@ -30,7 +30,10 @@ export interface ConfigState {
       hp: boolean;
       half: boolean;
     };
-    frameNumber: number;
+    random: {
+      worldSeed: number;
+      frameNumber: number;
+    };
   };
 }
 
@@ -90,7 +93,10 @@ export const initialState: ConfigState = {
       hp: false,
       half: false,
     },
-    frameNumber: 0,
+    random: {
+      worldSeed: 0,
+      frameNumber: 0,
+    },
   },
 };
 

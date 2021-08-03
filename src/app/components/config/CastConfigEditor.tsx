@@ -3,6 +3,7 @@ import { selectConfig, updateConfig } from '../../redux/configSlice';
 import { WandAction } from '../wandAction/WandAction';
 import { getActionById } from '../../calc/eval/util';
 import styled from 'styled-components';
+import { ChangeEvent } from 'react';
 
 const MainDiv = styled.div`
   display: flex;
@@ -32,25 +33,30 @@ export function CastConfigEditor(props: Props) {
   const dispatch = useAppDispatch();
 
   const reqs = config.requirements;
+  const random = config.random;
 
-  const requirementsChangeHandler = (field: string) => (e: any) => {
+  const requirementsChangeHandler = (field: keyof typeof reqs) => (e: any) => {
     dispatch(
       updateConfig({
         requirements: {
           ...reqs,
-          [field]: !reqs[field as keyof typeof reqs],
+          [field]: !reqs[field],
         },
       }),
     );
   };
 
-  const handleFrameNumberChange = (value: string) => {
-    dispatch(
-      updateConfig({
-        frameNumber: Number.parseInt(value),
-      }),
-    );
-  };
+  const randomChangeHandler =
+    (field: keyof typeof random) => (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(
+        updateConfig({
+          random: {
+            ...random,
+            [field]: Number.parseInt(e.target.value),
+          },
+        }),
+      );
+    };
 
   const actionSize = 24;
 
@@ -89,11 +95,21 @@ export function CastConfigEditor(props: Props) {
         />
       </InputWrapper>
       <InputWrapper>
-        Frame
+        World Seed
         <input
           type="number"
-          value={config.frameNumber}
-          onChange={(e) => handleFrameNumberChange(e.target.value)}
+          value={config.random.worldSeed}
+          onChange={randomChangeHandler('worldSeed')}
+          min={0}
+          max={1000}
+        />
+      </InputWrapper>
+      <InputWrapper>
+        Frame #
+        <input
+          type="number"
+          value={config.random.frameNumber}
+          onChange={randomChangeHandler('frameNumber')}
           min={0}
           max={1000}
         />
