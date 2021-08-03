@@ -30,6 +30,7 @@ export interface ConfigState {
       hp: boolean;
       half: boolean;
     };
+    frameNumber: number;
   };
 }
 
@@ -89,6 +90,7 @@ export const initialState: ConfigState = {
       hp: false,
       half: false,
     },
+    frameNumber: 0,
   },
 };
 

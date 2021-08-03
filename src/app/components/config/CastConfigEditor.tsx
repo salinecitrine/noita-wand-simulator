@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectConfig, updateConfig } from '../../redux/configSlice';
-import { ChangeEvent } from 'react';
 import { WandAction } from '../wandAction/WandAction';
 import { getActionById } from '../../calc/eval/util';
 import styled from 'styled-components';
@@ -9,29 +8,32 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  background-color: #555;
 `;
 
-const CheckWrapper = styled.label`
+const InputWrapper = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
   background-color: #111;
   margin-right: 5px;
+  color: #eee;
 
   input {
     margin: 2px;
+    max-width: 40px;
   }
 `;
 
 type Props = {};
 
-export function RequirementsConfigEditor(props: Props) {
+export function CastConfigEditor(props: Props) {
   const { config } = useAppSelector(selectConfig);
   const dispatch = useAppDispatch();
 
   const reqs = config.requirements;
 
-  const changeHandler = (field: string) => (e: any) => {
+  const requirementsChangeHandler = (field: string) => (e: any) => {
     dispatch(
       updateConfig({
         requirements: {
@@ -42,42 +44,60 @@ export function RequirementsConfigEditor(props: Props) {
     );
   };
 
+  const handleFrameNumberChange = (value: string) => {
+    dispatch(
+      updateConfig({
+        frameNumber: Number.parseInt(value),
+      }),
+    );
+  };
+
   const actionSize = 24;
 
   return (
     <MainDiv>
-      <CheckWrapper>
+      <InputWrapper>
         <WandAction action={getActionById('IF_ENEMY')} size={actionSize} />
         <input
           type="checkbox"
           checked={reqs.enemies}
-          onChange={changeHandler('enemies')}
+          onChange={requirementsChangeHandler('enemies')}
         />
-      </CheckWrapper>
-      <CheckWrapper>
+      </InputWrapper>
+      <InputWrapper>
         <WandAction action={getActionById('IF_PROJECTILE')} size={actionSize} />
         <input
           type="checkbox"
           checked={reqs.projectiles}
-          onChange={changeHandler('projectiles')}
+          onChange={requirementsChangeHandler('projectiles')}
         />
-      </CheckWrapper>
-      <CheckWrapper>
+      </InputWrapper>
+      <InputWrapper>
         <WandAction action={getActionById('IF_HP')} size={actionSize} />
         <input
           type="checkbox"
           checked={reqs.hp}
-          onChange={changeHandler('hp')}
+          onChange={requirementsChangeHandler('hp')}
         />
-      </CheckWrapper>
-      <CheckWrapper>
+      </InputWrapper>
+      <InputWrapper>
         <WandAction action={getActionById('IF_HALF')} size={actionSize} />
         <input
           type="checkbox"
           checked={reqs.half}
-          onChange={changeHandler('half')}
+          onChange={requirementsChangeHandler('half')}
         />
-      </CheckWrapper>
+      </InputWrapper>
+      <InputWrapper>
+        Frame
+        <input
+          type="number"
+          value={config.frameNumber}
+          onChange={(e) => handleFrameNumberChange(e.target.value)}
+          min={0}
+          max={1000}
+        />
+      </InputWrapper>
     </MainDiv>
   );
 }

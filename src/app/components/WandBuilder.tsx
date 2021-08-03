@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import SectionHeader from './SectionHeader';
 import { SaveImageButton } from './generic/SaveImageButton';
 import React, { useRef } from 'react';
-import { RequirementsConfigEditor } from './config/RequirementsConfigEditor';
+import { CastConfigEditor } from './config/CastConfigEditor';
 
 const MainDiv = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ export function WandBuilder(props: Props) {
     <MainDiv>
       <SectionHeader
         title={'Wand'}
-        leftChildren={<RequirementsConfigEditor />}
+        leftChildren={<CastConfigEditor />}
         rightChildren={
           <>
             <SaveImageButton
