@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SectionHeader from './SectionHeader';
 import { SaveImageButton } from './generic/SaveImageButton';
 import React, { useRef } from 'react';
+import { WandPermanentActionEditor } from './WandPermanentActionEditor';
 
 const MainDiv = styled.div`
   display: flex;
@@ -49,7 +50,10 @@ export function WandBuilder(props: Props) {
         }
       />
       <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
-        <WandStatsEditor />
+        <div>
+          <WandStatsEditor />
+          <WandPermanentActionEditor />
+        </div>
         <WandActionEditorWrapper
           ref={spellsRef as any}
           className={'saveImageRoot'}

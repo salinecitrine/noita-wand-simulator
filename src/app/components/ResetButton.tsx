@@ -7,7 +7,7 @@ type Props = {};
 export function ResetButton(props: Props) {
   const dispatch = useAppDispatch();
   const handleClick = () => {
-    dispatch(setWand({ wand: defaultWand, spells: [] }));
+    dispatch(setWand({ wand: defaultWand, permanentSpells: [], spells: [] }));
   };
   return (
     <div>

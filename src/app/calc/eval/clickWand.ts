@@ -11,6 +11,7 @@ import {
   _add_card_to_deck,
   _clear_deck,
   _draw_actions_for_shot,
+  _play_permanent_card,
   _set_gun,
   _start_shot,
   dont_draw_actions,
@@ -23,6 +24,7 @@ import { ActionCall, Requirements, TreeNode, WandShot } from './types';
 export function clickWand(
   wand: Gun,
   spells: Action[],
+  permanentSpells: string[],
   mana: number,
   castDelay: number,
   fireUntilReload: boolean,
@@ -232,6 +234,9 @@ export function clickWand(
   while (!reloaded && iterations < iterationLimit) {
     state_from_game.fire_rate_wait = castDelay;
     _start_shot(mana);
+    permanentSpells.forEach((actionId) => {
+      _play_permanent_card(actionId);
+    });
     _draw_actions_for_shot(true);
     iterations++;
     currentShot!.calledActions = calledActions!;
@@ -240,10 +245,12 @@ export function clickWand(
     wandShots.push(currentShot!);
     mana = gunMana;
 
+    console.log(calledActions!);
+
     if (
       !fireUntilReload ||
       (endOnRefresh && lastCalledAction?.action.id === 'RESET') ||
-      calledActions!.length === 0
+      calledActions!.length === permanentSpells.length
     ) {
       break;
     }

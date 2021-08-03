@@ -644,7 +644,7 @@ export function _add_card_to_deck(
   }
 }
 
-function _play_permanent_card(action_id: string) {
+export function _play_permanent_card(action_id: string) {
   for (let i = 0; i < actions.length; i++) {
     let action = actions[i];
     if (action.id === action_id) {

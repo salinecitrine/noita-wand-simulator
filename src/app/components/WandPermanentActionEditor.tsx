@@ -24,14 +24,16 @@ const StyledListItem = styled.li`
 
 type Props = {};
 
-export function WandActionEditor(props: Props) {
+export function WandPermanentActionEditor(props: Props) {
   const dispatch = useAppDispatch();
-  const { spells } = useAppSelector(selectWand);
+  const { permanentSpells } = useAppSelector(selectWand);
 
-  const spellActions = spells.map((s) => (s ? getActionById(s) : null));
+  const spellActions = permanentSpells.map((s) =>
+    s ? getActionById(s) : null,
+  );
 
   const size = DEFAULT_SIZE;
-  const list = 'spells';
+  const list = 'permanentSpells';
 
   const handleDeleteSpell = (wandIndex: number) => {
     dispatch(

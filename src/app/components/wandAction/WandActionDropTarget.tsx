@@ -1,9 +1,13 @@
 import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { WandActionDragItem } from '../../types';
+import { ActionLocation, WandActionDragItem } from '../../types';
 import styled from 'styled-components';
-import { moveSpell, setSpellAtIndex, swapSpells } from '../../redux/wandSlice';
+import {
+  moveSpell,
+  setSpellAtLocation,
+  swapSpells,
+} from '../../redux/wandSlice';
 import { selectConfig } from '../../redux/configSlice';
 
 const TargetDiv = styled.div`
@@ -23,6 +27,7 @@ const MarkerDiv = styled.div<{ isOver: boolean }>`
 
 type Props = {
   wandIndex: number;
+  list: ActionLocation['list'];
 };
 
 export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
@@ -32,18 +37,30 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
 
   const handleDrop = useCallback(
     (item: WandActionDragItem) => {
-      if (item.actionId && item.sourceWandIndex !== undefined) {
+      if (
+        item.actionId &&
+        item.sourceWandIndex !== undefined &&
+        item.sourceList !== undefined
+      ) {
         const moveFunction = config.swapOnMove ? swapSpells : moveSpell;
         dispatch(
-          moveFunction({ fromIndex: item.sourceWandIndex, toIndex: wandIndex }),
+          moveFunction({
+            from: { list: item.sourceList, index: item.sourceWandIndex },
+            to: { list: props.list, index: wandIndex },
+          }),
         );
       } else if (item.actionId) {
-        dispatch(setSpellAtIndex({ spell: item.actionId, index: wandIndex }));
+        dispatch(
+          setSpellAtLocation({
+            spell: item.actionId,
+            location: { list: props.list, index: wandIndex },
+          }),
+        );
       } else {
         throw Error(`invalid drag item ${item}`);
       }
     },
-    [config.swapOnMove, dispatch, wandIndex],
+    [config.swapOnMove, dispatch, props.list, wandIndex],
   );
   const [{ isOver }, drop] = useDrop(
     () => ({

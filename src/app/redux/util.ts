@@ -1,4 +1,4 @@
-import { WandState } from './wandSlice';
+import { MAX_PERMANENT_SPELLS, WandState } from './wandSlice';
 import { fixArraySize, trimArray } from '../util/util';
 import { defaultWand } from './presets';
 
@@ -6,13 +6,19 @@ export function generateSearchFromWandState(state: WandState) {
   const simplifiedState = {
     ...state,
     spells: trimArray(state.spells, (o) => o === null),
+    permanentSpells: trimArray(state.permanentSpells, (o) => o === null),
   };
   const params = new URLSearchParams();
   Object.entries(simplifiedState.wand).forEach(([k, v]) => {
     params.append(k, v.toString());
   });
   return (
-    '?' + params.toString() + '&spells=' + simplifiedState.spells.join(',')
+    '?' +
+    params.toString() +
+    '&spells=' +
+    simplifiedState.spells.join(',') +
+    '&permanentSpells=' +
+    simplifiedState.permanentSpells.join(',')
   );
 }
 
@@ -21,6 +27,11 @@ export function generateWandStateFromSearch(search: string) {
   const result = [...params.entries()].reduce((acc, [k, v]) => {
     if (k === 'spells') {
       acc.spells = trimArray(
+        v.split(',').map((s) => (s.length === 0 ? null : s)),
+        (s) => !s,
+      );
+    } else if (k === 'permanentSpells') {
+      acc.permanentSpells = trimArray(
         v.split(',').map((s) => (s.length === 0 ? null : s)),
         (s) => !s,
       );
@@ -35,5 +46,9 @@ export function generateWandStateFromSearch(search: string) {
   if (result.wand && result.wand.deck_capacity) {
     result.spells = fixArraySize(result.spells, result.wand.deck_capacity);
   }
+  result.permanentSpells = fixArraySize(
+    result.permanentSpells || [],
+    MAX_PERMANENT_SPELLS,
+  );
   return result;
 }

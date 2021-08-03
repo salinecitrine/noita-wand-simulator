@@ -48,7 +48,7 @@ type Props = {
 
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
 export function ShotResultList(props: Props) {
-  const { wand, spells } = useAppSelector(selectWand);
+  const { wand, permanentSpells, spells } = useAppSelector(selectWand);
   const { config } = useAppSelector(selectConfig);
 
   const projectilesRef = useRef<HTMLDivElement>();
@@ -58,6 +58,11 @@ export function ShotResultList(props: Props) {
   const spellActions = useMemo(
     () => spells.filter(notNull).map(getActionById),
     [spells],
+  );
+
+  const permanentSpellsNotNull = useMemo(
+    () => permanentSpells.filter(notNull),
+    [permanentSpells],
   );
 
   const spellActionsWithUses = useMemo(() => {
@@ -82,6 +87,7 @@ export function ShotResultList(props: Props) {
       clickWand(
         wand,
         spellActionsWithUses,
+        permanentSpellsNotNull,
         wand.mana_max,
         wand.cast_delay,
         true,
@@ -92,6 +98,7 @@ export function ShotResultList(props: Props) {
       config.endSimulationOnRefresh,
       config.requirements,
       config.random,
+      permanentSpellsNotNull,
       spellActionsWithUses,
       wand,
     ],

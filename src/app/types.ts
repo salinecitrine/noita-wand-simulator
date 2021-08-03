@@ -22,6 +22,12 @@ export type PresetGroup = {
 export type WandActionDragItem = {
   actionId?: string;
   sourceWandIndex?: number;
+  sourceList?: ActionLocation['list'];
 };
 
 export type LocalStorageState = ConfigState;
+
+export type ActionLocation = {
+  list: 'spells' | 'permanentSpells';
+  index: number;
+};
