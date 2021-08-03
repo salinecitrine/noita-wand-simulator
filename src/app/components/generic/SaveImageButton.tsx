@@ -37,12 +37,18 @@ export function SaveImageButton(props: Props) {
           html2CanvasOptions: {
             backgroundColor: '#000',
             imageTimeout: 0,
+            scrollX: -window.scrollX,
+            scrollY: -window.scrollY,
+            windowWidth: document.documentElement.offsetWidth,
+            windowHeight: document.documentElement.offsetHeight,
             onclone: (document) => {
               for (const elem of document.getElementsByClassName(
                 'saveImageRoot',
               )) {
                 (elem as any).style.width = 'fit-content';
+                (elem as any).style.height = 'fit-content';
                 (elem as any).style.overflowX = 'clip';
+                (elem as any).style.overflowY = 'clip';
               }
             },
           },
