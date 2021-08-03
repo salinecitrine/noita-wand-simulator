@@ -15,6 +15,7 @@ const ProxyDiv = styled.div<{
   border: 1px solid #999;
   background-image: url(${(props) => props.imgUrl});
   background-size: cover;
+  background-color: #111;
 `;
 
 type Props = {
