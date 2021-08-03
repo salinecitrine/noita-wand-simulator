@@ -15,7 +15,16 @@ import { ActionSource } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
 import { SaveImageButton } from '../generic/SaveImageButton';
 
-const GREEK_SPELLS = ['ALPHA', 'GAMMA', 'TAU', 'MU', 'PHI', 'SIGMA', 'ZETA'];
+const GREEK_SPELLS = [
+  'ALPHA',
+  'GAMMA',
+  'TAU',
+  'OMEGA',
+  'MU',
+  'PHI',
+  'SIGMA',
+  'ZETA',
+];
 
 const ParentDiv = styled.div`
   background-color: #333;
