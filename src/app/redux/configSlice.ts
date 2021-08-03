@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { loadState } from '../localStorage';
+import _ from 'lodash';
 
 // Define a type for the slice state
 export interface ConfigState {
@@ -93,10 +94,7 @@ const loadedInitialState = loadState();
 
 export const configSlice = createSlice({
   name: 'config',
-  initialState: {
-    ...initialState,
-    ...(loadedInitialState || {}),
-  },
+  initialState: _.merge(initialState, loadedInitialState || {}),
   reducers: {
     updateConfig: (
       state,
