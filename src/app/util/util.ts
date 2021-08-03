@@ -101,7 +101,7 @@ export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]) {
 
 export function trimArray<T>(arr: T[], predicate: (o: T) => boolean): T[] {
   let result = [...arr];
-  while (predicate(result[result.length - 1]) && arr.length > 0) {
+  while (result.length > 0 && predicate(result[result.length - 1])) {
     result.pop();
   }
   return result;
