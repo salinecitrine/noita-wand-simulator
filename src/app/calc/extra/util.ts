@@ -1,5 +1,12 @@
+import {
+  SetRandomSeed as SetRandomSeedExt,
+  Random as RandomExt,
+} from './random';
+
 export function Random(min: number, max: number) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return RandomExt(min, max);
+}
+
+export function SetRandomSeed(a: number, b: number) {
+  SetRandomSeedExt(0, a, b);
 }
