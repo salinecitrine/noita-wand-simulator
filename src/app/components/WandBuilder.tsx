@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SectionHeader from './SectionHeader';
 import { SaveImageButton } from './generic/SaveImageButton';
 import React, { useRef } from 'react';
+import { RequirementsConfigEditor } from './config/RequirementsConfigEditor';
 
 const MainDiv = styled.div`
   display: flex;
@@ -29,16 +30,26 @@ export function WandBuilder(props: Props) {
 
   return (
     <MainDiv>
-      <SectionHeader title={'Wand'}>
-        <SaveImageButton
-          targetRef={spellsRef}
-          fileName={'spells'}
-          enabled={true}
-        />
-        (spells only)
-        <SaveImageButton targetRef={wandRef} fileName={'wand'} enabled={true} />
-        (both)
-      </SectionHeader>
+      <SectionHeader
+        title={'Wand'}
+        leftChildren={<RequirementsConfigEditor />}
+        rightChildren={
+          <>
+            <SaveImageButton
+              targetRef={spellsRef}
+              fileName={'spells'}
+              enabled={true}
+            />
+            (spells only)
+            <SaveImageButton
+              targetRef={wandRef}
+              fileName={'wand'}
+              enabled={true}
+            />
+            (both)
+          </>
+        }
+      />
       <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
         <WandStatsEditor />
         <WandActionEditorWrapper

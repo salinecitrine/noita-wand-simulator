@@ -29,6 +29,7 @@ export function SaveImageButton(props: Props) {
   }, [wandState]);
 
   const saveImageHandler = useMemo(
+    // https://github.com/niklasvh/html2canvas/issues/1878#issuecomment-739245273
     () => (ref: React.MutableRefObject<any>, fileName: string) => () => {
       if (ref.current) {
         setIsProcessing(true);

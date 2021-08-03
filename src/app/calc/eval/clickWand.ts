@@ -1,5 +1,5 @@
 import { Action, Gun } from '../extra/types';
-import { subscribe } from '../extra/ext_functions';
+import { override, subscribe } from '../extra/ext_functions';
 import {
   ACTION_TYPE_MATERIAL,
   ACTION_TYPE_OTHER,
@@ -18,7 +18,7 @@ import {
   state_from_game,
 } from '../gun';
 import { entityToAction, iterativeActions } from './lookups';
-import { ActionCall, TreeNode, WandShot } from './types';
+import { ActionCall, Requirements, TreeNode, WandShot } from './types';
 
 export function clickWand(
   wand: Gun,
@@ -26,7 +26,8 @@ export function clickWand(
   mana: number,
   castDelay: number,
   fireUntilReload: boolean,
-  endOnRefresh: boolean = true,
+  endOnRefresh: boolean,
+  requirements?: Requirements,
 ): [WandShot[], number | undefined] {
   if (spells.filter((s) => s != null).length === 0) {
     return [[], undefined];
@@ -59,6 +60,44 @@ export function clickWand(
     rootNodes = [];
     currentNode = undefined;
   };
+
+  let removeOverrides = [];
+  if (requirements) {
+    removeOverrides.push(
+      override('EntityGetInRadiusWithTag', (args) => {
+        if (args[3] === 'homing_target') {
+          return requirements.enemies ? new Array(15) : [];
+        } else if (args[3] === 'projectile') {
+          return requirements.projectiles ? new Array(20) : [];
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('EntityGetFirstComponent', (args) => {
+        if (args[1] === 'DamageModelComponent') {
+          return 'IF_HP'; // just has to be non-null
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('ComponentGetValue2', (args) => {
+        if (args[0] === 'IF_HP') {
+          if (args[1] === 'hp') {
+            return requirements.hp ? 25 : 100;
+          } else if (args[1] === 'max_hp') {
+            return 100;
+          }
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('GlobalsGetValue', (args) => {
+        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
+          return requirements.half ? 1 : 0;
+        }
+      }),
+    );
+  }
 
   const unsub = subscribe((eventType, ...args) => {
     switch (eventType) {
@@ -204,6 +243,7 @@ export function clickWand(
   }
 
   unsub();
+  removeOverrides.forEach((cb) => cb());
 
   return [wandShots, reloadTime];
 }

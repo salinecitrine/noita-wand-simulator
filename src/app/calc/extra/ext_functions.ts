@@ -11,92 +11,165 @@ export function subscribe(callback: Callback) {
   return () => (listeners = listeners.filter((l) => l !== callback));
 }
 
-function onEvent(eventType: string, ...args: any[]) {
+function onEvent(eventType: string, ...args: any[]): any {
   listeners.forEach((c) => c(eventType, ...args));
+  if (overrides[eventType]) {
+    // console.log('onEvent.override', eventType, args);
+    return overrides[eventType]?.(args);
+  }
+}
+
+type OverrideCallback = (...args: any[]) => void;
+let overrides: { [eventType: string]: OverrideCallback | undefined } = {};
+
+export function override(eventType: string, callback: OverrideCallback) {
+  overrides[eventType] = callback;
+  return () => {
+    if (overrides[eventType] === callback) {
+      overrides[eventType] = undefined;
+    }
+  };
 }
 
 // ext functions
 
 export function SetProjectileConfigs() {
-  onEvent('SetProjectileConfigs');
+  const result = onEvent('SetProjectileConfigs');
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function OnNotEnoughManaForAction() {
-  onEvent('OnNotEnoughManaForAction');
+  const result = onEvent('OnNotEnoughManaForAction');
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function RegisterGunShotEffects(recoil_knockback: any) {
-  onEvent('RegisterGunShotEffects', recoil_knockback);
+  const result = onEvent('RegisterGunShotEffects', recoil_knockback);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function Reflection_RegisterProjectile(entity_filename: string) {
-  onEvent('Reflection_RegisterProjectile', entity_filename);
+  const result = onEvent('Reflection_RegisterProjectile', entity_filename);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function BeginProjectile(entity_filename: string) {
-  onEvent('BeginProjectile', entity_filename);
+  const result = onEvent('BeginProjectile', entity_filename);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function EndProjectile() {
-  onEvent('EndProjectile');
+  const result = onEvent('EndProjectile');
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function BeginTriggerTimer(delay_frames: number) {
-  onEvent('BeginTriggerTimer', delay_frames);
+  const result = onEvent('BeginTriggerTimer', delay_frames);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function BeginTriggerHitWorld() {
-  onEvent('BeginTriggerHitWorld');
+  const result = onEvent('BeginTriggerHitWorld');
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function BeginTriggerDeath() {
-  onEvent('BeginTriggerDeath');
+  const result = onEvent('BeginTriggerDeath');
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function EndTrigger() {
-  onEvent('EndTrigger');
+  const result = onEvent('EndTrigger');
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function BaabInstruction(name: string) {
-  onEvent('BaabInstruction', name);
+  const result = onEvent('BaabInstruction', name);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function ActionUsesRemainingChanged(
   item_id: any,
   uses_remaining: number,
 ) {
-  onEvent('ActionUsesRemainingChanged', item_id, uses_remaining);
+  const result = onEvent('ActionUsesRemainingChanged', item_id, uses_remaining);
+  if (result !== undefined) {
+    return result;
+  }
   return false;
 }
 
 export function ActionUsed(item_id: any) {
-  onEvent('ActionUsed', item_id);
+  const result = onEvent('ActionUsed', item_id);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function LogAction(s: string) {
-  onEvent('LogAction', s);
+  const result = onEvent('LogAction', s);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function StartReload(reload_time: number) {
-  onEvent('StartReload', reload_time);
+  const result = onEvent('StartReload', reload_time);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function RegisterGunAction(s: GunActionState) {
-  onEvent('RegisterGunAction', s);
+  const result = onEvent('RegisterGunAction', s);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function EntityGetWithTag(tag: string): any {
-  onEvent('EntityGetWithTag', tag);
+  const result = onEvent('EntityGetWithTag', tag);
+  if (result !== undefined) {
+    return result;
+  }
   return {};
 }
 
 export function GetUpdatedEntityID(): string {
-  onEvent('GetUpdatedEntityID');
+  const result = onEvent('GetUpdatedEntityID');
+  if (result !== undefined) {
+    return result;
+  }
   return 'dummy entity';
 }
 
 export function EntityGetComponent(entity_id: any, component: string): any {
-  onEvent('EntityGetComponent', entity_id, component);
+  const result = onEvent('EntityGetComponent', entity_id, component);
+  if (result !== undefined) {
+    return result;
+  }
   return {};
 }
 
@@ -104,7 +177,10 @@ export function EntityGetFirstComponent(
   entity_id: any,
   component: string,
 ): any {
-  onEvent('EntityGetFirstComponent', entity_id, component);
+  const result = onEvent('EntityGetFirstComponent', entity_id, component);
+  if (result !== undefined) {
+    return result;
+  }
   return {};
 }
 
@@ -112,7 +188,14 @@ export function EntityGetFirstComponentIncludingDisabled(
   entity_id: any,
   component: string,
 ): any {
-  onEvent('EntityGetFirstComponentIncludingDisabled', entity_id, component);
+  const result = onEvent(
+    'EntityGetFirstComponentIncludingDisabled',
+    entity_id,
+    component,
+  );
+  if (result !== undefined) {
+    return result;
+  }
   return {};
 }
 
@@ -125,12 +208,18 @@ const componentValues: { [component_id: string]: { [key: string]: any } } = {
 };
 
 export function ComponentGetValue2(component_id: string, key: string): any {
-  onEvent('ComponentGetValue2', component_id, key);
+  const result = onEvent('ComponentGetValue2', component_id, key);
+  if (result !== undefined) {
+    return result;
+  }
   return componentValues['dummy entity'][key];
 }
 
 export function ComponentSetValue2(component: any, key: string, value: any) {
-  onEvent('ComponentSetValue2', component, key, value);
+  const result = onEvent('ComponentSetValue2', component, key, value);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function EntityInflictDamage(
@@ -157,27 +246,42 @@ export function EntityInflictDamage(
 }
 
 export function EntityGetTransform(entity: any): [number, number] {
-  onEvent('EntityGetTransform', entity);
+  const result = onEvent('EntityGetTransform', entity);
+  if (result !== undefined) {
+    return result;
+  }
   return [0, 0];
 }
 
 export function EntityLoad(entityXml: string, x: number, y: number): number {
-  onEvent('EntityLoad', entityXml, x, y);
+  const result = onEvent('EntityLoad', entityXml, x, y);
+  if (result !== undefined) {
+    return result;
+  }
   return 0; //entity id
 }
 
 export function EntityGetAllChildren(entityId: any): any {
-  onEvent('EntityGetAllChildren', entityId);
+  const result = onEvent('EntityGetAllChildren', entityId);
+  if (result !== undefined) {
+    return result;
+  }
   return {};
 }
 
 export function EntityGetName(childId: any): any {
-  onEvent('EntityGetName', childId);
+  const result = onEvent('EntityGetName', childId);
+  if (result !== undefined) {
+    return result;
+  }
   return {};
 }
 
 export function EntityHasTag(entityId: any, tag: string): any {
-  onEvent('EntityHasTag', entityId, tag);
+  const result = onEvent('EntityHasTag', entityId, tag);
+  if (result !== undefined) {
+    return result;
+  }
   return false;
 }
 
@@ -187,7 +291,10 @@ export function EntityGetInRadiusWithTag(
   radius: number,
   tag: string,
 ): any {
-  onEvent('EntityGetInRadiusWithTag', x, y, radius, tag);
+  const result = onEvent('EntityGetInRadiusWithTag', x, y, radius, tag);
+  if (result !== undefined) {
+    return result;
+  }
   return {};
 }
 
@@ -195,16 +302,26 @@ export function EntityGetInRadiusWithTag(
 let globals: { [key: string]: string } = {};
 
 export function GlobalsGetValue(key: string, defaultValue: string): any {
+  const result = onEvent('GlobalsGetValue', key, defaultValue);
+  if (result !== undefined) {
+    return result;
+  }
   return globals.hasOwnProperty(key) ? globals[key] : defaultValue;
 }
 
 export function GlobalsSetValue(key: string, value: string) {
-  onEvent('GlobalsSetValue', key, value);
+  const result = onEvent('GlobalsSetValue', key, value);
+  if (result !== undefined) {
+    return result;
+  }
   globals[key] = value;
 }
 
 export function OnActionPlayed(action_id: any) {
-  onEvent('OnActionPlayed', action_id);
+  const result = onEvent('OnActionPlayed', action_id);
+  if (result !== undefined) {
+    return result;
+  }
   return false;
 }
 
@@ -216,7 +333,10 @@ export function OnActionCalled(
   c: GunActionState,
   ...args: number[]
 ) {
-  onEvent('OnActionCalled', source, action, c, ...args);
+  const result = onEvent('OnActionCalled', source, action, c, ...args);
+  if (result !== undefined) {
+    return result;
+  }
 }
 
 export function OnActionFinished(
@@ -226,5 +346,15 @@ export function OnActionFinished(
   returnValue: any,
   ...args: number[]
 ) {
-  onEvent('OnActionFinished', source, action, c, returnValue, ...args);
+  const result = onEvent(
+    'OnActionFinished',
+    source,
+    action,
+    c,
+    returnValue,
+    ...args,
+  );
+  if (result !== undefined) {
+    return result;
+  }
 }

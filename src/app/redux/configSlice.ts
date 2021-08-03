@@ -22,6 +22,12 @@ export interface ConfigState {
     unlocks: {
       [key: string]: boolean;
     };
+    requirements: {
+      enemies: boolean;
+      projectiles: boolean;
+      hp: boolean;
+      half: boolean;
+    };
   };
 }
 
@@ -73,6 +79,12 @@ export const initialState: ConfigState = {
       card_unlocked_rain: false,
       card_unlocked_paint: false,
       card_unlocked_rainbow_trail: false,
+    },
+    requirements: {
+      enemies: false,
+      projectiles: false,
+      hp: false,
+      half: false,
     },
   },
 };

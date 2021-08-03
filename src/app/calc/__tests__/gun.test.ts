@@ -117,7 +117,7 @@ it('clickWand', () => {
     ],
   ];
 
-  const result = clickWand(gun, spells, 1000, 0, true);
+  const result = clickWand(gun, spells, 1000, 0, true, true);
   expect(result).toEqual(expected);
 });
 
@@ -162,6 +162,6 @@ it('clickWand 2', () => {
     ],
   ];
 
-  const result = clickWand(gun, spells, 1000, 0, true);
+  const result = clickWand(gun, spells, 1000, 0, true, true);
   expect(result).toEqual(expected);
 });

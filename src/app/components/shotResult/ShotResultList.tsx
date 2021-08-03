@@ -88,8 +88,10 @@ export function ShotResultList(props: Props) {
         wand.mana_max,
         wand.cast_delay,
         true,
+        true,
+        config.requirements,
       ),
-    [spellActionsWithUses, wand],
+    [config.requirements, spellActionsWithUses, wand],
   );
 
   shots = useMemo(() => {
@@ -141,13 +143,16 @@ export function ShotResultList(props: Props) {
 
   return (
     <ParentDiv>
-      <SectionHeader title={'Projectiles'}>
-        <SaveImageButton
-          targetRef={projectilesRef}
-          fileName={'projectiles'}
-          enabled={groupedShots.length > 0}
-        />
-      </SectionHeader>
+      <SectionHeader
+        title={'Projectiles'}
+        rightChildren={
+          <SaveImageButton
+            targetRef={projectilesRef}
+            fileName={'projectiles'}
+            enabled={groupedShots.length > 0}
+          />
+        }
+      />
       <ScrollWrapper>
         <SectionDiv ref={projectilesRef as any} className={'saveImageRoot'}>
           {groupedShots.length > 0 && (
@@ -161,13 +166,16 @@ export function ShotResultList(props: Props) {
           ))}
         </SectionDiv>
       </ScrollWrapper>
-      <SectionHeader title={'Actions Called'}>
-        <SaveImageButton
-          targetRef={actionsCalledRef}
-          fileName={'actions_called'}
-          enabled={groupedShots.length > 0}
-        />
-      </SectionHeader>
+      <SectionHeader
+        title={'Actions Called'}
+        rightChildren={
+          <SaveImageButton
+            targetRef={actionsCalledRef}
+            fileName={'actions_called'}
+            enabled={groupedShots.length > 0}
+          />
+        }
+      />
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
           {groupedShots.map((shot, index) => (
@@ -180,13 +188,16 @@ export function ShotResultList(props: Props) {
       </ScrollWrapper>
       {config.showActionTree && (
         <>
-          <SectionHeader title={'Action Call Tree'}>
-            <SaveImageButton
-              targetRef={actionCallTreeRef}
-              fileName={'action_tree'}
-              enabled={groupedShots.length > 0}
-            />
-          </SectionHeader>
+          <SectionHeader
+            title={'Action Call Tree'}
+            rightChildren={
+              <SaveImageButton
+                targetRef={actionCallTreeRef}
+                fileName={'action_tree'}
+                enabled={groupedShots.length > 0}
+              />
+            }
+          />
           <ScrollWrapper>
             <SectionDiv
               ref={actionCallTreeRef as any}
