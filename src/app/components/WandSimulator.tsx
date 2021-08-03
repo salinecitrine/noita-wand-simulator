@@ -13,6 +13,7 @@ import { ResetButton } from './ResetButton';
 import { useEffect } from 'react';
 import { ActionCreators } from 'redux-undo';
 import { forceDisableCanvasSmoothing } from '../util/util';
+import { CastConfigEditor } from './config/CastConfigEditor';
 
 const Column = styled.div`
   display: flex;
@@ -71,6 +72,7 @@ export function WandSimulator(props: Props) {
           <Row>
             <SpellSelector />
           </Row>
+          <CastConfigEditor />
           <WandBuilder />
         </DndProvider>
       </Column>

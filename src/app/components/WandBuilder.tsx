@@ -32,7 +32,6 @@ export function WandBuilder(props: Props) {
     <MainDiv>
       <SectionHeader
         title={'Wand'}
-        leftChildren={<CastConfigEditor />}
         rightChildren={
           <>
             <SaveImageButton
