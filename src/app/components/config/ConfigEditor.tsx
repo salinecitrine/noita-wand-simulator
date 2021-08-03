@@ -133,6 +133,12 @@ const configOptions = [
     (c) => c.showSpellsInCategories,
     (c, v) => (c.showSpellsInCategories = v),
   ),
+  makeConfigField(
+    'End Simulation on Wand Refresh',
+    ConfigType.Boolean,
+    (c) => c.endSimulationOnRefresh,
+    (c, v) => (c.endSimulationOnRefresh = v),
+  ),
   makeConfigFieldGroup('Unlocks', [
     makeConfigField(
       'Enable All',

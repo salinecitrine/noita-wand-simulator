@@ -20,6 +20,7 @@ export interface ConfigState {
     swapOnMove: boolean;
     showActionTree: boolean;
     showSpellsInCategories: boolean;
+    endSimulationOnRefresh: boolean;
     unlocks: {
       [key: string]: boolean;
     };
@@ -49,6 +50,7 @@ export const initialState: ConfigState = {
     swapOnMove: true,
     showActionTree: true,
     showSpellsInCategories: false,
+    endSimulationOnRefresh: true,
     unlocks: {
       card_unlocked_black_hole: false,
       card_unlocked_everything: false,

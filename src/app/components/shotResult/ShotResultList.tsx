@@ -14,6 +14,7 @@ import { condenseActionsAndProjectiles } from '../../calc/eval/condense';
 import { ActionSource } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
 import { SaveImageButton } from '../generic/SaveImageButton';
+import { IterationLimitWarning } from './IterationLimitWarning';
 
 const GREEK_SPELLS = [
   'ALPHA',
@@ -97,10 +98,15 @@ export function ShotResultList(props: Props) {
         wand.mana_max,
         wand.cast_delay,
         true,
-        true,
+        config.endSimulationOnRefresh,
         config.requirements,
       ),
-    [config.requirements, spellActionsWithUses, wand],
+    [
+      config.endSimulationOnRefresh,
+      config.requirements,
+      spellActionsWithUses,
+      wand,
+    ],
   );
 
   shots = useMemo(() => {
