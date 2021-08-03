@@ -28,13 +28,13 @@ export function clickWand(
   fireUntilReload: boolean,
   endOnRefresh: boolean,
   requirements?: Requirements,
-): [WandShot[], number | undefined] {
+): [WandShot[], number | undefined, boolean] {
   if (spells.filter((s) => s != null).length === 0) {
-    return [[], undefined];
+    return [[], undefined, false];
   }
 
   let iterations = 0;
-  const iterationLimit = 26;
+  const iterationLimit = 10;
   let reloaded = false;
   let wandShots: WandShot[] = [];
   let currentShot: WandShot;
@@ -245,5 +245,5 @@ export function clickWand(
   unsub();
   removeOverrides.forEach((cb) => cb());
 
-  return [wandShots, reloadTime];
+  return [wandShots, reloadTime, iterations === iterationLimit];
 }

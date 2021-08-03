@@ -89,7 +89,7 @@ export function ShotResultList(props: Props) {
     }
   }, [props.infiniteSpells, props.unlimitedSpells, spellActions]);
 
-  let [shots, reloadTime] = useMemo(
+  let [shots, reloadTime, hitIterationLimit] = useMemo(
     () =>
       clickWand(
         wand,
@@ -154,6 +154,9 @@ export function ShotResultList(props: Props) {
     <ParentDiv>
       <SectionHeader
         title={'Projectiles'}
+        leftChildren={
+          <IterationLimitWarning hitIterationLimit={hitIterationLimit} />
+        }
         rightChildren={
           <SaveImageButton
             targetRef={projectilesRef}
