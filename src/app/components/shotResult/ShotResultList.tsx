@@ -15,6 +15,7 @@ import { ActionSource } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
 import { SaveImageButton } from '../generic/SaveImageButton';
 import { IterationLimitWarning } from './IterationLimitWarning';
+import { ScrollWrapper } from '../generic/ScrollWrapper';
 
 const GREEK_SPELLS = [
   'ALPHA',
@@ -29,10 +30,6 @@ const GREEK_SPELLS = [
 
 const ParentDiv = styled.div`
   background-color: #333;
-`;
-
-const ScrollWrapper = styled.div`
-  overflow-x: auto;
 `;
 
 const SectionDiv = styled.div`

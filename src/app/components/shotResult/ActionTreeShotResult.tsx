@@ -7,20 +7,12 @@ const MainDiv = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  transform: rotateX(180deg);
   margin: 1px;
-`;
-
-const DummyDiv = styled.div`
-  transform: rotateX(180deg);
-  overflow-x: auto;
-  //width: 100%;
 `;
 
 const NodeDiv = styled.div`
   display: flex;
   flex-direction: row;
-  //border-bottom: 1px solid #ccc;
 `;
 
 const ChildrenDiv = styled.div`
@@ -66,12 +58,10 @@ type Props = {
 export function ActionTreeShotResult(props: Props) {
   const s = props.shot;
   return (
-    <DummyDiv>
-      <MainDiv>
-        {s.actionTree.map((n, index) => (
-          <ActionTreeComponent node={n} key={index} />
-        ))}
-      </MainDiv>
-    </DummyDiv>
+    <MainDiv>
+      {s.actionTree.map((n, index) => (
+        <ActionTreeComponent node={n} key={index} />
+      ))}
+    </MainDiv>
   );
 }
