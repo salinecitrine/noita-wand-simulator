@@ -16,17 +16,7 @@ import { ShotMetadata } from './ShotMetadata';
 import { SaveImageButton } from '../generic/SaveImageButton';
 import { IterationLimitWarning } from './IterationLimitWarning';
 import { ScrollWrapper } from '../generic/ScrollWrapper';
-
-const GREEK_SPELLS = [
-  'ALPHA',
-  'GAMMA',
-  'TAU',
-  'OMEGA',
-  'MU',
-  'PHI',
-  'SIGMA',
-  'ZETA',
-];
+import { GREEK_SPELLS } from '../../calc/eval/lookups';
 
 const ParentDiv = styled.div`
   background-color: #333;
@@ -124,7 +114,7 @@ export function ShotResultList(props: Props) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
-          (ac) => !GREEK_SPELLS.includes(ac.action.id),
+          (ac) => !GREEK_SPELLS().includes(ac.action.id),
         ),
       }));
     } else {

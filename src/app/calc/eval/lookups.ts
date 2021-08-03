@@ -27,3 +27,14 @@ export const iterativeActions = lazy(() => [
   'DIVIDE_4',
   'DIVIDE_10',
 ]);
+
+export const GREEK_SPELLS = lazy(() => [
+  'ALPHA',
+  'GAMMA',
+  'TAU',
+  'OMEGA',
+  'MU',
+  'PHI',
+  'SIGMA',
+  'ZETA',
+]);
