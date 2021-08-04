@@ -8,26 +8,16 @@ import {
   hand,
 } from '../gun';
 import * as ext from '../extra/ext_functions';
-import { getActionById } from '../eval/util';
-import { Gun } from '../extra/types';
-import { clickWand } from '../eval/clickWand';
-import { wandShotToProjectiles } from './util';
-
-beforeEach(() => {
-  _clear_deck(false);
-});
-
-afterEach(() => {
-  _clear_deck(false);
-});
 
 describe('direct calls', () => {
   beforeEach(() => {
     jest.spyOn(ext, 'BeginProjectile');
+    _clear_deck(false);
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
+    _clear_deck(false);
   });
 
   it('one shot no reload', () => {
@@ -96,132 +86,5 @@ describe('direct calls', () => {
     _draw_actions_for_shot(true);
     expect([discarded.length, hand.length, deck.length]).toEqual([0, 0, 3]);
     expect(ext.BeginProjectile).toHaveBeenCalledTimes(4);
-  });
-});
-
-const defaultGun: Gun = {
-  actions_per_round: 1,
-  shuffle_deck_when_empty: false,
-  reload_time: 0,
-  deck_capacity: 10,
-};
-
-describe('clickWand', () => {
-  it('simple trigger', () => {
-    const spells = ['DAMAGE', 'LIGHT_BULLET_TRIGGER', 'BOMB'].map(
-      getActionById,
-    );
-
-    const expected = [
-      [
-        {
-          entity: 'data/entities/projectiles/deck/light_bullet.xml',
-          trigger: [
-            {
-              entity: 'data/entities/projectiles/bomb.xml',
-            },
-          ],
-        },
-      ],
-    ];
-
-    const [shots, reloadTime, iterationLimit] = clickWand(
-      defaultGun,
-      spells,
-      1000,
-      0,
-      true,
-      true,
-    );
-    const processed = shots.map(wandShotToProjectiles);
-    expect(processed).toEqual(expected);
-  });
-
-  it('two shots', () => {
-    const spells = [
-      'DAMAGE',
-      'LIGHT_BULLET_TRIGGER',
-      'BOMB',
-      'LIGHT_BULLET',
-    ].map(getActionById);
-
-    const expected = [
-      [
-        {
-          entity: 'data/entities/projectiles/deck/light_bullet.xml',
-          trigger: [
-            {
-              entity: 'data/entities/projectiles/bomb.xml',
-            },
-          ],
-        },
-      ],
-      [
-        {
-          entity: 'data/entities/projectiles/deck/light_bullet.xml',
-        },
-      ],
-    ];
-
-    const [shots, reloadTime, iterationLimit] = clickWand(
-      defaultGun,
-      spells,
-      1000,
-      0,
-      true,
-      true,
-    );
-    const processed = shots.map(wandShotToProjectiles);
-    expect(processed).toEqual(expected);
-  });
-
-  describe('requirement spells', () => {
-    it('simple IF_ENEMY pass', () => {
-      const spells = ['IF_ENEMY', 'LIGHT_BULLET', 'RESET'].map(getActionById);
-
-      const expected = [
-        [{ entity: 'data/entities/projectiles/deck/light_bullet.xml' }],
-      ];
-
-      const [shots, reloadTime, iterationLimit] = clickWand(
-        defaultGun,
-        spells,
-        1000,
-        0,
-        false,
-        true,
-        {
-          enemies: true,
-          half: false,
-          projectiles: false,
-          hp: false,
-        },
-      );
-      const processed = shots.map(wandShotToProjectiles);
-      expect(processed).toEqual(expected);
-    });
-
-    it('simple IF_ENEMY fail', () => {
-      const spells = ['IF_ENEMY', 'LIGHT_BULLET', 'RESET'].map(getActionById);
-
-      const expected = [[]];
-
-      const [shots, reloadTime, iterationLimit] = clickWand(
-        defaultGun,
-        spells,
-        1000,
-        0,
-        false,
-        true,
-        {
-          enemies: false,
-          half: false,
-          projectiles: false,
-          hp: false,
-        },
-      );
-      const processed = shots.map(wandShotToProjectiles);
-      expect(processed).toEqual(expected);
-    });
   });
 });
