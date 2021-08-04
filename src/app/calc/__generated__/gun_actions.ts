@@ -8620,12 +8620,12 @@ export const actions: Action[] = [
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
-							endpoint = i
-							elsepoint = i
+							endpoint = i + 1
+							elsepoint = i + 1
 						}
 						
 						if ( v.id === "IF_END" )  {
-							endpoint = i
+							endpoint = i + 1
 							break
 						}
 					}
@@ -8708,12 +8708,12 @@ export const actions: Action[] = [
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
-							endpoint = i
-							elsepoint = i
+							endpoint = i + 1
+							elsepoint = i + 1
 						}
 						
 						if ( v.id === "IF_END" )  {
-							endpoint = i
+							endpoint = i + 1
 							break
 						}
 					}
@@ -8804,12 +8804,12 @@ export const actions: Action[] = [
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
-							endpoint = i
-							elsepoint = i
+							endpoint = i + 1
+							elsepoint = i + 1
 						}
 						
 						if ( v.id === "IF_END" )  {
-							endpoint = i
+							endpoint = i + 1
 							break
 						}
 					}
@@ -8897,12 +8897,12 @@ export const actions: Action[] = [
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
-							endpoint = i
-							elsepoint = i
+							endpoint = i + 1
+							elsepoint = i + 1
 						}
 						
 						if ( v.id === "IF_END" )  {
-							endpoint = i
+							endpoint = i + 1
 							break
 						}
 					}
