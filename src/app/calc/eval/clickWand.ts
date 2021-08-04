@@ -49,6 +49,8 @@ export function clickWand(
 
   let reloadTime: number | undefined;
 
+  let if_half_state = requirements?.half ? 1 : 0;
+
   const resetState = () => {
     currentShot = {
       projectiles: [],
@@ -93,7 +95,14 @@ export function clickWand(
     removeOverrides.push(
       override('GlobalsGetValue', (args) => {
         if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
-          return requirements.half ? 1 : 0;
+          return `${if_half_state}`;
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('GlobalsSetValue', (args) => {
+        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
+          if_half_state = Number.parseInt(args[1]);
         }
       }),
     );
