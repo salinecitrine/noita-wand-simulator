@@ -71,4 +71,66 @@ describe('combineGroups', () => {
     const actual = combineGroups(input);
     expect(actual).toEqual(expected);
   });
+
+  it('long group', () => {
+    const input = Array(800).fill('x');
+    const expected = [
+      {
+        first: 'x',
+        count: 800,
+      },
+    ];
+    const actual = combineGroups(input);
+    expect(actual).toEqual(expected);
+  });
+
+  it('d10-d4-d2-a', () => {
+    const g1 = ['a', 'a'];
+    const g2 = ['d2', ...g1].flat();
+    const g3 = ['d4', ...Array(4).fill(g2)].flat();
+    const input = ['d10', ...Array(10).fill(g3)].flat();
+    const expected = [
+      'd10',
+      {
+        first: [
+          'd4',
+          {
+            first: [
+              'd2',
+              {
+                first: 'a',
+                count: 2,
+              },
+            ],
+            count: 4,
+          },
+        ],
+        count: 10,
+      },
+    ];
+    const actual = combineGroups(input);
+    expect(actual).toEqual(expected);
+  });
+
+  it('d10-d10-d10-a', () => {
+    const g1 = ['a'];
+    const g2 = ['d10', ...g1].flat();
+    const g3 = ['d10', ...Array(10).fill(g2)].flat();
+    const input = ['d10', ...Array(10).fill(g3)].flat();
+    const expected = [
+      'd10',
+      {
+        first: [
+          'd10',
+          {
+            first: ['d10', 'a'],
+            count: 10,
+          },
+        ],
+        count: 10,
+      },
+    ];
+    const actual = combineGroups(input);
+    expect(actual).toEqual(expected);
+  });
 });

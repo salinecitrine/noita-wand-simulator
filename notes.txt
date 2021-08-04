@@ -16,3 +16,36 @@
         * WandAction[]
     * ShotResultList
       * ProjectileTreeShotResult[]
+
+
+benchmarks
+
+session 1
+v1
+    combineGroups d10-d10-d4-d2-d2-a: 1255.5330316ms
+    combineGroups 4000x a: 1429.6731506999995ms
+
+v2: v1+no keyCache
+    combineGroups d10-d10-d4-d2-d2-a: 13906.205912400002ms
+    combineGroups 4000x a: 19205.812243400014ms
+
+v3: v1+no ignoreIndexes
+    combineGroups d10-d10-d4-d2-d2-a: 1735.2342494000004ms
+    combineGroups 4000x a: 20175.6869047ms
+
+session 2
+v4: v1+shared ignoreIndexes
+    run1
+    combineGroups d10-d10-d4-d2-d2-a: 1850.6122779000002ms
+    combineGroups 4000x a: 1908.4684159999993ms
+    run2
+    combineGroups d10-d10-d4-d2-d2-a: 1659.8100286000001ms
+    combineGroups 4000x a: 1941.0195821000002ms
+
+v5: same as v1
+    combineGroups d10-d10-d4-d2-d2-a: 1267.2664966000002ms
+    combineGroups 4000x a: 1430.8016343000002ms
+
+v6: remove use of u, order factors differently
+    combineGroups d10-d10-d4-d2-d2-a: 91.03470620000003ms
+    combineGroups 4000x a: 2.4361448999999764ms
