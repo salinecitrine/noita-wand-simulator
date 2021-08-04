@@ -1,5 +1,6 @@
 import { WandState } from './wandSlice';
 import { fixArraySize, trimArray } from '../util/util';
+import { defaultWand } from './presets';
 
 export function generateSearchFromWandState(state: WandState) {
   const simplifiedState = {
@@ -23,7 +24,7 @@ export function generateWandStateFromSearch(search: string) {
         v.split(',').map((s) => (s.length === 0 ? null : s)),
         (s) => !s,
       );
-    } else {
+    } else if (defaultWand.hasOwnProperty(k)) {
       if (!acc.wand) {
         acc.wand = {};
       }
