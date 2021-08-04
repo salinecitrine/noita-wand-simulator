@@ -99,14 +99,15 @@ describe('direct calls', () => {
   });
 });
 
+const defaultGun: Gun = {
+  actions_per_round: 1,
+  shuffle_deck_when_empty: false,
+  reload_time: 0,
+  deck_capacity: 10,
+};
+
 describe('clickWand', () => {
   it('simple trigger', () => {
-    const gun: Gun = {
-      actions_per_round: 1,
-      shuffle_deck_when_empty: false,
-      reload_time: 0,
-      deck_capacity: 10,
-    };
     const spells = ['DAMAGE', 'LIGHT_BULLET_TRIGGER', 'BOMB'].map(
       getActionById,
     );
@@ -125,7 +126,7 @@ describe('clickWand', () => {
     ];
 
     const [shots, reloadTime, iterationLimit] = clickWand(
-      gun,
+      defaultGun,
       spells,
       1000,
       0,
@@ -137,12 +138,6 @@ describe('clickWand', () => {
   });
 
   it('two shots', () => {
-    const gun: Gun = {
-      actions_per_round: 1,
-      shuffle_deck_when_empty: false,
-      reload_time: 0,
-      deck_capacity: 10,
-    };
     const spells = [
       'DAMAGE',
       'LIGHT_BULLET_TRIGGER',
@@ -169,7 +164,7 @@ describe('clickWand', () => {
     ];
 
     const [shots, reloadTime, iterationLimit] = clickWand(
-      gun,
+      defaultGun,
       spells,
       1000,
       0,
@@ -178,5 +173,55 @@ describe('clickWand', () => {
     );
     const processed = shots.map(wandShotToProjectiles);
     expect(processed).toEqual(expected);
+  });
+
+  describe('requirement spells', () => {
+    it('simple IF_ENEMY pass', () => {
+      const spells = ['IF_ENEMY', 'LIGHT_BULLET', 'RESET'].map(getActionById);
+
+      const expected = [
+        [{ entity: 'data/entities/projectiles/deck/light_bullet.xml' }],
+      ];
+
+      const [shots, reloadTime, iterationLimit] = clickWand(
+        defaultGun,
+        spells,
+        1000,
+        0,
+        false,
+        true,
+        {
+          enemies: true,
+          half: false,
+          projectiles: false,
+          hp: false,
+        },
+      );
+      const processed = shots.map(wandShotToProjectiles);
+      expect(processed).toEqual(expected);
+    });
+
+    it('simple IF_ENEMY fail', () => {
+      const spells = ['IF_ENEMY', 'LIGHT_BULLET', 'RESET'].map(getActionById);
+
+      const expected = [[]];
+
+      const [shots, reloadTime, iterationLimit] = clickWand(
+        defaultGun,
+        spells,
+        1000,
+        0,
+        false,
+        true,
+        {
+          enemies: false,
+          half: false,
+          projectiles: false,
+          hp: false,
+        },
+      );
+      const processed = shots.map(wandShotToProjectiles);
+      expect(processed).toEqual(expected);
+    });
   });
 });
