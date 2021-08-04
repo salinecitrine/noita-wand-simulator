@@ -14,12 +14,12 @@ const MainDiv = styled.div`
 const SubSectionDiv = styled.div`
   display: flex;
   flex-direction: row;
-  //background-color: #111;
-  margin: 0 5px;
+  margin: 0 3px;
+  border: 2px solid #111;
 `;
 
 const SubSectionTitle = styled.div`
-  background-color: #333;
+  background-color: #555;
   color: #eee;
   padding: 2px 5px 1px 5px;
 `;
@@ -30,7 +30,7 @@ const InputWrapper = styled.label`
   align-items: center;
   color: #eee;
   background-color: #111;
-  padding: 1px;
+  padding: 1px 1px 1px 3px;
 
   input {
     margin-left: 2px;
@@ -47,16 +47,17 @@ export function CastConfigEditor(props: Props) {
   const reqs = config.requirements;
   const random = config.random;
 
-  const requirementsChangeHandler = (field: keyof typeof reqs) => (e: any) => {
-    dispatch(
-      updateConfig({
-        requirements: {
-          ...reqs,
-          [field]: !reqs[field],
-        },
-      }),
-    );
-  };
+  const requirementsChangeHandler =
+    (field: keyof typeof reqs) => (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(
+        updateConfig({
+          requirements: {
+            ...reqs,
+            [field]: !reqs[field],
+          },
+        }),
+      );
+    };
   const randomChangeHandler =
     (field: keyof typeof random) => (e: ChangeEvent<HTMLInputElement>) => {
       const newValue = Number.parseInt(e.target.value);
@@ -72,6 +73,14 @@ export function CastConfigEditor(props: Props) {
         }),
       );
     };
+
+  const handlePauseChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(
+      updateConfig({
+        pauseCalculations: e.target.checked,
+      }),
+    );
+  };
 
   const actionSize = 24;
 
@@ -137,6 +146,17 @@ export function CastConfigEditor(props: Props) {
               onChange={randomChangeHandler('frameNumber')}
               min={0}
               max={1000}
+            />
+          </InputWrapper>
+        </SubSectionDiv>
+        <SubSectionDiv>
+          <SubSectionTitle>Calculation</SubSectionTitle>
+          <InputWrapper>
+            Pause
+            <input
+              type="checkbox"
+              checked={config.pauseCalculations}
+              onChange={handlePauseChange}
             />
           </InputWrapper>
         </SubSectionDiv>

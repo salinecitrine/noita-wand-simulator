@@ -76,7 +76,7 @@ export function WandSimulator(props: Props) {
           <WandBuilder />
         </DndProvider>
       </Column>
-      <ShotResultList {...config} />
+      {!config.pauseCalculations && <ShotResultList {...config} />}
     </Column>
   );
 }

@@ -34,6 +34,7 @@ export interface ConfigState {
       worldSeed: number;
       frameNumber: number;
     };
+    pauseCalculations: boolean;
   };
 }
 
@@ -97,6 +98,7 @@ export const initialState: ConfigState = {
       worldSeed: 0,
       frameNumber: 0,
     },
+    pauseCalculations: false,
   },
 };
 
