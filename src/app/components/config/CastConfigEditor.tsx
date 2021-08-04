@@ -9,18 +9,31 @@ import SectionHeader from '../SectionHeader';
 const MainDiv = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: #111;
+`;
+
+const SubSectionDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  //background-color: #111;
+  margin: 0 5px;
+`;
+
+const SubSectionTitle = styled.div`
+  background-color: #333;
+  color: #eee;
+  padding: 2px 5px 1px 5px;
 `;
 
 const InputWrapper = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-right: 5px;
   color: #eee;
+  background-color: #111;
+  padding: 1px;
 
   input {
-    margin: 2px;
+    margin-left: 2px;
     max-width: 40px;
   }
 `;
@@ -44,9 +57,12 @@ export function CastConfigEditor(props: Props) {
       }),
     );
   };
-
   const randomChangeHandler =
     (field: keyof typeof random) => (e: ChangeEvent<HTMLInputElement>) => {
+      const newValue = Number.parseInt(e.target.value);
+      if (!Number.isInteger(newValue)) {
+        return;
+      }
       dispatch(
         updateConfig({
           random: {
@@ -63,61 +79,67 @@ export function CastConfigEditor(props: Props) {
     <>
       <SectionHeader title={'Cast Configuration'} />
       <MainDiv>
-        <InputWrapper>
-          <WandAction action={getActionById('IF_ENEMY')} size={actionSize} />
-          <input
-            type="checkbox"
-            checked={reqs.enemies}
-            onChange={requirementsChangeHandler('enemies')}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <WandAction
-            action={getActionById('IF_PROJECTILE')}
-            size={actionSize}
-          />
-          <input
-            type="checkbox"
-            checked={reqs.projectiles}
-            onChange={requirementsChangeHandler('projectiles')}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <WandAction action={getActionById('IF_HP')} size={actionSize} />
-          <input
-            type="checkbox"
-            checked={reqs.hp}
-            onChange={requirementsChangeHandler('hp')}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <WandAction action={getActionById('IF_HALF')} size={actionSize} />
-          <input
-            type="checkbox"
-            checked={reqs.half}
-            onChange={requirementsChangeHandler('half')}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          World Seed
-          <input
-            type="number"
-            value={config.random.worldSeed}
-            onChange={randomChangeHandler('worldSeed')}
-            min={0}
-            max={1000}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          Frame #
-          <input
-            type="number"
-            value={config.random.frameNumber}
-            onChange={randomChangeHandler('frameNumber')}
-            min={0}
-            max={1000}
-          />
-        </InputWrapper>
+        <SubSectionDiv>
+          <SubSectionTitle>Requirements</SubSectionTitle>
+          <InputWrapper>
+            <WandAction action={getActionById('IF_ENEMY')} size={actionSize} />
+            <input
+              type="checkbox"
+              checked={reqs.enemies}
+              onChange={requirementsChangeHandler('enemies')}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <WandAction
+              action={getActionById('IF_PROJECTILE')}
+              size={actionSize}
+            />
+            <input
+              type="checkbox"
+              checked={reqs.projectiles}
+              onChange={requirementsChangeHandler('projectiles')}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <WandAction action={getActionById('IF_HP')} size={actionSize} />
+            <input
+              type="checkbox"
+              checked={reqs.hp}
+              onChange={requirementsChangeHandler('hp')}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <WandAction action={getActionById('IF_HALF')} size={actionSize} />
+            <input
+              type="checkbox"
+              checked={reqs.half}
+              onChange={requirementsChangeHandler('half')}
+            />
+          </InputWrapper>
+        </SubSectionDiv>
+        <SubSectionDiv>
+          <SubSectionTitle>RNG</SubSectionTitle>
+          <InputWrapper>
+            World Seed
+            <input
+              type="number"
+              value={config.random.worldSeed}
+              onChange={randomChangeHandler('worldSeed')}
+              min={0}
+              max={1000}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            Frame #
+            <input
+              type="number"
+              value={config.random.frameNumber}
+              onChange={randomChangeHandler('frameNumber')}
+              min={0}
+              max={1000}
+            />
+          </InputWrapper>
+        </SubSectionDiv>
       </MainDiv>
     </>
   );

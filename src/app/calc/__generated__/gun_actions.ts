@@ -56,7 +56,7 @@ import {
   GlobalsGetValue,
   GlobalsSetValue,
 } from "../extra/ext_functions";
-import { Random } from "../extra/util";
+import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/util";
 import { ActionSource } from "../eval/types";
 
 
@@ -2116,7 +2116,7 @@ export const actions: Action[] = [
 		mana: 100,
 		max_uses: 2,
 		action: (c: GunActionState) => {
-			// SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
+			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
 			let types = ["monster","slime","red","fire"]
 			let rnd = Random(1, types.length)
 			let egg_name = "egg_" + String(types[rnd - 1]) + ".xml"
@@ -3026,7 +3026,7 @@ export const actions: Action[] = [
 		mana: 70,
 		max_uses: 25,
 		action: (c: GunActionState) => {
-			// SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
+			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
 			let types = ["pink","green","blue","orange"]
 			let rnd = Random(1, types.length)
 			let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
@@ -4359,7 +4359,7 @@ export const actions: Action[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/damage_random.xml",
 		action: (c: GunActionState) => {
-			// SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() + 253 )
+			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() + 253 )
 			let multiplier = 0
 			multiplier = Random( -3, 4 ) * Random( 0, 2 )
 			let result = 0
@@ -6923,7 +6923,7 @@ export const actions: Action[] = [
 		price: 100,
 		mana: 5,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			// SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 263 )
+			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 263 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -6955,7 +6955,7 @@ export const actions: Action[] = [
 		price: 150,
 		mana: 20,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			// SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 203 )
+			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 203 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -6987,7 +6987,7 @@ export const actions: Action[] = [
 		price: 120,
 		mana: 20,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			// SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 133 )
+			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 133 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -7019,7 +7019,7 @@ export const actions: Action[] = [
 		price: 160,
 		mana: 20,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			// SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 253 )
+			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 253 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -7051,7 +7051,7 @@ export const actions: Action[] = [
 		price: 150,
 		mana: 20,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			// SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			let rnd = Random( 1, datasize )
 			
@@ -7107,7 +7107,7 @@ export const actions: Action[] = [
 		price: 250,
 		mana: 50,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			// SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			let rnd = Random( 1, datasize )
 			
@@ -7165,7 +7165,7 @@ export const actions: Action[] = [
 		price: 200,
 		mana: 40,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			// SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			
 			for (let i = 1; i <= 3; i++) {
@@ -8147,7 +8147,7 @@ export const actions: Action[] = [
 			}
 			
 			if ( options.length > 0 )  {
-				// SetRandomSeed( x + GameGetFrameNum(), y + 251 )
+				SetRandomSeed( x + GameGetFrameNum(), y + 251 )
 				
 				let rnd = Random( 1, options.length )
 				let action_id = options[rnd]

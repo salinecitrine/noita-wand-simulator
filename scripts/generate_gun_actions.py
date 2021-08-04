@@ -66,7 +66,7 @@ import {
   GlobalsGetValue,
   GlobalsSetValue,
 } from "../extra/ext_functions";
-import { Random } from "../extra/util";
+import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/util";
 import { ActionSource } from "../eval/types";
 
 
@@ -119,7 +119,7 @@ syntaxPatterns = [
   PatternReplace(r' \.\. "', r' + "', flags=re.MULTILINE),
   PatternReplace(r'" \.\. ', r'" + ', flags=re.MULTILINE),
   PatternReplace(r'math\.', r'Math.', flags=re.MULTILINE),
-  PatternReplace(r'(SetRandomSeed\(.*?\))$', r'// \1', flags=re.MULTILINE),
+  # PatternReplace(r'(SetRandomSeed\(.*?\))$', r'// \1', flags=re.MULTILINE),
   PatternReplace(r'tostring\((.*?)\)', r'String(\1)', flags=re.MULTILINE),
   PatternReplace(r'for (\w+)=(.+?),(.+?) do', r'for (let \1 = \2; \1 <= \3; \1++) {', flags=re.MULTILINE),
   PatternReplace(r'while (.*?) do', r'while (\1) {', flags=re.MULTILINE),

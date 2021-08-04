@@ -91,6 +91,7 @@ export function ShotResultList(props: Props) {
     [
       config.endSimulationOnRefresh,
       config.requirements,
+      config.random,
       spellActionsWithUses,
       wand,
     ],
