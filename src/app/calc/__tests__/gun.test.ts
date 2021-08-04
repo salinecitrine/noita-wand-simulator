@@ -11,6 +11,7 @@ import * as ext from '../extra/ext_functions';
 import { getActionById } from '../eval/util';
 import { Gun } from '../extra/types';
 import { clickWand } from '../eval/clickWand';
+import { wandShotToProjectiles } from './util';
 
 beforeEach(() => {
   _clear_deck(false);
@@ -113,24 +114,26 @@ describe('clickWand', () => {
     const expected = [
       [
         {
-          id: 'data/entities/projectiles/deck/light_bullet.xml',
-          info: expect.objectContaining({
-            action_name: '$action_light_bullet_trigger',
-          }),
-          triggers: [
+          entity: 'data/entities/projectiles/deck/light_bullet.xml',
+          trigger: [
             {
-              id: 'data/entities/projectiles/bomb.xml',
-              info: expect.objectContaining({
-                action_name: '$action_bomb',
-              }),
+              entity: 'data/entities/projectiles/bomb.xml',
             },
           ],
         },
       ],
     ];
 
-    const result = clickWand(gun, spells, 1000, 0, true, true);
-    expect(result).toEqual(expected);
+    const [shots, reloadTime, iterationLimit] = clickWand(
+      gun,
+      spells,
+      1000,
+      0,
+      true,
+      true,
+    );
+    const processed = shots.map(wandShotToProjectiles);
+    expect(processed).toEqual(expected);
   });
 
   it('two shots', () => {
@@ -150,34 +153,30 @@ describe('clickWand', () => {
     const expected = [
       [
         {
-          id: 'data/entities/projectiles/deck/light_bullet.xml',
-          info: expect.objectContaining({
-            damage_projectile_add: 0.4,
-            fire_rate_wait: 11,
-          }),
-          triggers: [
+          entity: 'data/entities/projectiles/deck/light_bullet.xml',
+          trigger: [
             {
-              id: 'data/entities/projectiles/bomb.xml',
-              info: expect.objectContaining({
-                damage_projectile_add: 0,
-                fire_rate_wait: 100,
-              }),
+              entity: 'data/entities/projectiles/bomb.xml',
             },
           ],
         },
       ],
       [
         {
-          id: 'data/entities/projectiles/deck/light_bullet.xml',
-          info: expect.objectContaining({
-            damage_projectile_add: 0,
-            fire_rate_wait: 11,
-          }),
+          entity: 'data/entities/projectiles/deck/light_bullet.xml',
         },
       ],
     ];
 
-    const result = clickWand(gun, spells, 1000, 0, true, true);
-    expect(result).toEqual(expected);
+    const [shots, reloadTime, iterationLimit] = clickWand(
+      gun,
+      spells,
+      1000,
+      0,
+      true,
+      true,
+    );
+    const processed = shots.map(wandShotToProjectiles);
+    expect(processed).toEqual(expected);
   });
 });
