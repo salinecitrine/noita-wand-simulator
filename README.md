@@ -1,7 +1,3 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Available Scripts
 
 In the project directory, you can run:
@@ -29,18 +25,20 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
+### `generate-actions`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Generate Typescript spell functions from the source Lua code. This requires that you have 'data/scripts/gun/gun_actions.lua' present.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Runs `scripts/generate_gun_actions.py`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### `generate-entity-map`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Generate a Typescript map from projectile definitions to spells that use them, based on the source Lua code. This requires that you have 'data/scripts/gun/gun_actions.lua' present.
 
-## Learn More
+Runs `scripts/generate_entity_map.py`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### `generate-translations`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Generate display strings from IDs based on the game's translation file. This requires that you have './data_base/translations/common.csv' present.
+
+Runs `scripts/generate_translations.py`.
