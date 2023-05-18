@@ -3770,7 +3770,7 @@ export const actions: Action[] = [
 				const v = hand[i];
 
 				let rec = check_recursion( v, recursion_level )
-				if (( v.id !== "DUPLICATE" ) && ( i <= hand_count ) && ( rec > -1 ))  {
+				if (( v.id !== "DUPLICATE" ) && ( i < hand_count ) && ( rec > -1 ))  {
 					call_action(ActionSource.ACTION, v, c,  rec )
 				}
 			}
