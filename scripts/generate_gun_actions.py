@@ -149,6 +149,7 @@ syntaxPatterns = [
   PatternReplace(r'related_projectiles\[1\]', r'related_projectiles[0]', flags=re.MULTILINE),
   PatternReplace(r'related_projectiles\[2\]', r'related_projectiles[1]', flags=re.MULTILINE),
   PatternReplace(r'(?<!let )((?:end|else)point = i)', r'\1 + 1', flags=re.MULTILINE),
+  PatternReplace(r'i <= hand_count', r'i < hand_count', flags=re.MULTILINE),
 ]
 
 with open(srcFile) as inFile:
