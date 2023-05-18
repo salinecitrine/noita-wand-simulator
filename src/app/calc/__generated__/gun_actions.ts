@@ -3653,13 +3653,14 @@ export const actions: Action[] = [
 			let dcomps = EntityGetComponent( entity_id, "DamageModelComponent" )
 			
 			if (( dcomps != null ) && ( dcomps.length > 0 ))  {
-				for(let a = 0; a < dcomps.length; a++) {
-					const b = dcomps[a];
+				;(function() {const tempArray = dcomps;
+				for(let a = 0; a < tempArray.length; a++) {
+					const b = tempArray[a];
 
 					let hp = ComponentGetValue2( b, "hp" )
 					hp = Math.max( hp - 0.16, 0.04 )
 					ComponentSetValue2( b, "hp", hp )
-				}
+				}})()
 			}
 		},
 	},
@@ -3766,14 +3767,15 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			let hand_count = hand.length
 			
-			for(let i = 0; i < hand.length; i++) {
-				const v = hand[i];
+			;(function() {const tempArray = hand;
+			for(let i = 0; i < tempArray.length; i++) {
+				const v = tempArray[i];
 
 				let rec = check_recursion( v, recursion_level )
 				if (( v.id !== "DUPLICATE" ) && ( i <= hand_count ) && ( rec > -1 ))  {
 					call_action(ActionSource.ACTION, v, c,  rec )
 				}
-			}
+			}})()
 			
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			setCurrentReloadTime(current_reload_time + 20)
@@ -7348,12 +7350,13 @@ export const actions: Action[] = [
 		max_uses: 1,
 		action: (c: GunActionState) => {
 			let players = EntityGetWithTag( "player_unit" )
-			for(let i = 0; i < players.length; i++) {
-				const v = players[i];
+			;(function() {const tempArray = players;
+			for(let i = 0; i < tempArray.length; i++) {
+				const v = tempArray[i];
 
 				let [x, y] = EntityGetTransform( v )
 				let eid = EntityLoad("data/entities/projectiles/deck/all_spells_loader.xml", x, y)
-			}
+			}})()
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 100)
 		},
@@ -7853,8 +7856,9 @@ export const actions: Action[] = [
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
 			if ( discarded != null )  {
-				for(let i = 0; i < discarded.length; i++) {
-					const data = discarded[i];
+				;(function() {const tempArray = discarded;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
@@ -7862,12 +7866,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( hand != null )  {
-				for(let i = 0; i < hand.length; i++) {
-					const data = hand[i];
+				;(function() {const tempArray = hand;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( ( data.recursive == null ) || ( data.recursive === false ) ))  {
@@ -7875,12 +7880,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( deck != null )  {
-				for(let i = 0; i < deck.length; i++) {
-					const data = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
@@ -7888,7 +7894,7 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 		},
 	},
@@ -7913,8 +7919,9 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				for(let i = 0; i < discarded.length; i++) {
-					const data = discarded[i];
+				;(function() {const tempArray = discarded;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
@@ -7922,12 +7929,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( hand != null )  {
-				for(let i = 0; i < hand.length; i++) {
-					const data = hand[i];
+				;(function() {const tempArray = hand;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
@@ -7935,12 +7943,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( deck != null )  {
-				for(let i = 0; i < deck.length; i++) {
-					const data = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
@@ -7948,7 +7957,7 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			c.fire_rate_wait = firerate
@@ -7979,8 +7988,9 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				for(let i = 0; i < discarded.length; i++) {
-					const data = discarded[i];
+				;(function() {const tempArray = discarded;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
@@ -7988,12 +7998,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( hand != null )  {
-				for(let i = 0; i < hand.length; i++) {
-					const data = hand[i];
+				;(function() {const tempArray = hand;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
@@ -8001,12 +8012,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( deck != null )  {
-				for(let i = 0; i < deck.length; i++) {
-					const data = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
@@ -8014,7 +8026,7 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			c.fire_rate_wait = firerate
@@ -8043,8 +8055,9 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				for(let i = 0; i < discarded.length; i++) {
-					const data = discarded[i];
+				;(function() {const tempArray = discarded;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
@@ -8052,12 +8065,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( hand != null )  {
-				for(let i = 0; i < hand.length; i++) {
-					const data = hand[i];
+				;(function() {const tempArray = hand;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
@@ -8065,12 +8079,13 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			if ( deck != null )  {
-				for(let i = 0; i < deck.length; i++) {
-					const data = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
@@ -8078,7 +8093,7 @@ export const actions: Action[] = [
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-				}
+				}})()
 			}
 			
 			c.fire_rate_wait = firerate
@@ -8113,22 +8128,25 @@ export const actions: Action[] = [
 			if (( children != null ) && ( inventory != null ))  {
 				let active_wand = ComponentGetValue2( inventory, "mActiveItem" )
 				
-				for(let i = 0; i < children.length; i++) {
-					const child_id = children[i];
+				;(function() {const tempArray = children;
+				for(let i = 0; i < tempArray.length; i++) {
+					const child_id = tempArray[i];
 
 					if ( EntityGetName( child_id ) === "inventory_quick" )  {
 						let wands = EntityGetAllChildren( child_id )
 						
 						if ( wands != null )  {
-							for(let k = 0; k < wands.length; k++) {
-								const wand_id = wands[k];
+							;(function() {const tempArray = wands;
+							for(let k = 0; k < tempArray.length; k++) {
+								const wand_id = tempArray[k];
 
 								if (( wand_id !== active_wand ) && EntityHasTag( wand_id, "wand" ))  {
 									let spells = EntityGetAllChildren( wand_id )
 									
 									if ( spells != null )  {
-										for(let j = 0; j < spells.length; j++) {
-											const spell_id = spells[j];
+										;(function() {const tempArray = spells;
+										for(let j = 0; j < tempArray.length; j++) {
+											const spell_id = tempArray[j];
 
 											let comp = EntityGetFirstComponentIncludingDisabled( spell_id, "ItemActionComponent" )
 											
@@ -8137,13 +8155,13 @@ export const actions: Action[] = [
 												
 												options.push(action_id)
 											}
-										}
+										}})()
 									}
 								}
-							}
+							}})()
 						}
 					}
-				}
+				}})()
 			}
 			
 			if ( options.length > 0 )  {
@@ -8152,8 +8170,9 @@ export const actions: Action[] = [
 				let rnd = Random( 1, options.length )
 				let action_id = options[rnd]
 				
-				for(let i = 0; i < actions.length; i++) {
-					const data = actions[i];
+				;(function() {const tempArray = actions;
+				for(let i = 0; i < tempArray.length; i++) {
+					const data = tempArray[i];
 
 					if ( data.id === action_id )  {
 						let rec = check_recursion( data, recursion_level )
@@ -8164,7 +8183,7 @@ export const actions: Action[] = [
 						}
 						break
 					}
-				}
+				}})()
 			}
 			
 			draw_actions( 1, true )
@@ -8562,19 +8581,21 @@ export const actions: Action[] = [
 		action: (c: GunActionState) => {
 			setCurrentReloadTime(current_reload_time - 25)
 			
-			for(let i = 0; i < hand.length; i++) {
-				const v = hand[i];
+			;(function() {const tempArray = hand;
+			for(let i = 0; i < tempArray.length; i++) {
+				const v = tempArray[i];
 
 				
 				discarded.push(v)
-			}
+			}})()
 			
-			for(let i = 0; i < deck.length; i++) {
-				const v = deck[i];
+			;(function() {const tempArray = deck;
+			for(let i = 0; i < tempArray.length; i++) {
+				const v = tempArray[i];
 
 				
 				discarded.push(v)
-			}
+			}})()
 			
 			clearHand()
 			clearDeck()
@@ -8610,8 +8631,9 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				for(let i = 0; i < deck.length; i++) {
-					const v = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const v = tempArray[i];
 
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
@@ -8629,7 +8651,7 @@ export const actions: Action[] = [
 							break
 						}
 					}
-				}
+				}})()
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8698,8 +8720,9 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				for(let i = 0; i < deck.length; i++) {
-					const v = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const v = tempArray[i];
 
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
@@ -8717,7 +8740,7 @@ export const actions: Action[] = [
 							break
 						}
 					}
-				}
+				}})()
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8794,8 +8817,9 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				for(let i = 0; i < deck.length; i++) {
-					const v = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const v = tempArray[i];
 
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
@@ -8813,7 +8837,7 @@ export const actions: Action[] = [
 							break
 						}
 					}
-				}
+				}})()
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8887,8 +8911,9 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				for(let i = 0; i < deck.length; i++) {
-					const v = deck[i];
+				;(function() {const tempArray = deck;
+				for(let i = 0; i < tempArray.length; i++) {
+					const v = tempArray[i];
 
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
@@ -8906,7 +8931,7 @@ export const actions: Action[] = [
 							break
 						}
 					}
-				}
+				}})()
 				
 				let envelope_min = 1
 				let envelope_max = 1

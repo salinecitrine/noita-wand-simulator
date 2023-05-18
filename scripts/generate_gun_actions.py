@@ -139,7 +139,7 @@ syntaxPatterns = [
   PatternReplace(r'tonumber\(', r'Number.parseInt(', flags=re.MULTILINE),
   PatternReplace(
     r'(\t+)for (\w+),(\w+) in ipairs\(\s*(.+?)\s*\) do(.*?)^\1}',
-    r'\1for(let \2 = 0; \2 < \4.length; \2++) {\n\1\tconst \3 = \4[\2];\n\5\1}',
+    r'\1;(function() {const tempArray = \4;\n\1for(let \2 = 0; \2 < tempArray.length; \2++) {\n\1\tconst \3 = tempArray[\2];\n\5\1}})()',
     flags=re.MULTILINE | re.DOTALL,
     repeat=True,
   ),
