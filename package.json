@@ -29,8 +29,8 @@
   },
   "scripts": {
     "start": "BROWSER=none react-scripts --openssl-legacy-provider start",
-    "build": "CI= react-scripts --openssl-legacy-provider build",
-    "test": "react-scripts --openssl-legacy-provider test",
+    "build": "CI= react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "npx serve -s build",
     "generate-actions": "python scripts/generate_gun_actions.py",
