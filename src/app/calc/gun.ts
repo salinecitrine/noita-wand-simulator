@@ -70,19 +70,19 @@ export let state_from_game: GunActionState = init_state_from_game();
 export let discarded: Action[] = [];
 
 export function clearDiscarded() {
-  discarded.length = 0;
+  discarded = [];
 }
 
 export let deck: Action[] = [];
 
 export function clearDeck() {
-  deck.length = 0;
+  deck = [];
 }
 
 export let hand: Action[] = [];
 
 export function clearHand() {
-  hand.length = 0;
+  hand = [];
 }
 
 export let c: GunActionState;
