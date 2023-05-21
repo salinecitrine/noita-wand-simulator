@@ -242,7 +242,8 @@ export function clickWand(
 
     if (
       !fireUntilReload ||
-      (endOnRefresh && lastCalledAction?.action.id === 'RESET') ||
+      (endOnRefresh &&
+        calledActions!.filter((a) => a.action.id === 'RESET').length > 0) ||
       calledActions!.length === 0
     ) {
       break;
