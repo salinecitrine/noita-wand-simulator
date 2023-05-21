@@ -139,10 +139,11 @@ syntaxPatterns = [
   PatternReplace(r'tonumber\(', r'Number.parseInt(', flags=re.MULTILINE),
   PatternReplace(
     r'(\t+)for (\w+),(\w+) in ipairs\(\s*(.+?)\s*\) do(.*?)^\1}',
-    r'\1for(let \2 = 0; \2 < \4.length; \2++) {\n\1\tconst \3 = \4[\2];\n\5\1}',
+    r'\1\4.every((\3: any, \2: any) => {\5\1\treturn true;\n\1})',
     flags=re.MULTILINE | re.DOTALL,
     repeat=True,
   ),
+  PatternReplace(r'break', r'return false;', flags=re.MULTILINE),
   PatternReplace(r' == ', r' === ', flags=re.MULTILINE),
   PatternReplace(r' !== null', r' != null', flags=re.MULTILINE),
   PatternReplace(r' === null', r' == null', flags=re.MULTILINE),
