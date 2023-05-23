@@ -134,7 +134,7 @@ syntaxPatterns = [
   PatternReplace(r'let (\w+) = \[]', r'let \1: any = []', flags=re.MULTILINE),
   PatternReplace(r'table.insert\(\s*(\w+)\s*,\s*(\w+)\s*\)', r'\1.push(\2)', flags=re.MULTILINE),
   PatternReplace(r'table.remove\(\s*(\w+)\s*,\s*(\w+)\s*\)', r'\1.splice(\2 - 1, 1)', flags=re.MULTILINE),
-  PatternReplace(r'(deck|actions|hand|discarded|types)\[([\w.]+)]', r'\1[\2 - 1]', flags=re.MULTILINE),
+  PatternReplace(r'(deck|actions|hand|discarded|types)\[([\w.\- ]+)]', r'\1[\2 - 1]', flags=re.MULTILINE),
   PatternReplace(r'string.sub\((.*?),(.*?),(.*?)\)', r'\1.substring(\2-1,\3)', flags=re.MULTILINE),
   PatternReplace(r'tonumber\(', r'Number.parseInt(', flags=re.MULTILINE),
   PatternReplace(

@@ -7058,7 +7058,7 @@ export const actions: Action[] = [
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
 		} 	else {
-				data = discarded[rnd - deck.length]
+				data = discarded[rnd - deck.length - 1]
 			}
 			
 			let checks = 0
@@ -7071,7 +7071,7 @@ export const actions: Action[] = [
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
 			} 	else {
-					data = discarded[rnd - deck.length]
+					data = discarded[rnd - deck.length - 1]
 				}
 				
 				rec = check_recursion( data, recursion_level )
@@ -7114,7 +7114,7 @@ export const actions: Action[] = [
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
 		} 	else {
-				data = discarded[rnd - deck.length]
+				data = discarded[rnd - deck.length - 1]
 			}
 			
 			let checks = 0
@@ -7127,7 +7127,7 @@ export const actions: Action[] = [
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
 			} 	else {
-					data = discarded[rnd - deck.length]
+					data = discarded[rnd - deck.length - 1]
 				}
 				
 				rec = check_recursion( data, recursion_level )
@@ -7174,7 +7174,7 @@ export const actions: Action[] = [
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
 			} 	else {
-					data = discarded[rnd - deck.length]
+					data = discarded[rnd - deck.length - 1]
 				}
 				
 				let checks = 0
@@ -7187,7 +7187,7 @@ export const actions: Action[] = [
 					if ( rnd <= deck.length )  {
 						data = deck[rnd - 1]
 				} 	else {
-						data = discarded[rnd - deck.length]
+						data = discarded[rnd - deck.length - 1]
 					}
 					
 					rec = check_recursion( data, recursion_level )
