@@ -7427,8 +7427,8 @@ export const actions: Action[] = [
 						
 						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
 							valid = true
-							// return false;
-              break;
+							// return false; TODO fix this in generate script
+							break;
 						}
 					}
 					
@@ -7508,8 +7508,8 @@ export const actions: Action[] = [
 						
 						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
 							valid = true
-							// return false;
-              break;
+							// return false; TODO fix this in generate script
+							break;
 						}
 					}
 					
@@ -7589,8 +7589,8 @@ export const actions: Action[] = [
 						
 						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
 							valid = true
-							// return false;
-              break;
+							// return false; TODO fix this in generate script
+							break;
 						}
 					}
 					
