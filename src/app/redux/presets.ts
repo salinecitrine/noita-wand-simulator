@@ -9,7 +9,10 @@ export const defaultWand: Wand = {
   mana_charge_speed: 20000,
   mana_max: 20000,
   spread: 0,
-};
+  name: '',
+  pic: '',
+  speed: 1,
+} as const;
 
 const defaultPresets = [
   {
