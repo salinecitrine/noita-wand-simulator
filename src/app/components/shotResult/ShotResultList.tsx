@@ -13,9 +13,8 @@ import { ActionTreeShotResult } from './ActionTreeShotResult';
 import { condenseActionsAndProjectiles } from '../../calc/eval/condense';
 import { ActionSource } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
-import { SaveImageButton } from '../generic/SaveImageButton';
+import { SaveImageButton, ScrollWrapper } from '../generic';
 import { IterationLimitWarning } from './IterationLimitWarning';
-import { ScrollWrapper } from '../generic/ScrollWrapper';
 import { GREEK_SPELLS } from '../../calc/eval/lookups';
 
 const ParentDiv = styled.div`
@@ -38,6 +37,7 @@ const StyledHr = styled.hr`
 `;
 
 type Props = {
+  pauseCalculations: boolean;
   condenseShots: boolean;
   unlimitedSpells: boolean;
   infiniteSpells: boolean;

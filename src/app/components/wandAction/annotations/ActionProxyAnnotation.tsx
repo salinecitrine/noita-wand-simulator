@@ -10,10 +10,10 @@ const ProxyDiv = styled.div<{
   position: absolute;
   top: 0;
   left: 0;
-  width: ${(props) => props.size / 3}px;
-  height: ${(props) => props.size / 3}px;
+  width: ${({ size }) => size / 3}px;
+  height: ${({ size }) => size / 3}px;
   border: 1px solid #999;
-  background-image: url(${(props) => props.imgUrl});
+  background-image: url(/${({ imgUrl }) => imgUrl});
   background-size: cover;
   background-color: #111;
 `;

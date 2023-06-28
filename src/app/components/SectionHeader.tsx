@@ -3,35 +3,43 @@ import { ReactNode } from 'react';
 
 const ParentDiv = styled.div`
   color: #111;
-  background-color: #999;
   display: flex;
-  justify-content: center;
-  position: relative;
   align-items: center;
-  border-top: 2px solid #bbb;
-  border-bottom: 2px solid #777;
+  border: none;
+  background-color: #0F0E0E;
+  padding: 0.9em 1em 0.4em 2em;
 `;
 
 const HeaderDiv = styled.div`
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
+  font-family: 'noita', '04b03', sans-serif;
+  font-variant-caps: small-caps;
+  font-weight: 600;
+  color: #929292;
   text-align: center;
+  margin-left: 1em;
+  margin-right: 1em;
+  background-color: #0F0E0E;
+  white-space: nowrap;
 `;
 
-const ChildrenDiv = styled.div`
-  position: absolute;
-  right: 0;
+const RightSideChildDiv = styled.div`
   font-size: 14px;
+  background-color: #333;
+  height: 2px;
+  width: 10%;
 `;
 
-const ChildrenDiv2 = styled.div`
-  position: absolute;
-  left: 0;
+const LeftSideChildDiv = styled.div`
   font-size: 14px;
+  background-color: #333;
+  height: 2px;
+  width: 80%;
 `;
 
 type SectionHeaderProps = {
-  title: string;
+  title: string | ReactNode;
   leftChildren?: ReactNode;
   rightChildren?: ReactNode;
 };
@@ -39,9 +47,9 @@ type SectionHeaderProps = {
 export default function SectionHeader(props: SectionHeaderProps) {
   return (
     <ParentDiv>
-      <ChildrenDiv2>{props?.leftChildren}</ChildrenDiv2>
+      <LeftSideChildDiv>{props?.leftChildren}</LeftSideChildDiv>
       <HeaderDiv>{props.title}</HeaderDiv>
-      <ChildrenDiv>{props?.rightChildren}</ChildrenDiv>
+      <RightSideChildDiv>{props?.rightChildren}</RightSideChildDiv>
     </ParentDiv>
   );
 }

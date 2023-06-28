@@ -4,7 +4,7 @@ import { Preset } from '../../types';
 import { setWand } from '../../redux/wandSlice';
 import React, { useCallback, useState } from 'react';
 import { WandPresetMenu } from './WandPresetMenu';
-import { Modal } from '../generic/Modal';
+import { Button, Modal } from '../generic';
 
 type Props = {};
 
@@ -28,7 +28,12 @@ export function WandPresetButton(props: Props) {
 
   return (
     <div>
-      <button onClick={() => setMenuVisible(!menuVisible)}>Presets</button>
+      <Button
+        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+        onClick={() => setMenuVisible(!menuVisible)}
+      >
+        Load
+      </Button>
       <Modal visible={menuVisible} onClose={handleClose} title="Presets">
         <WandPresetMenu presets={presets} onSelect={handleSelect} />
       </Modal>

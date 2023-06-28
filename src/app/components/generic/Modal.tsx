@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { CloseButton } from './CloseButton';
 
 const BackgroundDiv = styled.div`
-  z-index: 1;
+  z-index: var(--zindex-modal-window);
   position: fixed;
   top: 0;
   left: 0;

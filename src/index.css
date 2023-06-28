@@ -1,14 +1,62 @@
+@font-face {
+  font-family: 'noita';
+  src: url('fonts/NoitaPixel.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'glyphs';
+  src: url('fonts/NoitaGlyphScaled.ttf') format('truetype');
+  font-display: swap;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #666666;
+  background-color: #000;
+  color: #eee;
+
+  --input-border: 2px solid #555;
+  --input-border-radius: 0 2px 0 2px;
+
+  --config-topleft-border: #323232;
+  --config-bottomright-border: #616060;
+
+  --color-tab-active: #eee;
+  --color-tab-inactive: #918f96;
+  --color-tab-inactive-hover: #c7c7c7;
+  --color-tab-border-active: #918167;
+  --color-tab-border-inactive: #686358;
+  --color-tab-border-inactive-hover: #c7c7c7;
+
+  --color-button: #c7c7c7;
+  --color-button-hover: #c7c7c7;
+  --color-button-active: #eee;
+  --color-button-disabled: #5b5b66;
+  --color-button-border: #333;
+  --color-button-border-hover: #aaa;
+  /* --color-button-background: rgba(0, 0, 0, 0.5); */
+  --color-button-background: rgba(0, 0, 0, 1);
+
+  --font-family-noita-default: 'noita', sans-serif;
+  --font-family-noita-glyphs: 'glyphs', sans-serif;
+
+  --zindex-tabs-hover: 90;
+  --zindex-tabs-selected: 100;
+  --zindex-modal-window: 1000;
+
+  --anim-basic-in: all 20ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  --transition-hover-in: none 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+  --transition-hover-out: none 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  --transition-activate: none 30ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
+    monospace;
 }

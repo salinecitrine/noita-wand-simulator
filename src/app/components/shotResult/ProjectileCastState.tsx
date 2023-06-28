@@ -250,7 +250,7 @@ export function ProjectileCastState(props: Props) {
   return (
     <StyledList>
       {fields.map(({ field, displayName, render }) => {
-        if (castState[field] == defaultGunActionState[field]) {
+        if (castState[field] === defaultGunActionState[field]) {
           return null;
         }
         return (

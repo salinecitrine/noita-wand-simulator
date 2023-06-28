@@ -37,7 +37,7 @@ const CountDiv = styled.div<{
   flex: 1 1 auto;
   justify-content: center;
   color: white;
-  background-color: green;
+  background-color: black;
   height: ${(props) => props.size / 3}px;
   font-family: monospace;
   font-weight: bold;

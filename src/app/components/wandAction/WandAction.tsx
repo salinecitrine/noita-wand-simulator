@@ -17,10 +17,10 @@ const ImageBackgroundDiv = styled.div<{
 }>`
   position: relative;
   background-color: #111;
-  min-width: ${(props) => props.size}px;
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
-  background-image: url(${(props) => props.imgUrl});
+  min-width: ${({ size }) => size}px;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
+  background-image: url(/${({ imgUrl }) => imgUrl});
   background-size: cover;
   font-family: monospace;
   font-weight: bold;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from '../generic/Modal';
+import { Button, Modal } from '../generic';
 import { ConfigEditor } from './ConfigEditor';
 
 type Props = {};
@@ -13,9 +13,12 @@ export function ConfigButton(props: Props) {
 
   return (
     <div>
-      <button onClick={() => setModalVisible(!modalVisible)}>
-        Configuration
-      </button>
+      <Button
+        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+        onClick={() => setModalVisible(!modalVisible)}
+      >
+        Config
+      </Button>
       <Modal visible={modalVisible} onClose={handleClose} title="Configuration">
         <ConfigEditor />
       </Modal>

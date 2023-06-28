@@ -3,7 +3,7 @@ import { selectWand, setWand } from '../redux/wandSlice';
 import { Wand } from '../types';
 import styled from 'styled-components';
 import { AppDispatch } from '../redux/store';
-import { EditableInteger } from './generic/EditableInteger';
+import { EditableInteger } from './generic';
 import { numSign, round, TypedProperties } from '../util/util';
 
 const CheckboxField = styled.input`

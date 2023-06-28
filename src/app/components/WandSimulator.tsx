@@ -1,20 +1,17 @@
 import { WandBuilder } from './WandBuilder';
 import { ShotResultList } from './shotResult/ShotResultList';
-import { WandPresetButton } from './presetMenu/WandPresetButton';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
+import SectionHeader from './SectionHeader';
 import { SpellSelector } from './SpellSelector';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { ConfigButton } from './config/ConfigButton';
-import { ResetButton } from './ResetButton';
+import { ConfigButton } from './buttons';
 import { useEffect } from 'react';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
-import { UndoButton } from './UndoButton';
-import { RedoButton } from './RedoButton';
 
 const Column = styled.div`
   display: flex;
@@ -27,6 +24,7 @@ const Row = styled.div`
   justify-content: space-between;
   align-self: center;
   width: 100%;
+  background-color: black;
 `;
 
 type Props = {};
@@ -43,11 +41,7 @@ export function WandSimulator(props: Props) {
     <Column>
       <MainHeader>
         <Row>
-          <UndoButton />
-          <RedoButton />
-          <ResetButton />
           <ConfigButton />
-          <WandPresetButton />
         </Row>
       </MainHeader>
       <Column>
@@ -55,10 +49,14 @@ export function WandSimulator(props: Props) {
           <Row>
             <SpellSelector />
           </Row>
-          <CastConfigEditor />
           <WandBuilder />
+          <CastConfigEditor />
         </DndProvider>
       </Column>
+      <SectionHeader
+        title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
+        rightChildren={<div>Status: Running</div>}
+      />
       {!config.pauseCalculations && <ShotResultList {...config} />}
     </Column>
   );

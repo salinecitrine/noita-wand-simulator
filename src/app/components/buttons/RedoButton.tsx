@@ -1,6 +1,7 @@
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import { useEffect } from 'react';
 import { ActionCreators } from 'redux-undo';
+import { Button } from '../generic';
 
 type Props = {};
 
@@ -18,8 +19,11 @@ export function RedoButton(props: Props) {
   }, [dispatch]);
 
   return (
-    <div>
-      <button onClick={() => dispatch(ActionCreators.redo())}>Redo</button>
-    </div>
+    <Button
+      imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+      onClick={() => dispatch(ActionCreators.redo())}
+    >
+      Redo
+    </Button>
   );
 }

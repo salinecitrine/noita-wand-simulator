@@ -5,14 +5,15 @@ type Props = {};
 const HeaderDiv = styled.div`
   display: flex;
   flex-direction: row;
-  color: #111;
-  background-color: #bbb;
+  color: #eee;
+  background-color: #000;
   justify-content: space-between;
-
-  h2 {
-    font-weight: bold;
-    margin: 0 0 0 20px;
-  }
+  background-image: url(/logo.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 38px;
+  image-rendering: pixelated;
+  margin: 8px;
 `;
 
 const SpacerDiv = styled.div`
@@ -22,17 +23,15 @@ const SpacerDiv = styled.div`
 
 const ExtraDiv = styled.div`
   display: flex;
-  align-self: center;
-  width: 340px;
+  align-self: end;
   margin-right: 15px;
 `;
 
-export function MainHeader(props: React.PropsWithChildren<Props>) {
+export function MainHeader({ children }: React.PropsWithChildren<Props>) {
   return (
     <HeaderDiv>
-      <h2>Noita Wand Simulator</h2>
       <SpacerDiv />
-      <ExtraDiv>{props.children}</ExtraDiv>
+      <ExtraDiv>{children}</ExtraDiv>
     </HeaderDiv>
   );
 }
