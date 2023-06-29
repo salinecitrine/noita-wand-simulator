@@ -31,7 +31,7 @@ type Props = {};
 
 export function WandSimulator(props: Props) {
   const { config } = useAppSelector(selectConfig);
-  const dispatch = useAppDispatch();
+  useAppDispatch();
 
   useEffect(() => {
     forceDisableCanvasSmoothing();

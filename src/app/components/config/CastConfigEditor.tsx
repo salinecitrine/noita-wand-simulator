@@ -149,17 +149,17 @@ const RandomInputWrapper = styled(InputWrapper)`
   }
 `;
 
-const SimPaused = styled.span`
-  display: inline-block;
-  width: 4em;
-  padding-left: 4px;
-  font-style: italic;
-`;
-const SimRunning = styled.span`
-  display: inline-block;
-  width: 4em;
-  padding-left: 4px;
-`;
+// const SimPaused = styled.span`
+//   display: inline-block;
+//   width: 4em;
+//   padding-left: 4px;
+//   font-style: italic;
+// `;
+// const SimRunning = styled.span`
+//   display: inline-block;
+//   width: 4em;
+//   padding-left: 4px;
+// `;
 
 const InputImageLabel = styled.div<{
   size: number;

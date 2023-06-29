@@ -8,12 +8,12 @@ const HeaderDiv = styled.div`
   color: #eee;
   background-color: #000;
   justify-content: space-between;
-  background-image: url(/logo.png);
+  background-image: url(/logo/logo.png);
   background-size: contain;
   background-repeat: no-repeat;
-  height: 38px;
+  height: 60px;
   image-rendering: pixelated;
-  margin: 8px;
+  margin: 14px 16px;
 `;
 
 const SpacerDiv = styled.div`

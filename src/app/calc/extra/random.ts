@@ -31,7 +31,7 @@ function SetRandomSeedHelper(r: number) {
   ) {
     let s = Math.abs(r);
     let i = BigInt(0);
-    if (s != 0.0) {
+    if (s !== 0.0) {
       let f = (e & BigInt(0xfffffffffffff)) | BigInt(0x0010000000000000);
       let g = BigInt(0x433) - (e >> BigInt(0x34));
       let h = f >> g;
@@ -46,7 +46,7 @@ function SetRandomSeedHelper(r: number) {
       i =
         (~i & h) |
         ((f << ((BigInt(Math.floor(s)) >> BigInt(0x34)) - BigInt(0x433))) & i);
-      i = (~-BigInt(r == s) & -i) | (i & -BigInt(r == s));
+      i = (~-BigInt(r === s) & -i) | (i & -BigInt(r === s));
       //there's some error handling here in the real code that I'm ignoring
     }
     return i & BigInt(0xffffffff);

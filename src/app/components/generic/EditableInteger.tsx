@@ -3,17 +3,32 @@ import styled from 'styled-components';
 
 const StaticValue = styled.div`
   height: 15px;
-`;
-
-const EditingValue = styled.input`
-  height: 15px;
   margin: 0;
   padding: 0 2px;
   border: none;
-  width: 70%;
+`;
 
-  &:focus {
-    outline: none;
+const EditingValue = styled.input`
+  height: 100%;
+  margin: 0;
+  padding: 0 2px;
+  border: none;
+
+  width: 100%;
+  flex: 1 1 100%;
+  background-color: #000;
+  font-family: 'noita', '04b03', sans-serif;
+  font-size: 16px;
+  color: #fff;
+  text-align: left;
+
+  &:focus,
+  &:focus-visible {
+    border: none;
+    outline: 0px solid #dea71bcf;
+    background-color: #000;
+    outline-style: none;
+    border-style: none;
   }
 `;
 
