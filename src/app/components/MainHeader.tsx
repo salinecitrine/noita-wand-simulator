@@ -1,14 +1,29 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 
 type Props = {};
 
-const HeaderDiv = styled.div`
+const logoVariants = [
+  '/logo/logo-blue.png',
+  '/logo/logo-green.png',
+  '/logo/logo-orange.png',
+  '/logo/logo-purple.png',
+  '/logo/logo-red.png',
+  '/logo/logo-teal.png',
+  '/logo/logo-yellow.png',
+];
+
+const getRandomInteger = (max: number) => Math.floor(Math.random() * max);
+
+const HeaderDiv = styled.div<{
+  imgUrl?: string;
+}>`
   display: flex;
   flex-direction: row;
   color: #eee;
   background-color: #000;
   justify-content: space-between;
-  background-image: url(/logo/logo.png);
+  background-image: url(${({ imgUrl = '/logo/logo.png' }) => imgUrl});
   background-size: contain;
   background-repeat: no-repeat;
   height: 60px;
@@ -28,8 +43,12 @@ const ExtraDiv = styled.div`
 `;
 
 export function MainHeader({ children }: React.PropsWithChildren<Props>) {
+  const [logoVariant, setLogoVariant] = useState(
+    logoVariants[getRandomInteger(logoVariants.length)],
+  );
+
   return (
-    <HeaderDiv>
+    <HeaderDiv imgUrl={logoVariant}>
       <SpacerDiv />
       <ExtraDiv>{children}</ExtraDiv>
     </HeaderDiv>
