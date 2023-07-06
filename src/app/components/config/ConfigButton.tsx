@@ -14,7 +14,7 @@ export function ConfigButton(props: Props) {
   return (
     <div>
       <Button
-        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+        imgUrl={'data/sampo-config.png'}
         onClick={() => setModalVisible(!modalVisible)}
       >
         Config
