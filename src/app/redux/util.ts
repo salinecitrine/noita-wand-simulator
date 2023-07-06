@@ -1,10 +1,43 @@
 import { WandState } from './wandSlice';
 import { Wand } from '../types';
-import { trimArray } from '../util/util';
+import { trimArray, objectKeys } from '../util/util';
 import { defaultWand } from './presets';
 
-const decodeQueryParam = (p: string) => {
-  return decodeURIComponent(p.replace(/\+/g, ' '));
+const decodeQueryParamAsString = (
+  rawParam: string,
+  defaultValue: string = '',
+) => {
+  const decodedString = decodeURIComponent(rawParam.replace(/\+/g, ' '));
+  return decodedString.length === 0 ? defaultValue : decodedString;
+};
+
+const decodeQueryParamAsNumber = (rawParam: string, defaultValue: number) => {
+  const decodedNumber = Number.parseFloat(decodeQueryParamAsString(rawParam));
+  return Number.isNaN(decodedNumber) ? defaultValue : decodedNumber;
+};
+
+const decodeQueryParamAsBoolean = (rawParam: string, defaultValue: boolean) => {
+  const decodedString = decodeQueryParamAsString(rawParam).toLowerCase();
+  if (
+    decodedString === '1' ||
+    decodedString === 'y' ||
+    decodedString === 't' ||
+    decodedString.startsWith('true') ||
+    decodedString.startsWith('yes')
+  ) {
+    return true;
+  } else if (
+    decodedString === '0' ||
+    decodedString === 'n' ||
+    decodedString === 'f' ||
+    decodedString.startsWith('false') ||
+    decodedString.startsWith('no') ||
+    decodedString === 'n'
+  ) {
+    return false;
+  } else {
+    return defaultValue;
+  }
 };
 
 const encodeQueryParam = (p: string) => encodeURIComponent(p);
@@ -32,36 +65,35 @@ export interface ParsedWandState {
   messages: string[];
 }
 
-type Entries<T> = {
-  [K in keyof T]: [K, T[K]];
-}[keyof T][];
-
-const getEntries = <T extends object>(obj: T) =>
-  Object.entries(obj) as Entries<T>;
-
 export function generateWandStateFromSearch(search: string): ParsedWandState {
   const params = new URLSearchParams(search);
 
-  return getEntries(defaultWand).reduce(
-    (acc: ParsedWandState, [key]) => {
+  return objectKeys(defaultWand).reduce(
+    (acc: ParsedWandState, key) => {
       if (params.has(key)) {
-        const param = params.get(key as string);
+        const rawParam = params.get(key);
+        const defaultValue = defaultWand[key];
         try {
-          const decodedParam = decodeQueryParam(param!);
-          if (decodedParam.length > 0) {
-            try {
-              acc.wand = { ...acc.wand, [key]: decodedParam };
-            } catch (e) {
-              acc.messages.push(
-                `Could not parse param: '${key}' with value: '${param}', error: ${e}`,
-              );
-            }
+          if (typeof defaultValue === 'number') {
+            acc.wand = {
+              ...acc.wand,
+              [key]: decodeQueryParamAsNumber(rawParam!, defaultValue),
+            };
+          } else if (typeof defaultValue === 'boolean') {
+            acc.wand = {
+              ...acc.wand,
+              [key]: decodeQueryParamAsBoolean(rawParam!, defaultValue),
+            };
           } else {
-            acc.messages.push(`Decoded empty param: '${key}', using default`);
+            // Assume type string for anything else
+            acc.wand = {
+              ...acc.wand,
+              [key]: decodeQueryParamAsString(rawParam!, defaultValue),
+            };
           }
         } catch (e) {
           acc.messages.push(
-            `Could not decode param: '${key}' with value: '${param}', using default, error: ${e}`,
+            `Could not decode param: '${key}' with value: '${rawParam}', using default, error: ${e}`,
           );
         }
       } else {

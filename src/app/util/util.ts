@@ -65,16 +65,80 @@ export const lazy = <T>(callback: () => T) => {
   };
 };
 
-export const ACTION_TYPES = [
-  'PROJECTILE',
-  'STATIC_PROJECTILE',
-  'MODIFIER',
-  'DRAW_MANY',
-  'MATERIAL',
-  'OTHER',
-  'UTILITY',
-  'PASSIVE',
-];
+const ActionTypeInfoMapDefinition = {
+  projectile: {
+    id: GunEnumActionTypes.ACTION_TYPE_PROJECTILE,
+    name: 'Projectile',
+    src: 'data/spelltypes/item_bg_projectile.png',
+  } as const,
+  static: {
+    id: GunEnumActionTypes.ACTION_TYPE_STATIC_PROJECTILE,
+    name: 'Static',
+    src: 'data/spelltypes/item_bg_static_projectile.png',
+  } as const,
+  modifier: {
+    id: GunEnumActionTypes.ACTION_TYPE_MODIFIER,
+    name: 'Modifier',
+    src: 'data/spelltypes/item_bg_modifier.png',
+  } as const,
+  multicast: {
+    id: GunEnumActionTypes.ACTION_TYPE_DRAW_MANY,
+    name: 'Multicast',
+    src: 'data/spelltypes/item_bg_draw_many.png',
+  } as const,
+  material: {
+    id: GunEnumActionTypes.ACTION_TYPE_MATERIAL,
+    name: 'Material',
+    src: 'data/spelltypes/item_bg_material.png',
+  } as const,
+  other: {
+    id: GunEnumActionTypes.ACTION_TYPE_OTHER,
+    name: 'Other',
+    src: 'data/spelltypes/item_bg_other.png',
+  } as const,
+  utility: {
+    id: GunEnumActionTypes.ACTION_TYPE_UTILITY,
+    name: 'Utility',
+    src: 'data/spelltypes/item_bg_utility.png',
+  } as const,
+  passive: {
+    id: GunEnumActionTypes.ACTION_TYPE_PASSIVE,
+    name: 'Passive',
+    src: 'data/spelltypes/item_bg_passive.png',
+  } as const,
+} as const;
+
+export type ActionType = keyof typeof ActionTypeInfoMapDefinition;
+export type ActionTypeInfo = typeof ActionTypeInfoMapDefinition[ActionType];
+export type ActionTypeInfoKey =
+  keyof typeof ActionTypeInfoMapDefinition[ActionType];
+export type ActionTypeId = typeof ActionTypeInfoMapDefinition[ActionType]['id'];
+export type ActionTypeName =
+  typeof ActionTypeInfoMapDefinition[ActionType]['name'];
+export type ActionTypeSrc =
+  typeof ActionTypeInfoMapDefinition[ActionType]['src'];
+
+export type ActionTypeInfoMap = Record<ActionType, ActionTypeInfo>;
+export type ActionIdToTypeMap = Map<ActionTypeId, ActionType>;
+
+export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
+  Object.keys(obj) as (keyof T)[];
+export type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+export const objectEntries = <T extends object>(obj: T): Entries<T>[] =>
+  Object.entries(obj) as Entries<T>[];
+
+export const actionTypeToIdMap = objectEntries<ActionTypeInfoMap>(
+  ActionTypeInfoMapDefinition,
+).reduce<ActionIdToTypeMap>(
+  (
+    acc: ActionIdToTypeMap,
+    [actionType, actionTypeInfo]: [ActionType, ActionTypeInfo],
+  ): ActionIdToTypeMap => acc.set(actionTypeInfo.id, actionType),
+  new Map(),
+);
+
+export const actionTypeInfoMap =
+  ActionTypeInfoMapDefinition as ActionTypeInfoMap;
 
 export function groupBy<T, K extends string>(arr: T[], keyFn: (x: T) => K) {
   return arr.reduce((acc, cur) => {
