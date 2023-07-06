@@ -1,7 +1,7 @@
 ## Branches
 
-* `master` is deployed to https://noita-wand-simulator.salinecitrine.com/
-* `develop` is deployed to https://beta.noita-wand-simulator.salinecitrine.com/
+- `master` is deployed to https://noita-wand-simulator.salinecitrine.com/
+- `develop` is deployed to https://beta.noita-wand-simulator.salinecitrine.com/
 
 ## Available Scripts
 
@@ -29,6 +29,36 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Automatic code generation
+
+These scripts convert the files the game uses into forms easily consumed by TypeScript. Uses the following files:
+
+From the main game files:
+
+```
+data_base/translations/common.csv
+```
+
+From the modding data export:
+
+```
+data/scripts/gun/gun_actions.lua
+```
+
+If versions of these files containing the 'beta' suffix are found, the additional spells are included behind a 'beta content' toggle in the sim. E.g.:
+
+```
+data_base/translations/common.beta.csv
+data/scripts/gun/gun_actions.beta.lua
+```
+
+Get a diff of release and beta with:
+
+```
+diff --suppress-common-lines -trb gun_actions.ts gun_actions.beta.ts
+diff --suppress-common-lines -trb -I 'spawn_' gun_actions.ts gun_actions.beta.ts
+```
 
 ### `generate-actions`
 

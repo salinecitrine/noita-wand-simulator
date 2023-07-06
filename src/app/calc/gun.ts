@@ -45,7 +45,7 @@ import {
   StartReload,
 } from './extra/ext_functions';
 import { init_state_from_game } from './extra/init';
-import { actions } from './__generated__/gun_actions';
+import { actions } from './gun_actions';
 import { ActionSource } from './eval/types';
 
 // constants

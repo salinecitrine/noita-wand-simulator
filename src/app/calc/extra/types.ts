@@ -36,6 +36,7 @@ export type GunActionState = {
   damage_electricity_add: number;
   damage_fire_add: number;
   damage_explosion_add: number;
+  damage_explosion: number;
   damage_ice_add: number;
   damage_slice_add: number;
   damage_healing_add: number;
@@ -65,6 +66,7 @@ export type GunActionState = {
   game_effect_entities: string;
   sound_loop_tag?: string;
   projectile_file: string;
+  damage_null_all: number;
 
   action_recursive?: boolean;
   damage_projectile_mul?: number;

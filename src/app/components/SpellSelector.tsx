@@ -1,4 +1,4 @@
-import { actions } from '../calc/__generated__/gun_actions';
+import { actions } from '../calc/gun_actions';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import styled from 'styled-components';
 import { useMemo } from 'react';
