@@ -89,6 +89,8 @@ export const initialState: ConfigState = {
       card_unlocked_rain: false,
       card_unlocked_paint: false,
       card_unlocked_rainbow_trail: false,
+      card_unlocked_homing_wand: false,
+      card_unlocked_fish: false,
     },
     requirements: {
       enemies: false,
