@@ -76,6 +76,7 @@ export type Action = {
   id: string;
   name: string;
   description: string;
+  beta?: boolean;
   sprite: string;
   sprite_unidentified?: string;
   related_projectiles?: [string, number?];

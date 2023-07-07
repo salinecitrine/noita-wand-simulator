@@ -77,3 +77,7 @@ Runs `scripts/generate_entity_map.py`.
 Generate display strings from IDs based on the game's translation file. This requires that you have './data_base/translations/common.csv' present.
 
 Runs `scripts/generate_translations.py`.
+
+### `generate`
+
+Runs all three of the above.
