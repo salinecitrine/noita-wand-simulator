@@ -122,10 +122,10 @@ export type ActionTypeSrc =
 export type ActionTypeInfoMap = Record<ActionType, ActionTypeInfo>;
 export type ActionIdToTypeMap = Map<ActionTypeId, ActionType>;
 
-export const objectKeys = <T>(obj: T): (keyof T)[] =>
+export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
 export type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
-export const objectEntries = <T>(obj: T): Entries<T>[] =>
+export const objectEntries = <T extends object>(obj: T): Entries<T>[] =>
   Object.entries(obj) as Entries<T>[];
 
 export const actionTypeToIdMap = objectEntries<ActionTypeInfoMap>(

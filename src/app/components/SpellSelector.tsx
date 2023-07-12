@@ -105,7 +105,6 @@ export function SpellSelector(props: Props) {
     () => actions.filter((a) => isSpellUnlocked(config.unlocks, a)),
     [config.unlocks],
   );
-
   const actionsByType = useMemo(() => {
     return groupBy(
       unlockedActions,
