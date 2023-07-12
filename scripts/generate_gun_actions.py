@@ -4,7 +4,9 @@ from dataclasses import dataclass
 from re import Match
 
 srcFile = 'data/scripts/gun/gun_actions.lua'
+srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
 dstFile = 'src/app/calc/__generated__/gun_actions.ts'
+dstFileBeta = 'src/app/calc/__generated__/gun_actions.beta.ts'
 
 os.makedirs(os.path.dirname(dstFile), exist_ok=True)
 
@@ -153,30 +155,6 @@ syntaxPatterns = [
   PatternReplace(r'i <= hand_count', r'i < hand_count', flags=re.MULTILINE),
 ]
 
-with open(srcFile) as inFile:
-  content = inFile.read()
-
-# fix array syntax for top level actions
-content = re.sub(bracketArrayPattern.pattern, bracketArrayPattern.replace, content, flags=bracketArrayPattern.flags)
-
-# remove comments
-content = re.sub(
-  multiLineCommentPattern.pattern,
-  multiLineCommentPattern.replace, content,
-  flags=multiLineCommentPattern.flags
-)
-content = re.sub(
-  singleLineCommentPattern.pattern,
-  singleLineCommentPattern.replace, content,
-  flags=singleLineCommentPattern.flags
-)
-
-# fix array syntax for related projectiles
-content = re.sub(relatedPattern.pattern, relatedPattern.replace, content, flags=relatedPattern.flags)
-
-# convert object fields to ts
-content = re.sub(propertiesPattern.pattern, propertiesPattern.replace, content, flags=propertiesPattern.flags)
-
 # convert action function to ts+commented lua
 # action\s*=\s*function\((.*?)\)(\s*)(.*?)end,(\s*},)
 # action: (c: C, \1) => {\1\1},\1
@@ -184,7 +162,6 @@ actionArgTypes = {
   'recursion_level': ['number', 0],
   'iteration': ['number', 1],
 }
-
 
 def actionReplaceFn(m: Match):
   argsString = 'c: GunActionState'
@@ -198,18 +175,47 @@ def actionReplaceFn(m: Match):
   return f'action: ({argsString}) => {{{m.group(2)}{m.group(3)}}},{m.group(4)}'
 
 
-content = re.sub(actionPattern.pattern, actionReplaceFn, content, flags=actionPattern.flags)
+def processFile(srcFile):
+  with open(srcFile) as inFile:
+    content = inFile.read()
 
-for pattern in syntaxPatterns:
-  content = re.sub(pattern.pattern, pattern.replace, content, flags=pattern.flags)
-  if pattern.repeat:
-    oldContent = ''
-    while oldContent != content:
-      oldContent = content
-      content = re.sub(pattern.pattern, pattern.replace, content, flags=pattern.flags)
+  # fix array syntax for top level actions
+  content = re.sub(bracketArrayPattern.pattern, bracketArrayPattern.replace, content, flags=bracketArrayPattern.flags)
 
-# insert imports
-content = imports + content
+  # remove comments
+  content = re.sub(
+    multiLineCommentPattern.pattern,
+    multiLineCommentPattern.replace, content,
+    flags=multiLineCommentPattern.flags
+  )
+  content = re.sub(
+    singleLineCommentPattern.pattern,
+    singleLineCommentPattern.replace, content,
+    flags=singleLineCommentPattern.flags
+  )
+
+  # fix array syntax for related projectiles
+  content = re.sub(relatedPattern.pattern, relatedPattern.replace, content, flags=relatedPattern.flags)
+
+  # convert object fields to ts
+  content = re.sub(propertiesPattern.pattern, propertiesPattern.replace, content, flags=propertiesPattern.flags)
+
+  content = re.sub(actionPattern.pattern, actionReplaceFn, content, flags=actionPattern.flags)
+
+  for pattern in syntaxPatterns:
+    content = re.sub(pattern.pattern, pattern.replace, content, flags=pattern.flags)
+    if pattern.repeat:
+      oldContent = ''
+      while oldContent != content:
+        oldContent = content
+        content = re.sub(pattern.pattern, pattern.replace, content, flags=pattern.flags)
+
+  # insert imports
+  content = imports + content
+
 
 with open(dstFile, 'w') as outFile:
-  outFile.write(content)
+  outFile.write(processFiles(srcFile))
+
+with open(dstFileBeta, 'w') as outFile:
+  outFile.write(processFiles(srcFileBeta))

@@ -33,6 +33,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "npx serve -s build",
+    "generate": "yarn generate-actions && yarn generate-entity-map && yarn generate-translations",
     "generate-actions": "python scripts/generate_gun_actions.py",
     "generate-translations": "python scripts/generate_translations.py",
     "generate-entity-map": "python scripts/generate_entity_map.py"
