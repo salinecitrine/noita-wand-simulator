@@ -23,7 +23,6 @@ const ImageBackgroundDiv = styled.div<{
   typeImgUrl?: string;
 }>`
   position: relative;
-  background-color: #111;
   min-width: ${({ size }) => size}px;
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;

@@ -14,6 +14,7 @@ const StyledList = styled.ul`
   flex-wrap: wrap;
   margin: 0;
   padding: 0;
+  gap: 6px;
 `;
 
 const StyledListItem = styled.li`
