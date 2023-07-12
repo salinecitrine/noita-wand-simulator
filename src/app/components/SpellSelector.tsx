@@ -42,7 +42,7 @@ const SpellCategorySpellsDiv = styled.div`
 `;
 
 const SpellSelectorWandActionBorder = styled(WandActionBorder)`
-  ${SpellCategorySpellsDiv}:hover && {
+  ${SpellCategorySpellsDiv} &:hover {
     transform-origin: center;
     transform: scale(150%);
     transition: transform var(--anim-basic-in);
@@ -117,6 +117,7 @@ export function SpellSelector(props: Props) {
       ),
     [config.unlocks, config.showBeta],
   );
+
   const actionsByType = useMemo(() => {
     return groupBy(
       unlockedActions,

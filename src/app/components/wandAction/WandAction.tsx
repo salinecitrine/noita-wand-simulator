@@ -8,19 +8,27 @@ import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { RecursionAnnotation } from './annotations/RecursionAnnotation';
 import { iterativeActions, recursiveActions } from '../../calc/eval/lookups';
 import { DontDrawAnnotation } from './annotations/DontDrawAnnotation';
+import {
+  ActionType,
+  ActionTypeId,
+  actionTypeToIdMap,
+  actionTypeInfoMap,
+} from '../../util/util';
 
 export const DEFAULT_SIZE = 48;
 
 const ImageBackgroundDiv = styled.div<{
   size: number;
-  imgUrl: string;
+  actionImgUrl: string;
+  typeImgUrl?: string;
 }>`
   position: relative;
   background-color: #111;
   min-width: ${({ size }) => size}px;
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
-  background-image: url(/${({ imgUrl }) => imgUrl});
+  background-image: url(/${({ actionImgUrl }) => actionImgUrl})
+    ${({ typeImgUrl }) => (typeImgUrl ? `, url(/${typeImgUrl})` : ``)};
   background-size: cover;
   font-family: monospace;
   font-weight: bold;
@@ -40,13 +48,18 @@ export function WandAction(props: Props) {
   const size = props.size || DEFAULT_SIZE;
 
   if (!props.action) {
-    return <ImageBackgroundDiv size={size} imgUrl="" />;
+    return <ImageBackgroundDiv size={size} actionImgUrl="" />;
   }
 
   return (
     <ImageBackgroundDiv
       size={size}
-      imgUrl={props.action.sprite}
+      actionImgUrl={props.action.sprite}
+      typeImgUrl={
+        actionTypeInfoMap[
+          actionTypeToIdMap.get(props.action.type as ActionTypeId) as ActionType
+        ]?.src
+      }
       onMouseEnter={() => setMouseOver(true)}
       onMouseLeave={() => setMouseOver(false)}
     >
