@@ -1,4 +1,5 @@
 import { Preset, PresetGroup } from '../types';
+import * as GunEnumActionTypes from '../calc/gun_enums';
 
 export function union<T, U>(setA: Set<T>, setB: Set<U>) {
   let _union = new Set<T | U>(setA);
