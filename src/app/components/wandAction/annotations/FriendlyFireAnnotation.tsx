@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useAppSelector } from '../../../redux/hooks';
-import { selectConfig } from '../../../redux/configSlice';
+// import { useAppSelector } from '../../../redux/hooks';
+// import { selectConfig } from '../../../redux/configSlice';
 import { ActionSource } from '../../../calc/eval/types';
 
 const SourceDiv = styled.div<{
@@ -15,35 +15,25 @@ const SourceDiv = styled.div<{
   width: ${(props) => props.size / 4}px;
   height: ${(props) => props.size / 4}px;
   border: 1px solid #999;
+  border: none;
   color: ${(props) => props.colors[0]};
   background-color: ${(props) => props.colors[1]};
+  background-color: transparent;
+  background-image: url(/data/warnings/icon_danger.png);
   font-size: 12px;
   line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
   font-family: var(--font-family-noita-default);
+  opacity: 0;
 `;
-
-const sourceDisplayMap: Record<ActionSource, [string, [string, string]]> = {
-  perk: ['P', ['#ddd', '#995']],
-  action: ['A', ['#ddd', '#955']],
-  draw: ['D', ['#ddd', '#559']],
-  multiple: ['*', ['#ddd', '#747']],
-};
 
 type Props = {
   size: number;
   source?: ActionSource;
 };
 
-export function ActionSourceAnnotation(props: Props) {
-  const { config } = useAppSelector(selectConfig);
-  if (props.source === undefined || !config.showSources) {
-    return null;
-  }
+export function FriendlyFireAnnotation(props: Props) {
+  // const { config } = useAppSelector(selectConfig);
 
-  return (
-    <SourceDiv size={props.size} colors={sourceDisplayMap[props.source][1]}>
-      {sourceDisplayMap[props.source][0]}
-    </SourceDiv>
-  );
+  return <SourceDiv size={props.size} colors={['#000', '#fff']}></SourceDiv>;
 }

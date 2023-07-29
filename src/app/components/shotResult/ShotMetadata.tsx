@@ -7,13 +7,14 @@ const StyledList = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   font-family: monospace;
-  background-color: #555;
+  background-color: #222;
   color: #fff;
   font-weight: bold;
   min-width: 230px;
   border: 1px solid black;
   border-bottom: none;
-  padding: 1px;
+  padding: 4px;
+  font-family: var(--font-family-noita-default);
 `;
 
 const StyledListItem = styled.div`

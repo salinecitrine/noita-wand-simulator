@@ -9,12 +9,12 @@ const StyledList = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   font-family: monospace;
-  background-color: #333;
   color: #fff;
   font-weight: bold;
   min-width: 230px;
   border: 1px solid black;
   padding: 1px;
+  font-family: var(--font-family-noita-default);
 `;
 
 const StyledListItem = styled.div`
@@ -91,10 +91,10 @@ const fields: FieldDescription[] = [
   },
   {
     field: 'child_speed_multiplier',
-    displayName: 'child_speed_multiplier',
-    render: (v) => `${v}`,
+    displayName: 'Child Speed',
+    render: (v) => `${v}x`,
   },
-  { field: 'dampening', displayName: 'dampening', render: (v) => `${v}` },
+  { field: 'dampening', displayName: 'Dampening', render: (v) => `${v}` },
   {
     field: 'explosion_radius',
     displayName: 'Explosion Radius',
@@ -196,16 +196,16 @@ const fields: FieldDescription[] = [
   // {field: 'material_amount', displayName: 'material_amount', render: (v) => `${v}`},
   {
     field: 'trail_material',
-    displayName: 'trail_material',
+    displayName: 'Trail Material',
     render: (v) => `${v}`,
   },
   // {field: 'trail_material_amount', displayName: 'trail_material_amount', render: (v) => `${v}`},
-  { field: 'bounces', displayName: 'bounces', render: (v) => `${v}` },
-  { field: 'gravity', displayName: 'gravity', render: (v) => `${v}` },
-  { field: 'light', displayName: 'light', render: (v) => `${v}` },
+  { field: 'bounces', displayName: 'Bounces', render: (v) => `${v}` },
+  { field: 'gravity', displayName: 'Gravity', render: (v) => `${v}` },
+  { field: 'light', displayName: 'Light', render: (v) => `${v}` },
   {
     field: 'blood_count_multiplier',
-    displayName: 'blood_count_multiplier',
+    displayName: 'Blood Count Multiplier',
     render: (v) => `${v}`,
   },
   // {field: 'gore_particles', displayName: 'gore_particles', render: (v) => `${v}`},
@@ -217,7 +217,7 @@ const fields: FieldDescription[] = [
   },
   {
     field: 'physics_impulse_coeff',
-    displayName: 'physics_impulse_coeff',
+    displayName: 'Physics Impulse Coeff.',
     render: (v) => `${v}`,
   },
   {

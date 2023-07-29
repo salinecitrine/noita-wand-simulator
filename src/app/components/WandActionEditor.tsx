@@ -4,6 +4,7 @@ import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
 import { getActionById } from '../calc/eval/util';
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { DEFAULT_SIZE, WandAction } from './wandAction/WandAction';
+import { WandBorder } from './WandBorder';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import WandActionBorder from './wandAction/WandActionBorder';
 import { Action } from '../calc/extra/types';
@@ -15,6 +16,8 @@ const StyledList = styled.ul`
   margin: 0;
   padding: 0;
   gap: 6px;
+  padding: 12px 16px;
+  background-color: #000;
 `;
 
 const StyledListItem = styled.li`
@@ -45,18 +48,18 @@ export function WandActionEditor(props: Props) {
     if (spellAction) {
       return (
         <WandActionDropTarget wandIndex={wandIndex}>
-          <WandActionDragSource
-            actionId={spellAction.id}
-            sourceWandIndex={wandIndex}
-          >
-            <WandActionBorder size={size}>
+          <WandActionBorder size={size}>
+            <WandActionDragSource
+              actionId={spellAction.id}
+              sourceWandIndex={wandIndex}
+            >
               <WandAction
                 action={spellAction}
                 deckIndex={deckIndex}
                 onDeleteSpell={() => handleDeleteSpell(wandIndex)}
               />
-            </WandActionBorder>
-          </WandActionDragSource>
+            </WandActionDragSource>
+          </WandActionBorder>
         </WandActionDropTarget>
       );
     } else {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const MainDiv = styled.div`
-  background-color: black;
   padding: 3px;
 `;
 
@@ -11,7 +10,6 @@ const TabTitlesDiv = styled.div`
   flex-direction: row-reverse;
   flex-wrap: wrap-reverse;
   justify-content: start;
-  background-color: black;
   margin-right: 10px;
   padding: 0 10px;
 `;

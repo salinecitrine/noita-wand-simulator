@@ -32,32 +32,32 @@ const MainDiv = styled.div`
   background-color: #100e0e;
 `;
 
-const SpellCategorySpellsDiv = styled.div`
+const SpellCategorySpellsDiv = styled.div<{
+  size: number;
+}>`
   display: grid;
   flex-wrap: wrap;
   flex: 1;
-  grid-template-columns: repeat(auto-fill, minmax(33px, 1fr));
-  gap: 3px;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(${({ size }) => size}px, 1fr)
+  );
+  gap: ${({ size }) => size * 0.16}px;
   padding: 7px 6px;
 `;
 
 const SpellSelectorWandActionBorder = styled(WandActionBorder)`
-  ${SpellCategorySpellsDiv} &:hover {
-    transform-origin: center;
-    transform: scale(150%);
-    transition: transform var(--anim-basic-in);
-    cursor: move;
-    pointer-events: none;
-  }
+  background-image: url(/data/inventory/grid_box.png);
+  padding-left: 0px;
+  padding-top: 0px;
 `;
 
 const SpellShortcuts = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-self: center;
   width: 100%;
-  background-color: black;
 `;
 
 const EditButtons = styled.div`
@@ -65,7 +65,6 @@ const EditButtons = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-self: center;
-  background-color: black;
 `;
 
 const SpellHotbar = styled.div`
@@ -96,17 +95,19 @@ type WandActionSelectProps = {
 };
 
 const WandActionSelect = (props: WandActionSelectProps) => (
-  <WandActionDragSource actionId={props.action.id} key={props.action.id}>
-    <SpellSelectorWandActionBorder size={props.size}>
+  <SpellSelectorWandActionBorder size={props.size}>
+    <WandActionDragSource actionId={props.action.id} key={props.action.id}>
       <WandAction action={props.action} size={props.size} />
-    </SpellSelectorWandActionBorder>
-  </WandActionDragSource>
+    </WandActionDragSource>
+  </SpellSelectorWandActionBorder>
 );
 
 type Props = {};
 
 export function SpellSelector(props: Props) {
   const { config } = useAppSelector(selectConfig);
+
+  const spellSize = 40;
 
   const unlockedActions = useMemo(
     () =>
@@ -135,9 +136,13 @@ export function SpellSelector(props: Props) {
           title: actionTypeMapping?.name,
           iconSrc: actionTypeMapping?.src,
           content: (
-            <SpellCategorySpellsDiv>
-              {actions.map((a) => (
-                <WandActionSelect action={a} size={32} key={a.id} />
+            <SpellCategorySpellsDiv size={spellSize}>
+              {actions.map((action) => (
+                <WandActionSelect
+                  action={action}
+                  size={spellSize}
+                  key={action.id}
+                />
               ))}
             </SpellCategorySpellsDiv>
           ),
@@ -151,9 +156,13 @@ export function SpellSelector(props: Props) {
         title: 'All Spells',
         iconSrc: '',
         content: (
-          <SpellCategorySpellsDiv>
-            {actions.map((a) => (
-              <WandActionSelect action={a} size={32} key={a.id} />
+          <SpellCategorySpellsDiv size={spellSize}>
+            {actions.map((action) => (
+              <WandActionSelect
+                action={action}
+                size={spellSize}
+                key={action.id}
+              />
             ))}
           </SpellCategorySpellsDiv>
         ),

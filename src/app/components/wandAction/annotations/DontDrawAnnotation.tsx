@@ -5,9 +5,12 @@ import { selectConfig } from '../../../redux/configSlice';
 const DontDrawDiv = styled.div<{
   size: number;
 }>`
+  pointer-events: none;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -${(props) => props.size / 4 + 12}px;
   width: ${(props) => props.size / 4}px;
   height: ${(props) => props.size / 4}px;
   border: 1px solid #999;
@@ -16,7 +19,7 @@ const DontDrawDiv = styled.div<{
   font-size: 12px;
   line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
-  text-decoration: line-through;
+  font-family: var(--font-family-noita-default);
 `;
 
 type Props = {

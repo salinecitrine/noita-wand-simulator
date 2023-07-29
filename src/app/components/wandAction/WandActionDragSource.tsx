@@ -2,19 +2,24 @@ import { useDrag } from 'react-dnd';
 
 import styled from 'styled-components';
 
-const StyledDiv = styled.div<{ isDragging: boolean }>`
-  opacity: ${({isDragging}) => (isDragging ? 0.3 : 1)};
+const StyledDiv = styled.div<{
+  isDragging: boolean;
+}>`
+  opacity: ${({ isDragging }) => (isDragging ? 0.3 : 1)};
   flex: 1 1;
   max-width: max-content;
   max-width: fit-content;
   min-width: min-content;
 
-  ${({isDragging}) => (isDragging ? `
-    `: `
+  ${({ isDragging }) =>
+    isDragging
+      ? `
+    `
+      : `
     &&:hover > div > div {
       z-index: 1000;
     }
-   `)}
+   `}
 `;
 
 type Props = {

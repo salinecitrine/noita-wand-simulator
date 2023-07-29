@@ -24,7 +24,6 @@ const Row = styled.div`
   justify-content: space-between;
   align-self: center;
   width: 100%;
-  background-color: black;
 `;
 
 type Props = {};

@@ -14,6 +14,7 @@ const DeleteDiv = styled.div<{
   font-size: 10px;
   line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
+  font-family: var(--font-family-noita-default);
 `;
 
 type Props = {

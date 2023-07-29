@@ -17,16 +17,13 @@ import { SaveImageButton, ScrollWrapper } from '../generic';
 import { IterationLimitWarning } from './IterationLimitWarning';
 import { GREEK_SPELLS } from '../../calc/eval/lookups';
 
-const ParentDiv = styled.div`
-  background-color: #333;
-`;
+const ParentDiv = styled.div``;
 
 const SectionDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: #333;
   width: fit-content;
 `;
 
@@ -146,7 +143,7 @@ export function ShotResultList(props: Props) {
   return (
     <ParentDiv>
       <SectionHeader
-        title={'Projectiles'}
+        title={'Simulation: Projectiles'}
         leftChildren={
           <IterationLimitWarning hitIterationLimit={hitIterationLimit} />
         }
@@ -171,30 +168,10 @@ export function ShotResultList(props: Props) {
           ))}
         </SectionDiv>
       </ScrollWrapper>
-      <SectionHeader
-        title={'Actions Called'}
-        rightChildren={
-          <SaveImageButton
-            targetRef={actionsCalledRef}
-            fileName={'actions_called'}
-            enabled={groupedShots.length > 0}
-          />
-        }
-      />
-      <ScrollWrapper>
-        <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
-          {groupedShots.map((shot, index) => (
-            <React.Fragment key={index}>
-              {index > 0 && <StyledHr />}
-              <ActionCalledShotResult key={index} shot={shot} />
-            </React.Fragment>
-          ))}
-        </SectionDiv>
-      </ScrollWrapper>
       {config.showActionTree && (
         <>
           <SectionHeader
-            title={'Action Call Tree'}
+            title={'Simulation: Actions Called'}
             rightChildren={
               <SaveImageButton
                 targetRef={actionCallTreeRef}
@@ -218,6 +195,26 @@ export function ShotResultList(props: Props) {
           </ScrollWrapper>
         </>
       )}
+      <SectionHeader
+        title={'Simulation: Actions Called (Grouped)'}
+        rightChildren={
+          <SaveImageButton
+            targetRef={actionsCalledRef}
+            fileName={'actions_called'}
+            enabled={groupedShots.length > 0}
+          />
+        }
+      />
+      <ScrollWrapper>
+        <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
+          {groupedShots.map((shot, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <StyledHr />}
+              <ActionCalledShotResult key={index} shot={shot} />
+            </React.Fragment>
+          ))}
+        </SectionDiv>
+      </ScrollWrapper>
     </ParentDiv>
   );
 }

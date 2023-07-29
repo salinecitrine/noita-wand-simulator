@@ -6,7 +6,7 @@ const ParentDiv = styled.div`
   display: flex;
   align-items: center;
   border: none;
-  background-color: #0F0E0E;
+  background-color: #0f0e0e;
   padding: 0.9em 1em 0.4em 2em;
 `;
 
@@ -18,9 +18,9 @@ const HeaderDiv = styled.div`
   font-weight: 600;
   color: #929292;
   text-align: center;
-  margin-left: 1em;
-  margin-right: 1em;
-  background-color: #0F0E0E;
+  margin-left: 0.8em;
+  margin-right: 0.8em;
+  background-color: #0f0e0e;
   white-space: nowrap;
 `;
 
@@ -38,18 +38,40 @@ const LeftSideChildDiv = styled.div`
   width: 80%;
 `;
 
+const ShortDivider = styled.div`
+  background-color: #333;
+  height: 2px;
+  width: 1em;
+`;
+
 type SectionHeaderProps = {
   title: string | ReactNode;
   leftChildren?: ReactNode;
   rightChildren?: ReactNode;
 };
 
-export default function SectionHeader(props: SectionHeaderProps) {
+export default function SectionHeader({
+  leftChildren,
+  rightChildren,
+  title,
+}: SectionHeaderProps) {
   return (
     <ParentDiv>
-      <LeftSideChildDiv>{props?.leftChildren}</LeftSideChildDiv>
-      <HeaderDiv>{props.title}</HeaderDiv>
-      <RightSideChildDiv>{props?.rightChildren}</RightSideChildDiv>
+      <LeftSideChildDiv></LeftSideChildDiv>
+      {leftChildren && (
+        <>
+          <HeaderDiv>{leftChildren}</HeaderDiv>
+          <ShortDivider />
+        </>
+      )}
+      <HeaderDiv>{title}</HeaderDiv>
+      {rightChildren && (
+        <>
+          <ShortDivider />
+          <HeaderDiv>{rightChildren}</HeaderDiv>
+        </>
+      )}
+      <RightSideChildDiv></RightSideChildDiv>
     </ParentDiv>
   );
 }

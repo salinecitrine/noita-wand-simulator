@@ -125,7 +125,6 @@ const fields = [
 
 const StyledList = styled.div`
   display: flex;
-  align-self: flex-start;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -142,7 +141,6 @@ const StyledListItem = styled.div<{
   background-origin: padding-box;
   background-size: 1em;
   background-repeat: no-repeat;
-  background-color: var(--color-button-background);
   image-rendering: pixelated;
   font-family: 'noita', '04b03', sans-serif;
   font-size: 16px;

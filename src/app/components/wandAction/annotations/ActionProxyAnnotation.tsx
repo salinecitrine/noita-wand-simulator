@@ -7,6 +7,7 @@ const ProxyDiv = styled.div<{
   size: number;
   imgUrl: string;
 }>`
+  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -16,6 +17,7 @@ const ProxyDiv = styled.div<{
   background-image: url(/${({ imgUrl }) => imgUrl});
   background-size: cover;
   background-color: #111;
+  font-family: var(--font-family-noita-default);
 `;
 
 type Props = {

@@ -21,7 +21,6 @@ const HeaderDiv = styled.div<{
   display: flex;
   flex-direction: row;
   color: #eee;
-  background-color: #000;
   justify-content: space-between;
   background-image: url(${({ imgUrl = '/logo/logo.png' }) => imgUrl});
   background-size: contain;
