@@ -11,6 +11,7 @@ export const WandBorder = styled.div<{
 
   &::before {
     content: '';
+    pointer-events: none;
     position: absolute;
     height: 100%;
     width: 100%;

@@ -4,7 +4,7 @@ import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
 import { getActionById } from '../calc/eval/util';
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { DEFAULT_SIZE, WandAction } from './wandAction/WandAction';
-import { WandBorder } from './WandBorder';
+// import { WandBorder } from './WandBorder';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import WandActionBorder from './wandAction/WandActionBorder';
 import { Action } from '../calc/extra/types';
