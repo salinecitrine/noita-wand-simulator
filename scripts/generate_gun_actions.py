@@ -71,6 +71,23 @@ import {
 import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/util";
 import { ActionSource } from "../eval/types";
 
+"""
+
+lua_utils = """
+function* luaFor(start: number, count: number, step: number = 1) {
+  let cur = start, n = count;
+  while (--n >= 0) {
+    yield cur += step;
+  }
+}
+
+function* ipairs([...arr]) {
+  const len = arr.length;
+  let i = -1;
+  while (++i < len) {
+    yield [i, arr[i]];
+  }
+}
 
 """
 
@@ -106,7 +123,7 @@ syntaxPatterns = [
   PatternReplace(r'local ', r'let ', flags=re.MULTILINE),
   PatternReplace(r'#(\w+)', r'\1.length', flags=re.MULTILINE),
   PatternReplace(r'elseif', r'} else if', flags=re.MULTILINE),
-  PatternReplace(r'(\selse)(?!\w)(?! +if)', r'} \1 {', flags=re.MULTILINE),
+  PatternReplace(r'(\t+)(else)(?!\w)(?! +if)', r'\1} \2 {', flags=re.MULTILINE),
   PatternReplace(r'if\s+([^()]+?)then', r'if (\1) {', flags=re.MULTILINE),
   PatternReplace(r'if\s+(.+?)then', r'if \1 {', flags=re.MULTILINE),
   PatternReplace(r'end(\s+)', r'}\1', flags=re.MULTILINE),
@@ -123,7 +140,7 @@ syntaxPatterns = [
   PatternReplace(r'math\.', r'Math.', flags=re.MULTILINE),
   # PatternReplace(r'(SetRandomSeed\(.*?\))$', r'// \1', flags=re.MULTILINE),
   PatternReplace(r'tostring\((.*?)\)', r'String(\1)', flags=re.MULTILINE),
-  PatternReplace(r'for (\w+)=(.+?),(.+?) do', r'for (let \1 = \2; \1 <= \3; \1++) {', flags=re.MULTILINE),
+  # PatternReplace(r'for (\w+)=(.+?),(.+?) do', r'for (let \1 = \2; \1 <= \3; \1++) {', flags=re.MULTILINE),
   PatternReplace(r'while (.*?) do', r'while (\1) {', flags=re.MULTILINE),
   PatternReplace(r'~=', r'!==', flags=re.MULTILINE),
   PatternReplace(r'(?<=\W)nil(?=\W)', r'null', flags=re.MULTILINE),
@@ -134,18 +151,36 @@ syntaxPatterns = [
   PatternReplace(r'let (\w+)\s*,\s*(\w+) =', r'let [\1, \2] =', flags=re.MULTILINE),
   PatternReplace(r'let (data) = \[]', r'let \1: Action | null = null', flags=re.MULTILINE),
   PatternReplace(r'let (\w+) = \[]', r'let \1: any = []', flags=re.MULTILINE),
+
   PatternReplace(r'table.insert\(\s*(\w+)\s*,\s*(\w+)\s*\)', r'\1.push(\2)', flags=re.MULTILINE),
   PatternReplace(r'table.remove\(\s*(\w+)\s*,\s*(\w+)\s*\)', r'\1.splice(\2 - 1, 1)', flags=re.MULTILINE),
   PatternReplace(r'(deck|actions|hand|discarded|types)\[([\w.\- ]+)]', r'\1[\2 - 1]', flags=re.MULTILINE),
   PatternReplace(r'string.sub\((.*?),(.*?),(.*?)\)', r'\1.substring(\2-1,\3)', flags=re.MULTILINE),
   PatternReplace(r'tonumber\(', r'Number.parseInt(', flags=re.MULTILINE),
+
+  # For loops
+  #   for i=1,how_many[,step] do  ==>  for (const i of luaFor(1, how_many[, step])) {
   PatternReplace(
-    r'(\t+)for (\w+),(\w+) in ipairs\(\s*(.+?)\s*\) do(.*?)^\1}',
-    r'\1\4.every((\3: any, \2: any) => {\5\1\treturn true;\n\1})',
-    flags=re.MULTILINE | re.DOTALL,
-    repeat=True,
+    r'for *(.*?) *= *(.*?) *, *(.*?) *, *(.*?) +do',
+    r'for (const \1 of luaFor(\2, \3, \4)) {',
+    flags=re.MULTILINE,
+    # repeat=True,
   ),
-  PatternReplace(r'break', r'return false;', flags=re.MULTILINE),
+  #          for i=1,how_many do  ==>  for (const i of luaFor(1, how_many)) {
+  PatternReplace(
+    r'for *(.*?) *= *(.*?) *, *(.*?) +do',
+    r'for (const \1 of luaFor(\2, \3)) {',
+    flags=re.MULTILINE,
+    # repeat=True,
+  ),
+  # for i,v in ipairs( list ) do  ==>  for (const [i, v] of ipairs(list)) {
+  PatternReplace(
+    r'for ([.()\-\w]+),(\w+) in ipairs\(\s*(.+?)\s*\) do',
+    r'for (const [\1, \2] of ipairs(\3)) {',
+    flags=re.MULTILINE,
+    # repeat=True,
+  ),
+
   PatternReplace(r' == ', r' === ', flags=re.MULTILINE),
   PatternReplace(r' !== null', r' != null', flags=re.MULTILINE),
   PatternReplace(r' === null', r' == null', flags=re.MULTILINE),
@@ -210,12 +245,14 @@ def processFile(srcFile):
         oldContent = content
         content = re.sub(pattern.pattern, pattern.replace, content, flags=pattern.flags)
 
-  # insert imports
-  content = imports + content
+  # insert imports & lua utils
+  content = imports + lua_utils + content
+
+  return content
 
 
 with open(dstFile, 'w') as outFile:
-  outFile.write(processFiles(srcFile))
+  outFile.write(processFile(srcFile))
 
 with open(dstFileBeta, 'w') as outFile:
-  outFile.write(processFiles(srcFileBeta))
+  outFile.write(processFile(srcFileBeta))
