@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { actionTypeInfoMap } from '../../calc/extra/types';
 import {
   ActionProxyAnnotation,
   ActionSourceAnnotation,
@@ -12,12 +13,6 @@ import {
 } from './annotations/';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { iterativeActions, recursiveActions } from '../../calc/eval/lookups';
-import {
-  ActionType,
-  ActionTypeId,
-  actionTypeToIdMap,
-  actionTypeInfoMap,
-} from '../../util/util';
 
 export const DEFAULT_SIZE = 48;
 
@@ -74,12 +69,7 @@ export function WandAction(props: Props) {
     <ImageBackgroundDiv
       size={size}
       actionImgUrl={props.action.sprite}
-      typeImgUrl={
-        // TODO - set action types when generating gun actions from lua to avoid mapping this
-        actionTypeInfoMap[
-          actionTypeToIdMap.get(props.action.type as ActionTypeId) as ActionType
-        ]?.src
-      }
+      typeImgUrl={actionTypeInfoMap[props.action.type]?.src}
       onMouseEnter={() => setMouseOver(true)}
       onMouseLeave={() => setMouseOver(false)}
       mouseOver={mouseOver}

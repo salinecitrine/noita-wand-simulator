@@ -1,12 +1,65 @@
 import { extra_modifiers } from '../gun_extra_modifiers';
 
+const ActionTypeInfoMapDefinition = {
+  projectile: {
+    name: 'Projectile',
+    src: 'data/spelltypes/item_bg_projectile.png',
+  } as const,
+  static: {
+    name: 'Static',
+    src: 'data/spelltypes/item_bg_static_projectile.png',
+  } as const,
+  modifier: {
+    name: 'Modifier',
+    src: 'data/spelltypes/item_bg_modifier.png',
+  } as const,
+  multicast: {
+    name: 'Multicast',
+    src: 'data/spelltypes/item_bg_draw_many.png',
+  } as const,
+  material: {
+    name: 'Material',
+    src: 'data/spelltypes/item_bg_material.png',
+  } as const,
+  other: {
+    name: 'Other',
+    src: 'data/spelltypes/item_bg_other.png',
+  } as const,
+  utility: {
+    name: 'Utility',
+    src: 'data/spelltypes/item_bg_utility.png',
+  } as const,
+  passive: {
+    name: 'Passive',
+    src: 'data/spelltypes/item_bg_passive.png',
+  } as const,
+} as const;
+
+export type ActionType = keyof typeof ActionTypeInfoMapDefinition;
+
+export type ActionTypeInfo = typeof ActionTypeInfoMapDefinition[ActionType];
+
+export type ActionTypeName =
+  typeof ActionTypeInfoMapDefinition[ActionType]['name'];
+
+export type ActionTypeSrc =
+  typeof ActionTypeInfoMapDefinition[ActionType]['src'];
+
+export type ActionTypeInfoKey =
+  keyof typeof ActionTypeInfoMapDefinition[ActionType];
+
+export type ActionTypeInfoMap = Record<ActionType, ActionTypeInfo>;
+
+export const actionTypeInfoMap =
+  ActionTypeInfoMapDefinition as ActionTypeInfoMap;
+
 export type GunActionState = {
   action_id: string;
   action_name: string;
   action_description: string;
   action_sprite_filename: string;
   action_unidentified_sprite_filename?: string;
-  action_type: number;
+  action_type: ActionType;
   action_spawn_level: string;
   action_spawn_probability: string;
   action_spawn_requires_flag?: string;
@@ -80,7 +133,7 @@ export type Action = {
   sprite: string;
   sprite_unidentified?: string;
   related_projectiles?: [string, number?];
-  type: number;
+  type: ActionType;
   spawn_level: string;
   spawn_probability: string;
   price: number;
@@ -127,3 +180,6 @@ export type ModifierName = keyof typeof extra_modifiers;
 export type ShotEffects = {
   recoil_knockback: number;
 };
+
+export type ComponentID = string;
+export type EntityID = string;

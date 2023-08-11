@@ -1,13 +1,6 @@
 import { Action, Gun } from '../extra/types';
 import { override, subscribe } from '../extra/ext_functions';
 import {
-  ACTION_TYPE_MATERIAL,
-  ACTION_TYPE_OTHER,
-  ACTION_TYPE_PROJECTILE,
-  ACTION_TYPE_STATIC_PROJECTILE,
-  ACTION_TYPE_UTILITY,
-} from '../gun_enums';
-import {
   _add_card_to_deck,
   _clear_deck,
   _draw_actions_for_shot,
@@ -113,11 +106,11 @@ export function clickWand(
       case 'BeginProjectile':
         const validSourceActionCalls = calledActions.filter((a) => {
           return [
-            ACTION_TYPE_PROJECTILE,
-            ACTION_TYPE_STATIC_PROJECTILE,
-            ACTION_TYPE_MATERIAL,
-            ACTION_TYPE_OTHER,
-            ACTION_TYPE_UTILITY,
+            'projectile',
+            'static',
+            'material',
+            'other',
+            'utility',
           ].includes(a.action.type);
         });
 

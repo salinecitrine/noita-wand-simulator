@@ -7,15 +7,8 @@ import { WandAction } from './wandAction/WandAction';
 import WandActionBorder from './wandAction/WandActionBorder';
 import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
-import { Action } from '../calc/extra/types';
-import {
-  ActionType,
-  ActionTypeId,
-  groupBy,
-  actionTypeToIdMap,
-  actionTypeInfoMap,
-  objectEntries,
-} from '../util/util';
+import { Action, actionTypeInfoMap } from '../calc/extra/types';
+import { groupBy, objectEntries } from '../util/util';
 import { Tabs } from './generic';
 import {
   ExportButton,
@@ -120,10 +113,7 @@ export function SpellSelector(props: Props) {
   );
 
   const actionsByType = useMemo(() => {
-    return groupBy(
-      unlockedActions,
-      ({ type }) => actionTypeToIdMap.get(type as ActionTypeId) as ActionType,
-    );
+    return groupBy(unlockedActions, ({ type }) => type);
   }, [unlockedActions]);
 
   const tabPerType = useMemo(() => {

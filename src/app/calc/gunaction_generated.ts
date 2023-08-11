@@ -1,4 +1,3 @@
-import { ACTION_TYPE_PROJECTILE } from './gun_enums';
 import { GunActionState } from './extra/types';
 import { RegisterGunAction } from './extra/ext_functions';
 
@@ -9,7 +8,7 @@ export const defaultGunActionState: GunActionState = {
   action_sprite_filename: '',
   action_unidentified_sprite_filename:
     'data/ui_gfx/gun_actions/unidentified.png',
-  action_type: ACTION_TYPE_PROJECTILE,
+  action_type: 'projectile',
   action_spawn_level: '',
   action_spawn_probability: '',
   action_spawn_requires_flag: '',
@@ -83,7 +82,10 @@ export function ConfigGunActionInfo_PassToGame(value: GunActionState) {
 // ext function
 function ConfigGunActionInfo_ReadToLua(...args: any[]) {}
 
-export function ConfigGunActionInfo_Copy<T extends GunActionState>(source: T, dest: T): void {
+export function ConfigGunActionInfo_Copy<T extends GunActionState>(
+  source: T,
+  dest: T,
+): void {
   dest.action_id = source.action_id;
   dest.action_name = source.action_name;
   dest.action_description = source.action_description;
