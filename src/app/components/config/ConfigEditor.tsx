@@ -139,6 +139,12 @@ const configOptions = [
     (c) => c.endSimulationOnRefresh,
     (c, v) => (c.endSimulationOnRefresh = v),
   ),
+  makeConfigField(
+    'Show Beta Spells',
+    ConfigType.Boolean,
+    (c) => c.showBeta,
+    (c, v) => (c.showBeta = v),
+  ),
   makeConfigFieldGroup('Unlocks', [
     makeConfigField(
       'Enable All',

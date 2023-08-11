@@ -1,7 +1,7 @@
 import { lazy, notNullOrUndefined } from '../../util/util';
-import { entityToActionId } from '../__generated__/entityProjectileMap';
+import { entityToActionId } from '../entityProjectileMap';
 import { Action } from '../extra/types';
-import { actions } from '../__generated__/gun_actions';
+import { actions } from '../gun_actions';
 import { getActionById } from './util';
 
 export const entityToAction = lazy(() =>

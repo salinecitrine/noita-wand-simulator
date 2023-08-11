@@ -21,6 +21,7 @@ export interface ConfigState {
     showActionTree: boolean;
     showSpellsInCategories: boolean;
     endSimulationOnRefresh: boolean;
+    showBeta: boolean;
     unlocks: {
       [key: string]: boolean;
     };
@@ -56,6 +57,7 @@ export const initialState: ConfigState = {
     showActionTree: true,
     showSpellsInCategories: false,
     endSimulationOnRefresh: true,
+    showBeta: false,
     unlocks: {
       card_unlocked_black_hole: false,
       card_unlocked_everything: false,
@@ -87,6 +89,8 @@ export const initialState: ConfigState = {
       card_unlocked_rain: false,
       card_unlocked_paint: false,
       card_unlocked_rainbow_trail: false,
+      card_unlocked_homing_wand: false,
+      card_unlocked_fish: false,
     },
     requirements: {
       enemies: false,

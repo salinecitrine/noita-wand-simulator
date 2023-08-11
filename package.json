@@ -28,11 +28,12 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "BROWSER=none react-scripts --openssl-legacy-provider start",
+    "start": "BROWSER=none react-scripts start",
     "build": "CI= react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "npx serve -s build",
+    "generate": "yarn generate-actions && yarn generate-entity-map && yarn generate-translations",
     "generate-actions": "python scripts/generate_gun_actions.py",
     "generate-translations": "python scripts/generate_translations.py",
     "generate-entity-map": "python scripts/generate_entity_map.py"
