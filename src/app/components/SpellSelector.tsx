@@ -1,4 +1,4 @@
-import { actions } from '../calc/__generated__/gun_actions';
+import { actions } from '../calc/gun_actions';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import styled from 'styled-components';
 import { useMemo } from 'react';
@@ -36,6 +36,13 @@ const isSpellUnlocked = (
   return !spell.spawn_requires_flag || unlocks[spell.spawn_requires_flag];
 };
 
+const isBetaEnabled = (
+  configBetaEnabled: ConfigState['config']['showBeta'],
+  spell: Action,
+) => {
+  return !spell.beta || configBetaEnabled;
+};
+
 type WandActionSelectProps = {
   action: Action;
   size: number;
@@ -55,8 +62,13 @@ export function SpellSelector(props: Props) {
   const { config } = useAppSelector(selectConfig);
 
   const unlockedActions = useMemo(
-    () => actions.filter((a) => isSpellUnlocked(config.unlocks, a)),
-    [config.unlocks],
+    () =>
+      actions.filter(
+        (a) =>
+          isSpellUnlocked(config.unlocks, a) &&
+          isBetaEnabled(config.showBeta, a),
+      ),
+    [config.unlocks, config.showBeta],
   );
   const actionsByType = useMemo(() => {
     return groupBy(

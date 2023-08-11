@@ -60,6 +60,21 @@ import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/util";
 import { ActionSource } from "../eval/types";
 
 
+function* luaFor(start: number, count: number, step: number = 1) {
+  let cur = start, n = count;
+  while (--n >= 0) {
+    yield cur += step;
+  }
+}
+
+function* ipairs([...arr]) {
+  const len = arr.length;
+  let i = -1;
+  while (++i < len) {
+    yield [i, arr[i]];
+  }
+}
+
 export const actions: Action[] = [
 	
 	
@@ -2391,7 +2406,7 @@ export const actions: Action[] = [
 		mana: 40,
 		
 		action: (c: GunActionState) => {
-			for (let i = 1; i <= 6; i++) {
+			for (const i of luaFor(1, 6)) {
 				add_projectile("data/entities/projectiles/deck/infestation.xml")
 			}
 			
@@ -3653,12 +3668,11 @@ export const actions: Action[] = [
 			let dcomps = EntityGetComponent( entity_id, "DamageModelComponent" )
 			
 			if (( dcomps != null ) && ( dcomps.length > 0 ))  {
-				dcomps.every((b: any, a: any) => {
+				for (const [a, b] of ipairs(dcomps)) {
 					let hp = ComponentGetValue2( b, "hp" )
 					hp = Math.max( hp - 0.16, 0.04 )
 					ComponentSetValue2( b, "hp", hp )
-					return true;
-				})
+				}
 			}
 		},
 	},
@@ -3703,7 +3717,7 @@ export const actions: Action[] = [
 						c.damage_projectile_add = c.damage_projectile_add + ( damage / 35 )
 					} else if ( damage < 500 )  {
 						c.damage_projectile_add = c.damage_projectile_add + ( damage / 45 )
-				} 	else {
+					} else {
 						c.damage_projectile_add = c.damage_projectile_add + ( damage / 55 )
 					}
 				}
@@ -3765,13 +3779,12 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			let hand_count = hand.length
 			
-			hand.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(hand)) {
 				let rec = check_recursion( v, recursion_level )
 				if (( v.id !== "DUPLICATE" ) && ( i < hand_count ) && ( rec > -1 ))  {
 					call_action(ActionSource.ACTION, v, c,  rec )
 				}
-				return true;
-			})
+			}
 			
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			setCurrentReloadTime(current_reload_time + 20)
@@ -7057,7 +7070,7 @@ export const actions: Action[] = [
 				
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
-		} 	else {
+			} else {
 				data = discarded[rnd - deck.length - 1]
 			}
 			
@@ -7070,7 +7083,7 @@ export const actions: Action[] = [
 				
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
-			} 	else {
+				} else {
 					data = discarded[rnd - deck.length - 1]
 				}
 				
@@ -7113,7 +7126,7 @@ export const actions: Action[] = [
 				
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
-		} 	else {
+			} else {
 				data = discarded[rnd - deck.length - 1]
 			}
 			
@@ -7126,7 +7139,7 @@ export const actions: Action[] = [
 				
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
-			} 	else {
+				} else {
 					data = discarded[rnd - deck.length - 1]
 				}
 				
@@ -7134,7 +7147,7 @@ export const actions: Action[] = [
 			}
 			
 			if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
-				for (let i = 1; i <= 3; i++) {
+				for (const i of luaFor(1, 3)) {
 					call_action(ActionSource.ACTION, data, c,  rec )
 				}
 				
@@ -7166,14 +7179,14 @@ export const actions: Action[] = [
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			
-			for (let i = 1; i <= 3; i++) {
+			for (const i of luaFor(1, 3)) {
 				let rnd = Random( 1, datasize )
 				
 				let data: Action | null = null
 				
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
-			} 	else {
+				} else {
 					data = discarded[rnd - deck.length - 1]
 				}
 				
@@ -7186,7 +7199,7 @@ export const actions: Action[] = [
 					
 					if ( rnd <= deck.length )  {
 						data = deck[rnd - 1]
-				} 	else {
+					} else {
 						data = discarded[rnd - deck.length - 1]
 					}
 					
@@ -7346,11 +7359,10 @@ export const actions: Action[] = [
 		max_uses: 1,
 		action: (c: GunActionState) => {
 			let players = EntityGetWithTag( "player_unit" )
-			players.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(players)) {
 				let [x, y] = EntityGetTransform( v )
 				let eid = EntityLoad("data/entities/projectiles/deck/all_spells_loader.xml", x, y)
-				return true;
-			})
+			}
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 100)
 		},
@@ -7393,7 +7405,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -7414,7 +7426,7 @@ export const actions: Action[] = [
 					let target = data.related_projectiles[0]
 					let count = data.related_projectiles[1] || 1
 					
-					for (let i = 1; i <= how_many; i++) {
+					for (const i of luaFor(1, how_many)) {
 						data = deck[1 - 1]
 						discarded.push(data)
 						deck.splice(1 - 1, 1)
@@ -7422,13 +7434,12 @@ export const actions: Action[] = [
 					
 					let valid = false
 					
-					for (let i = 1; i <= deck.length; i++) {
+					for (const i of luaFor(1, deck.length)) {
 						let check = deck[i - 1]
 						
 						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
 							valid = true
-							// return false; TODO fix this in generate script
-							break;
+							break
 						}
 					}
 					
@@ -7442,10 +7453,10 @@ export const actions: Action[] = [
 					}
 					
 					if (valid ) {
-						for (let i = 1; i <= count; i++) {
+						for (const i of luaFor(1, count)) {
 							add_projectile_trigger_hit_world(target, 1)
 						}
-				} 	else {
+					} else {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c, )
 						setDontDrawActions(false)
@@ -7474,7 +7485,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -7495,7 +7506,7 @@ export const actions: Action[] = [
 					let target = data.related_projectiles[0]
 					let count = data.related_projectiles[1] || 1
 					
-					for (let i = 1; i <= how_many; i++) {
+					for (const i of luaFor(1, how_many)) {
 						data = deck[1 - 1]
 						discarded.push(data)
 						deck.splice(1 - 1, 1)
@@ -7503,13 +7514,12 @@ export const actions: Action[] = [
 					
 					let valid = false
 					
-					for (let i = 1; i <= deck.length; i++) {
+					for (const i of luaFor(1, deck.length)) {
 						let check = deck[i - 1]
 						
 						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
 							valid = true
-							// return false; TODO fix this in generate script
-							break;
+							break
 						}
 					}
 					
@@ -7523,10 +7533,10 @@ export const actions: Action[] = [
 					}
 					
 					if (valid ) {
-						for (let i = 1; i <= count; i++) {
+						for (const i of luaFor(1, count)) {
 							add_projectile_trigger_timer(target, 20, 1)
 						}
-				} 	else {
+					} else {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c, )
 						setDontDrawActions(false)
@@ -7555,7 +7565,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -7576,7 +7586,7 @@ export const actions: Action[] = [
 					let target = data.related_projectiles[0]
 					let count = data.related_projectiles[1] || 1
 					
-					for (let i = 1; i <= how_many; i++) {
+					for (const i of luaFor(1, how_many)) {
 						data = deck[1 - 1]
 						discarded.push(data)
 						deck.splice(1 - 1, 1)
@@ -7584,13 +7594,12 @@ export const actions: Action[] = [
 					
 					let valid = false
 					
-					for (let i = 1; i <= deck.length; i++) {
+					for (const i of luaFor(1, deck.length)) {
 						let check = deck[i - 1]
 						
 						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
 							valid = true
-							// return false; TODO fix this in generate script
-							break;
+							break
 						}
 					}
 					
@@ -7604,10 +7613,10 @@ export const actions: Action[] = [
 					}
 					
 					if (valid ) {
-						for (let i = 1; i <= count; i++) {
+						for (const i of luaFor(1, count)) {
 							add_projectile_trigger_death(target, 1)
 						}
-				} 	else {
+					} else {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c, )
 						setDontDrawActions(false)
@@ -7736,7 +7745,7 @@ export const actions: Action[] = [
 				data = hand[1 - 1]
 			} else if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -7771,7 +7780,7 @@ export const actions: Action[] = [
 				data = deck[deck.length - 1]
 			} else if ( hand.length > 0 )  {
 				data = hand[hand.length - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -7809,14 +7818,14 @@ export const actions: Action[] = [
 			if ( deck.length > 0 )  {
 				s1 = "deck"
 				data1 = deck[1 - 1]
-		} 	else {
+			} else {
 				data1 = null
 			}
 			
 			if ( deck.length > 0 )  {
 				s2 = "deck 2"
 				data2 = deck[2 - 1]
-		} 	else {
+			} else {
 				data2 = null
 			}
 			
@@ -7853,39 +7862,36 @@ export const actions: Action[] = [
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( ( data.recursive == null ) || ( data.recursive === false ) ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 		},
 	},
@@ -7910,39 +7916,36 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			c.fire_rate_wait = firerate
@@ -7973,39 +7976,36 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			c.fire_rate_wait = firerate
@@ -8034,39 +8034,36 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck)) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			c.fire_rate_wait = firerate
@@ -8101,17 +8098,17 @@ export const actions: Action[] = [
 			if (( children != null ) && ( inventory != null ))  {
 				let active_wand = ComponentGetValue2( inventory, "mActiveItem" )
 				
-				children.every((child_id: any, i: any) => {
+				for (const [i, child_id] of ipairs(children)) {
 					if ( EntityGetName( child_id ) === "inventory_quick" )  {
 						let wands = EntityGetAllChildren( child_id )
 						
 						if ( wands != null )  {
-							wands.every((wand_id: any, k: any) => {
+							for (const [k, wand_id] of ipairs(wands)) {
 								if (( wand_id !== active_wand ) && EntityHasTag( wand_id, "wand" ))  {
 									let spells = EntityGetAllChildren( wand_id )
 									
 									if ( spells != null )  {
-										spells.every((spell_id: any, j: any) => {
+										for (const [j, spell_id] of ipairs(spells)) {
 											let comp = EntityGetFirstComponentIncludingDisabled( spell_id, "ItemActionComponent" )
 											
 											if ( comp != null )  {
@@ -8119,16 +8116,13 @@ export const actions: Action[] = [
 												
 												options.push(action_id)
 											}
-											return true;
-										})
+										}
 									}
 								}
-								return true;
-							})
+							}
 						}
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( options.length > 0 )  {
@@ -8137,7 +8131,7 @@ export const actions: Action[] = [
 				let rnd = Random( 1, options.length )
 				let action_id = options[rnd]
 				
-				actions.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(actions)) {
 					if ( data.id === action_id )  {
 						let rec = check_recursion( data, recursion_level )
 						if ( rec > -1 )  {
@@ -8145,10 +8139,9 @@ export const actions: Action[] = [
 							call_action(ActionSource.ACTION, data, c,  rec )
 							setDontDrawActions(false)
 						}
-						return false;
+						break
 					}
-					return true;
-				})
+				}
 			}
 			
 			draw_actions( 1, true )
@@ -8176,7 +8169,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8191,7 +8184,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8215,7 +8208,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8258,7 +8251,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8273,7 +8266,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8297,7 +8290,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8340,7 +8333,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8355,7 +8348,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8379,7 +8372,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8424,7 +8417,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8439,7 +8432,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8463,7 +8456,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8546,17 +8539,15 @@ export const actions: Action[] = [
 		action: (c: GunActionState) => {
 			setCurrentReloadTime(current_reload_time - 25)
 			
-			hand.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(hand)) {
 				
 				discarded.push(v)
-				return true;
-			})
+			}
 			
-			deck.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(deck)) {
 				
 				discarded.push(v)
-				return true;
-			})
+			}
 			
 			clearHand()
 			clearDeck()
@@ -8592,11 +8583,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck)) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8606,11 +8597,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8622,7 +8612,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 						
 						if ( v != null )  {
@@ -8630,17 +8620,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {
@@ -8679,11 +8669,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck)) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8693,11 +8683,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8709,7 +8698,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 						
 						if ( v != null )  {
@@ -8717,17 +8706,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {
@@ -8774,11 +8763,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck)) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8788,11 +8777,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8804,7 +8792,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 						
 						if ( v != null )  {
@@ -8812,17 +8800,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {
@@ -8866,11 +8854,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck)) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8880,11 +8868,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8896,7 +8883,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 					
 						if ( v != null )  {
@@ -8904,17 +8891,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {

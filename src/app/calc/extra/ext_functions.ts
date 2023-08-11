@@ -266,7 +266,7 @@ export function EntityGetAllChildren(entityId: any): any {
   if (result !== undefined) {
     return result;
   }
-  return {};
+  return [];
 }
 
 export function EntityGetName(childId: any): any {

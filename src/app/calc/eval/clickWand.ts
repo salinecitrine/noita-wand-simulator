@@ -85,9 +85,9 @@ export function clickWand(
       override('ComponentGetValue2', (args) => {
         if (args[0] === 'IF_HP') {
           if (args[1] === 'hp') {
-            return requirements.hp ? 25 : 100;
+            return requirements.hp ? 25000 / 25 : 100000 / 25;
           } else if (args[1] === 'max_hp') {
-            return 100;
+            return 100000 / 25;
           }
         }
       }),
