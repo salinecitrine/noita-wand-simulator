@@ -18,13 +18,11 @@ const MainDiv = styled.div`
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
-  background-color: rgba(64, 128, 64, 0.2);
 `;
 
 const GroupDiv = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: rgba(0, 128, 64, 0.2);
 `;
 
 const CountParentDiv = styled.div`
