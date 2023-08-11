@@ -1,7 +1,7 @@
 ## Branches
 
-- `master` is deployed to https://noita-wand-simulator.salinecitrine.com/
-- `develop` is deployed to https://beta.noita-wand-simulator.salinecitrine.com/
+- ~~ `master` is deployed to https://noita-wand-simulator.salinecitrine.com/ ~~
+- ~~ `develop` is deployed to https://beta.noita-wand-simulator.salinecitrine.com/ ~~
 
 ## Available Scripts
 
@@ -60,24 +60,31 @@ diff --suppress-common-lines -trb gun_actions.ts gun_actions.beta.ts
 diff --suppress-common-lines -trb -I 'spawn_' gun_actions.ts gun_actions.beta.ts
 ```
 
-### `generate-actions`
+With those files in place, you can run this command to generate the necessary files:
+
+```
+yarn generate
+```
+
+Or, individually:
+
+```
+yarn generate-actions
+```
 
 Generate Typescript spell functions from the source Lua code. This requires that you have 'data/scripts/gun/gun_actions.lua' present.
-
 Runs `scripts/generate_gun_actions.py`.
 
-### `generate-entity-map`
+```
+yarn generate-entity-map
+```
 
 Generate a Typescript map from projectile definitions to spells that use them, based on the source Lua code. This requires that you have 'data/scripts/gun/gun_actions.lua' present.
-
 Runs `scripts/generate_entity_map.py`.
 
-### `generate-translations`
+```
+yarn generate-translations
+```
 
 Generate display strings from IDs based on the game's translation file. This requires that you have './data_base/translations/common.csv' present.
-
 Runs `scripts/generate_translations.py`.
-
-### `generate`
-
-Runs all three of the above.
