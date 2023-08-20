@@ -7,9 +7,11 @@ const SourceDiv = styled.div<{
   size: number;
   colors: [string, string];
 }>`
+  pointer-events: none;
   position: absolute;
-  bottom: 0;
-  left: 0;
+  top: 10%;
+  transform: translateY(-50%);
+  left: -${(props) => props.size / 4 + 12}px;
   width: ${(props) => props.size / 4}px;
   height: ${(props) => props.size / 4}px;
   border: 1px solid #999;
@@ -18,6 +20,7 @@ const SourceDiv = styled.div<{
   font-size: 12px;
   line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
+  font-family: var(--font-family-noita-default);
 `;
 
 const sourceDisplayMap: Record<ActionSource, [string, [string, string]]> = {

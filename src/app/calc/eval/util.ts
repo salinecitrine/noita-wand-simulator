@@ -1,5 +1,5 @@
 import { Action } from '../extra/types';
-import { actions } from '../__generated__/gun_actions';
+import { actions } from '../gun_actions';
 
 export function getActionById(actionId: string): Readonly<Action> {
   for (let i = 0; i < actions.length; i++) {

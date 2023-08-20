@@ -1,15 +1,5 @@
 
-import {GunActionState, Action} from "../extra/types";
-import {
-  ACTION_TYPE_PROJECTILE,
-  ACTION_TYPE_STATIC_PROJECTILE,
-  ACTION_TYPE_MODIFIER,
-  ACTION_TYPE_DRAW_MANY,
-  ACTION_TYPE_MATERIAL,
-  ACTION_TYPE_OTHER,
-  ACTION_TYPE_UTILITY,
-  ACTION_TYPE_PASSIVE,
-} from "../gun_enums";
+import { GunActionState, Action } from "../extra/types";
 import {
   hand,
   deck,
@@ -60,6 +50,21 @@ import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/util";
 import { ActionSource } from "../eval/types";
 
 
+function* luaFor(start: number, count: number, step: number = 1) {
+  let cur = start, n = count;
+  while (--n >= 0) {
+    yield cur += step;
+  }
+}
+
+function* ipairs<T>(arr: T[], tag: string = ''): Generator<[number,T]> {
+  let i = -1;
+  while (++i < arr.length) {
+    //console.log(`${tag}(${i}) ${(arr as unknown as Action[]).map(({id}, idx) => idx === i ? `[${id}]` : `${id}`).join(', ')}`);
+    yield [i, arr[i]];
+  }
+}
+
 export const actions: Action[] = [
 	
 	
@@ -70,7 +75,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bomb.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/bomb.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "1,1,1,1,1,1,1",
 		price: 200,
@@ -89,7 +94,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/light_bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/light_bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2",
 		spawn_probability: "2,1,0.5",
 		price: 100,
@@ -110,7 +115,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/light_bullet_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/light_bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3",
 		spawn_probability: "1,0.5,0.5,0.5",
 		price: 140,
@@ -129,7 +134,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_light_bullet_trigger_2",
 		sprite: "data/ui_gfx/gun_actions/light_bullet_trigger_2.png",
 		related_projectiles: ["data/entities/projectiles/deck/light_bullet_blue.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,5,6,10",
 		spawn_probability: "1,0.5,1,1,0.2",
 		price: 250,
@@ -149,7 +154,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/light_bullet_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_timer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/light_bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3",
 		spawn_probability: "0.5,0.5,0.5",
 		price: 140,
@@ -169,7 +174,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "1,1,1,1,1",
 		price: 150,
@@ -191,7 +196,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bullet_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bullet_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 190,
@@ -213,7 +218,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bullet_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bullet_timer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 190,
@@ -235,7 +240,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/heavy_bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heavy_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.5,1,1,1,1,1",
 		price: 200,
@@ -258,7 +263,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/heavy_bullet_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heavy_bullet_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 240,
@@ -281,7 +286,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/heavy_bullet_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heavy_bullet_timer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 240,
@@ -304,7 +309,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/air_bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/air_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/light_bullet_air.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2",
 		spawn_probability: "1,1",
 		price: 80,
@@ -325,7 +330,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/slow_bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slow_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet_slow.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "1,1,1,1",
 		price: 160,
@@ -347,7 +352,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/slow_bullet_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slow_bullet_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet_slow.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.5,0.5,0.5,0.5,1",
 		price: 200,
@@ -369,7 +374,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/slow_bullet_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slow_bullet_timer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bullet_slow.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,1,1",
 		price: 200,
@@ -391,7 +396,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/black_hole.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/black_hole.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2,4,5",
 		spawn_probability: "0.8,0.8,0.8,0.8",
 		price: 200,
@@ -412,7 +417,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/black_hole_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/black_hole.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5",
 		price: 220,
@@ -433,7 +438,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/black_hole_big.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_big_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/black_hole_big.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,3,5,6,10",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.5",
 		price: 320,
@@ -454,7 +459,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_big_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/black_hole_giga.xml"],
 		spawn_requires_flag: "card_unlocked_black_hole",
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 600,
@@ -480,7 +485,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tentacle_portal.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tentacle_portal.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,10",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.2",
 		price: 220,
@@ -499,7 +504,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spitter.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spitter.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3",
 		spawn_probability: "1,1,1,0.5",
 		price: 110,
@@ -521,7 +526,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spitter_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spitter_timer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spitter.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3",
 		spawn_probability: "0.5,0.5,0.5,1",
 		price: 140,
@@ -543,7 +548,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spitter_green.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spitter_tier_2.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "1,1,1,0.5",
 		price: 190,
@@ -565,7 +570,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spitter_green_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spitter_tier_2.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "0.5,0.5,0.5,1",
 		price: 220,
@@ -587,7 +592,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spitter_purple.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spitter_tier_3.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5,6",
 		spawn_probability: "0.8,0.8,1,1",
 		price: 240,
@@ -609,7 +614,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spitter_purple_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spitter_tier_3.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "4,5,6",
 		spawn_probability: "0.5,0.5,0.5",
 		price: 260,
@@ -631,7 +636,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bubbleshot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bubbleshot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bubbleshot.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3",
 		spawn_probability: "1,1,1,0.5",
 		price: 100,
@@ -651,7 +656,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bubbleshot_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bubbleshot_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bubbleshot.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3",
 		spawn_probability: "0.5,0.5,1",
 		price: 120,
@@ -671,7 +676,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/disc_bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/disc_bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2,4",
 		spawn_probability: "1,1,1",
 		price: 120,
@@ -692,7 +697,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/disc_bullet_big.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/disc_bullet_big.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2,4,10",
 		spawn_probability: "0.6,0.6,0.6,0.1",
 		price: 180,
@@ -714,7 +719,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		spawn_requires_flag: "card_unlocked_everything",
 		related_projectiles: ["data/entities/projectiles/deck/disc_bullet_bigger.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,5,10",
 		spawn_probability: "0.1,0.6,1.0,0.1",
 		price: 270,
@@ -736,7 +741,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bouncy_orb.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bouncy_orb.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2,4",
 		spawn_probability: "1,1,1",
 		price: 120,
@@ -756,7 +761,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bouncy_orb_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bouncy_orb.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2,4",
 		spawn_probability: "0.5,0.5,0.5",
 		price: 150,
@@ -776,7 +781,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/rubber_ball.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rubber_ball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/rubber_ball.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,6",
 		spawn_probability: "1,1,1",
 		price: 60,
@@ -796,7 +801,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/arrow.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/arrow_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/arrow.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,4,5",
 		spawn_probability: "1,1,1,1",
 		price: 140,
@@ -817,7 +822,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/pollen.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/arrow_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/pollen.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,3,4",
 		spawn_probability: "0.6,1,1,0.8",
 		price: 110,
@@ -837,7 +842,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/lance.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/lance_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/lance.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,5,6",
 		spawn_probability: "1,1,1,1",
 		price: 180,
@@ -859,7 +864,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/rocket.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/rocket.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "1,1,1,0.5,0.5",
 		price: 220,
@@ -881,7 +886,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/rocket_tier_2.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/rocket_tier_2.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,1,1,1,1",
 		price: 240,
@@ -903,7 +908,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/rocket_tier_3.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/rocket_tier_3.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.25,0.5,1,1,1",
 		price: 250,
@@ -925,7 +930,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/grenade.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/grenade.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "1,1,0.5,0.25,0.25",
 		price: 170,
@@ -948,7 +953,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/grenade_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/grenade_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/grenade.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5,1",
 		price: 210,
@@ -971,7 +976,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/grenade_tier_2.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/grenade_tier_2.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.5,1,1,1,1",
 		price: 220,
@@ -994,7 +999,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/grenade_tier_3.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/grenade_tier_3.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.25,0.5,0.75,1,1",
 		price: 220,
@@ -1017,7 +1022,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/grenade_anti.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/grenade_anti.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 170,
@@ -1040,7 +1045,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/grenade_large.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/grenade_large.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 150,
@@ -1063,7 +1068,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/mine.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/mine_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/mine.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,3,4,6",
 		spawn_probability: "1,1,1,1",
 		price: 200,
@@ -1090,7 +1095,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/mine_death_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/mine_death_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/mine.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,6",
 		spawn_probability: "1,1",
 		price: 240,
@@ -1117,7 +1122,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/pipe_bomb.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/pipe_bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/pipe_bomb.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4",
 		spawn_probability: "1,1,1",
 		price: 200,
@@ -1143,7 +1148,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/pipe_bomb_death_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/pipe_bomb_death_trigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/pipe_bomb.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "1,1,1,1",
 		price: 230,
@@ -1171,7 +1176,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/exploding_deer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/exploding_deer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/exploding_deer.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5",
 		spawn_probability: "0.6,0.6,0.6",
 		price: 170,
@@ -1190,7 +1195,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/duck_2.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/exploding_deer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/duck.xml", 3],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5",
 		spawn_probability: "0.6,0.8,0.6",
 		price: 200,
@@ -1212,7 +1217,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/worm.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/exploding_deer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/worm_shot.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5",
 		spawn_probability: "0.6,0.8,0.6",
 		price: 200,
@@ -1234,7 +1239,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/pipe_bomb_detonator.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/meteor_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/bomb_detonator.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "1,1,1,1,1",
 		price: 120,
@@ -1250,7 +1255,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/laser.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/laser.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,4",
 		spawn_probability: "1,1,1",
 		price: 180,
@@ -1271,7 +1276,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/megalaser.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/megalaser_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/megalaser.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5,6,10",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.1",
 		price: 300,
@@ -1297,7 +1302,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/lightning.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/lightning_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/lightning.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,5,6",
 		spawn_probability: "1,1,1,1",
 		price: 250,
@@ -1317,7 +1322,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/ball_lightning.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/lightning_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/ball_lightning.xml",3],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,4,5",
 		spawn_probability: "0.2,0.2,1,1",
 		price: 250,
@@ -1338,7 +1343,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/laser_emitter.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.2,1,1,0.5",
 		price: 180,
@@ -1357,7 +1362,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/laser_emitter_four.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.2,1,0.2,0.5,1",
 		price: 200,
@@ -1376,7 +1381,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/laser_emitter_cutter.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter_cutter.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "0.2,0.3,1,0.5,0.1",
 		price: 120,
@@ -1394,7 +1399,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/digger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/digger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/digger.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2",
 		spawn_probability: "1,0.5",
 		price: 70,
@@ -1413,7 +1418,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/powerdigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/powerdigger_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/powerdigger.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.5,1,1",
 		price: 110,
@@ -1432,7 +1437,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/chainsaw.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/chainsaw.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2",
 		spawn_probability: "1,1",
 		price: 80,
@@ -1453,7 +1458,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/luminous_drill.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/luminous_drill.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2",
 		spawn_probability: "1,1",
 		price: 150,
@@ -1473,7 +1478,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/luminous_drill_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/luminous_drill.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,2",
 		spawn_probability: "1,1",
 		price: 220,
@@ -1494,7 +1499,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tentacle.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/tentacle_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tentacle.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5,6",
 		spawn_probability: "1,1,1,1",
 		price: 200,
@@ -1514,7 +1519,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tentacle_timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/tentacle_timer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tentacle.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.6",
 		price: 250,
@@ -1534,7 +1539,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/heal_bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heal_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/heal_bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4",
 		spawn_probability: "1,1,1",
 		price: 60,
@@ -1556,7 +1561,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spiral_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spiral_shot.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "4,5,6",
 		spawn_probability: "1,1,1",
 		price: 190,
@@ -1575,7 +1580,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/magic_shield.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/magic_shield_start.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,4,5,6",
 		spawn_probability: "0.5,0.5,1,1",
 		price: 100,
@@ -1592,7 +1597,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/big_magic_shield.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/big_magic_shield_start.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,4,5,6,10",
 		spawn_probability: "0.2,0.2,0.5,0.5,0.1",
 		price: 120,
@@ -1608,7 +1613,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_chain_bolt",
 		sprite: "data/ui_gfx/gun_actions/chain_bolt.png",
 		related_projectiles: ["data/entities/projectiles/deck/chain_bolt.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,4,5,6",
 		spawn_probability: "1,1,1,1",
 		price: 240,
@@ -1626,7 +1631,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fireball.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/fireball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/fireball.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,3,4,6",
 		spawn_probability: "1,1,1,1",
 		price: 220,
@@ -1647,7 +1652,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/meteor.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/meteor_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/meteor.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "4,5,6,10",
 		spawn_probability: "0.6,0.6,0.6,0.5",
 		price: 280,
@@ -1664,7 +1669,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/flamethrower.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/flamethrower_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/flamethrower.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,6",
 		spawn_probability: "1,1,1",
 		price: 220,
@@ -1683,7 +1688,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/iceball.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/fireball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/iceball.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,6",
 		spawn_probability: "1,1,1,1",
 		price: 260,
@@ -1705,7 +1710,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/slimeball.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/slime.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,3,4",
 		spawn_probability: "1,1,1",
 		price: 130,
@@ -1732,7 +1737,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/darkflame.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/darkflame_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/darkflame.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,5,6",
 		spawn_probability: "1,1,1",
 		price: 180,
@@ -1749,7 +1754,7 @@ export const actions: Action[] = [
 		name: "$action_missile",
 		description: "$actiondesc_missile",
 		sprite: "data/ui_gfx/gun_actions/missile.png",
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,5",
 		spawn_probability: "0.5,0.5,1,1",
 		price: 200,
@@ -1769,7 +1774,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/machinegun_bullet.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/machinegun_bullet.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_requires_flag: "card_unlocked_funky",
 		spawn_level: "6,10",
 		spawn_probability: "0.1,0.1",
@@ -1791,7 +1796,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/pebble.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/pebble_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/pebble_player.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,4,6",
 		spawn_probability: "1,1,1,1",
 		price: 200,
@@ -1809,7 +1814,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/dynamite.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tnt.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "1,1,1,1,1",
 		price: 160,
@@ -1829,7 +1834,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/glitter_bomb.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/glitter_bomb.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 200,
@@ -1849,7 +1854,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/buckshot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/buckshot_player.xml",3],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "1,1,1,1,1",
 		price: 160,
@@ -1869,7 +1874,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/freezing_gaze.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/freezing_gaze_beam.xml",12],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4",
 		spawn_probability: "1,1,1",
 		price: 180,
@@ -1899,7 +1904,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/glowing_bolt.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/glowing_bolt.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "3,4,5,10",
 		spawn_probability: "1,1,1,0.1",
 		price: 220,
@@ -1918,7 +1923,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spore_pod.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spore_pod_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/spore_pod.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 200,
@@ -1936,7 +1941,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/glue_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/glue_shot.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "0.6,0.2,0.2,0.6",
 		price: 140,
@@ -1955,7 +1960,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bomb_holy.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/bomb_holy.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6,10",
 		spawn_probability: "0.2,0.2,0.2,0.2,0.2,0.5",
 		price: 400,
@@ -1977,7 +1982,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bomb_holy_giga.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/bomb_holy_giga.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 600,
@@ -1999,7 +2004,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/propane_tank.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/propane_tank.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0,0,1,1,1,1,1",
 		price: 200,
@@ -2018,7 +2023,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bomb_cart.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/bomb_cart.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0,0,0.6,0.6,0.6,0.6,0.6",
 		price: 200,
@@ -2037,7 +2042,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/cursed_orb.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/orb_cursed.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3",
 		spawn_probability: "0.3,0.2,0.1",
 		price: 200,
@@ -2055,7 +2060,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/expanding_orb.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/orb_expanding.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,1.0,1.0,1.0",
 		price: 200,
@@ -2074,7 +2079,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/crumbling_earth.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/crumbling_earth.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 300,
@@ -2091,7 +2096,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/summon_rock.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/rock.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 160,
@@ -2109,7 +2114,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/summon_egg.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/items/pickup/egg_monster.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 220,
@@ -2130,7 +2135,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/summon_hollow_egg.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/items/pickup/egg_hollow.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 140,
@@ -2147,7 +2152,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tntbox.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tntbox.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 150,
@@ -2165,7 +2170,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tntbox_big.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tntbox_big.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 170,
@@ -2183,7 +2188,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/swarm_fly.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/swarm_fly.xml",5],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,4,5,6",
 		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 90,
@@ -2206,7 +2211,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/swarm_firebug.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/swarm_firebug.xml",4],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,4,5,6",
 		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 100,
@@ -2228,7 +2233,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/swarm_wasp.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/swarm_wasp.xml",6],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,4,5,6",
 		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 120,
@@ -2252,7 +2257,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/friend_fly.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/friend_fly.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "4,5,6",
 		spawn_probability: "0.2,0.5,0.5",
 		price: 160,
@@ -2272,7 +2277,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/acidshot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/acidshot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/acidshot.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "1,1,1,1",
 		price: 180,
@@ -2291,7 +2296,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/thunderball.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/thunderball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/thunderball.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,4,6,10",
 		spawn_probability: "1,1,1,0.2",
 		price: 300,
@@ -2311,7 +2316,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/firebomb.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/firebomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/firebomb.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3",
 		spawn_probability: "1,1,1",
 		price: 90,
@@ -2329,7 +2334,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/soil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/firebomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/chunk_of_soil.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,5",
 		spawn_probability: "1,1,1,1",
 		price: 10,
@@ -2346,7 +2351,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/death_cross.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/death_cross_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/death_cross.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "1,0.6,0.6,0.6,0.6,0.6",
 		price: 210,
@@ -2364,7 +2369,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/death_cross_big.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/death_cross_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/death_cross_big.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4,5,6,10",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.2",
 		price: 310,
@@ -2384,14 +2389,14 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/infestation.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rubber_ball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/infestation.xml",10],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.3,0.3",
 		price: 160,
 		mana: 40,
 		
 		action: (c: GunActionState) => {
-			for (let i = 1; i <= 6; i++) {
+			for (const i of luaFor(1, 6)) {
 				add_projectile("data/entities/projectiles/deck/infestation.xml")
 			}
 			
@@ -2406,7 +2411,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/wall_horizontal.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/wall_horizontal.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 160,
@@ -2424,7 +2429,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/wall_vertical.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/wall_vertical.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 160,
@@ -2442,7 +2447,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/wall_square.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/wall_square.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 160,
@@ -2460,7 +2465,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/temporary_wall.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/temporary_wall.xml"],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.1,0.1,0.3,0.4,0.2,0.1",
 		price: 100,
@@ -2478,7 +2483,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/temporary_platform.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/temporary_platform.xml"],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.1,0.1,0.3,0.4,0.2,0.1",
 		price: 90,
@@ -2496,7 +2501,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/purple_explosion_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/purple_explosion_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "1,1,1,1,1,1",
 		price: 160,
@@ -2521,7 +2526,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/delayed_spell.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/delayed_spell.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "1,1,1,1,1,1",
 		price: 240,
@@ -2538,7 +2543,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/long_distance_cast.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/long_distance_cast.xml"],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6,0.6",
 		price: 90,
@@ -2555,7 +2560,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/teleport_cast.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/teleport_cast.xml"],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6,0.6",
 		price: 190,
@@ -2573,7 +2578,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/super_teleport_cast.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/super_teleport_cast.xml"],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.2,0.2,0.2,0.6,0.6,0.6",
 		price: 160,
@@ -2592,7 +2597,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/mist_radioactive.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/mist_radioactive.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 80,
@@ -2610,7 +2615,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/mist_alcohol.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/mist_alcohol.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 80,
@@ -2628,7 +2633,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/mist_slime.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/mist_slime.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 80,
@@ -2646,7 +2651,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/mist_blood.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/mist_blood.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 120,
@@ -2664,7 +2669,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/circle_fire.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/circle_fire.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 170,
@@ -2682,7 +2687,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/circle_acid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/circle_acid.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 180,
@@ -2700,7 +2705,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/circle_oil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/circle_oil.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 160,
@@ -2718,7 +2723,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/circle_water.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/circle_water.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 160,
@@ -2737,7 +2742,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/material_water.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/material_water_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/material_water.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 110,
@@ -2757,7 +2762,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/material_oil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/material_oil_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/material_oil.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 140,
@@ -2778,7 +2783,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/material_blood.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/material_blood_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/material_blood.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 130,
@@ -2799,7 +2804,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/material_acid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/material_acid_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/material_acid.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 150,
@@ -2821,7 +2826,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/material_cement.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/material_cement_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/material_cement.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 100,
@@ -2844,7 +2849,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/teleport_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/teleport_projectile.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
 		price: 130,
@@ -2864,7 +2869,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/teleport_projectile_short.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/teleport_projectile_short.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
 		price: 130,
@@ -2883,7 +2888,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/teleport_projectile_static.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/teleport_projectile_static.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
 		price: 90,
@@ -2903,7 +2908,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/swapper_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/swapper.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.05,0.05,0.05,0.05,0.05,0.05",
 		price: 100,
@@ -2924,7 +2929,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/teleport_projectile_closer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/teleport_projectile_closer.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
 		price: 130,
@@ -2944,7 +2949,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/nuke.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/nuke_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/nuke.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,5,6,10",
 		spawn_probability: "0.3,1,1,0.2",
 		price: 400,
@@ -2982,7 +2987,7 @@ export const actions: Action[] = [
 		never_unlimited: true,
 		recursive: true,
 		ai_never_uses: true,
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 800,
@@ -3019,7 +3024,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fireworks.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/fireworks/firework_pink.xml"],
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "1,1,1,1,1,1",
 		price: 220,
@@ -3044,7 +3049,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/summon_wandghost.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/wand_ghost_player.xml"],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "2,4,5,6,10",
 		spawn_probability: "0.08,0.1,0.1,0.1,0.1",
 		price: 420,
@@ -3063,7 +3068,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/touch_gold.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/touch_gold.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
 		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.5",
 		price: 480,
@@ -3081,7 +3086,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/touch_water.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/touch_water.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
 		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 420,
@@ -3098,7 +3103,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/touch_oil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/touch_oil.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
 		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 380,
@@ -3115,7 +3120,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/touch_alcohol.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/touch_alcohol.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
 		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 360,
@@ -3132,7 +3137,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/touch_blood.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/touch_blood.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
 		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.5",
 		price: 390,
@@ -3149,7 +3154,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/touch_smoke.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/touch_smoke.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
 		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 350,
@@ -3167,7 +3172,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/destruction.xml"],
 		spawn_requires_flag: "card_unlocked_destruction",
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 600,
@@ -3187,7 +3192,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_burst_2",
 		sprite: "data/ui_gfx/gun_actions/burst_2.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/burst_2_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 140,
@@ -3203,7 +3208,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_burst_3",
 		sprite: "data/ui_gfx/gun_actions/burst_3.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/burst_3_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.7,0.7,0.7,0.7,0.7,0.7",
 		price: 160,
@@ -3219,7 +3224,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_burst_4",
 		sprite: "data/ui_gfx/gun_actions/burst_4.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/burst_4_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 180,
@@ -3236,7 +3241,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/burst_8.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/burst_4_unidentified.png",
 		spawn_requires_flag: "card_unlocked_musicbox",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,0.5",
 		price: 300,
@@ -3253,7 +3258,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/burst_x.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/burst_4_unidentified.png",
 		spawn_requires_flag: "card_unlocked_musicbox",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,0.5",
 		price: 500,
@@ -3272,7 +3277,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_scatter_2",
 		sprite: "data/ui_gfx/gun_actions/scatter_2.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/scatter_2_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "0,1,2",
 		spawn_probability: "0.8,0.8,0.8",
 		price: 100,
@@ -3289,7 +3294,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_scatter_3",
 		sprite: "data/ui_gfx/gun_actions/scatter_3.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/scatter_3_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "0,1,2,3",
 		spawn_probability: "0.7,0.7,0.7,0.8",
 		price: 120,
@@ -3306,7 +3311,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_scatter_4",
 		sprite: "data/ui_gfx/gun_actions/scatter_4.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/scatter_4_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.6,0.6,0.7,0.8,0.8,0.8",
 		price: 140,
@@ -3323,7 +3328,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_i_shape",
 		sprite: "data/ui_gfx/gun_actions/i_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 80,
@@ -3340,7 +3345,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_y_shape",
 		sprite: "data/ui_gfx/gun_actions/y_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/y_shape_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "0.8,0.4,0.4,0.4,0.4",
 		price: 100,
@@ -3357,7 +3362,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_t_shape",
 		sprite: "data/ui_gfx/gun_actions/t_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/t_shape_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 120,
@@ -3374,7 +3379,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_w_shape",
 		sprite: "data/ui_gfx/gun_actions/w_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.4,0.3,0.3,0.3,0.3",
 		price: 160,
@@ -3391,7 +3396,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_circle_shape",
 		sprite: "data/ui_gfx/gun_actions/circle_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/circle_shape_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.1,0.2,0.3,0.3,0.3,0.3",
 		price: 150,
@@ -3408,7 +3413,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_pentagram_shape",
 		sprite: "data/ui_gfx/gun_actions/pentagram_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/pentagram_shape_unidentified.png",
-		type: ACTION_TYPE_DRAW_MANY,
+		type: "multicast",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.3,0.2,0.1",
 		price: 150,
@@ -3427,7 +3432,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_spread_reduce",
 		sprite: "data/ui_gfx/gun_actions/spread_reduce.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 100,
@@ -3444,7 +3449,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_heavy_spread",
 		sprite: "data/ui_gfx/gun_actions/heavy_spread.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "0,1,2,4,5,6",
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 100,
@@ -3462,7 +3467,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_recharge",
 		sprite: "data/ui_gfx/gun_actions/recharge.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "1,1,1,1,1,1",
 		price: 200,
@@ -3480,7 +3485,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_lifetime",
 		sprite: "data/ui_gfx/gun_actions/lifetime.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5,6,10",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.1",
 		price: 250,
@@ -3499,7 +3504,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_lifetime_down",
 		sprite: "data/ui_gfx/gun_actions/lifetime_down.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5,6,10",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.1",
 		price: 90,
@@ -3520,7 +3525,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
 		related_extra_entities: [ "data/entities/misc/nolla.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4,5,6,10",
 		spawn_probability: "0.2,0.2,0.5,0.5,1",
 		price: 50,
@@ -3539,7 +3544,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/slow_but_steady.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_maths",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5,6,10",
 		spawn_probability: "0.1,0.2,0.3,0.4,0.4",
 		price: 50,
@@ -3557,7 +3562,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explosion_remove.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/explosion_remove.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4,5,6",
 		spawn_probability: "0.2,0.6,0.7,0.2",
 		price: 50,
@@ -3578,7 +3583,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explosion_tiny.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/explosion_tiny.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4,5,6",
 		spawn_probability: "0.2,0.6,0.7,0.2",
 		price: 160,
@@ -3599,7 +3604,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/laser_emitter_wider.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/burn_trail_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/laser_emitter_wider.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 40,
@@ -3617,7 +3622,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_mana_reduce",
 		sprite: "data/ui_gfx/gun_actions/mana.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "1,1,1,1,1,1",
 		price: 250,
@@ -3636,7 +3641,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/blood_magic.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/blood_sparks.xml" ],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.7,0.5",
 		price: 150,
@@ -3653,12 +3658,11 @@ export const actions: Action[] = [
 			let dcomps = EntityGetComponent( entity_id, "DamageModelComponent" )
 			
 			if (( dcomps != null ) && ( dcomps.length > 0 ))  {
-				dcomps.every((b: any, a: any) => {
+				for (const [a, b] of ipairs(dcomps, 'dcomps')) {
 					let hp = ComponentGetValue2( b, "hp" )
 					hp = Math.max( hp - 0.16, 0.04 )
 					ComponentSetValue2( b, "hp", hp )
-					return true;
-				})
+				}
 			}
 		},
 	},
@@ -3669,7 +3673,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/golden_punch.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/gold_sparks.xml" ],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "3,5,6,10",
 		spawn_probability: "0.2,0.8,0.1,0.5",
 		price: 200,
@@ -3703,7 +3707,7 @@ export const actions: Action[] = [
 						c.damage_projectile_add = c.damage_projectile_add + ( damage / 35 )
 					} else if ( damage < 500 )  {
 						c.damage_projectile_add = c.damage_projectile_add + ( damage / 45 )
-				} 	else {
+					} else {
 						c.damage_projectile_add = c.damage_projectile_add + ( damage / 55 )
 					}
 				}
@@ -3719,7 +3723,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/blood_punch.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/blood_sparks.xml" ],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "2,5,6,10",
 		spawn_probability: "0.2,0.8,0.1,0.5",
 		price: 150,
@@ -3756,7 +3760,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/duplicate.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_mestari",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
@@ -3765,13 +3769,12 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			let hand_count = hand.length
 			
-			hand.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(hand, 'hand')) {
 				let rec = check_recursion( v, recursion_level )
 				if (( v.id !== "DUPLICATE" ) && ( i < hand_count ) && ( rec > -1 ))  {
 					call_action(ActionSource.ACTION, v, c,  rec )
 				}
-				return true;
-			})
+			}
 			
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			setCurrentReloadTime(current_reload_time + 20)
@@ -3786,7 +3789,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/quantum_split.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/quantum_split.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,1",
 		price: 200,
@@ -3803,7 +3806,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_gravity",
 		sprite: "data/ui_gfx/gun_actions/gravity.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 50,
@@ -3820,7 +3823,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_gravity_anti",
 		sprite: "data/ui_gfx/gun_actions/gravity_anti.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 50,
@@ -3839,7 +3842,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sinewave.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/sinewave.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4,6",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 10,
@@ -3865,7 +3868,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/chaotic_arc.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/chaotic_arc.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,5",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 10,
@@ -3891,7 +3894,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/pingpong_path.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/pingpong_path.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,5",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 20,
@@ -3910,7 +3913,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/avoiding_arc.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/avoiding_arc.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4,6",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
@@ -3929,7 +3932,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/floating_arc.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/floating_arc.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,5",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
@@ -3948,7 +3951,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fly_downwards.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/fly_downwards.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,5",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
@@ -3967,7 +3970,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fly_upwards.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/fly_upwards.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4,6",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 20,
@@ -3986,7 +3989,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/horizontal_arc.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/horizontal_arc.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,5",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 20,
@@ -4006,7 +4009,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/line_arc.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/line_arc.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,5",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
@@ -4026,7 +4029,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/orbit_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/spiraling_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.2,0.3,0.4,0.1",
 		price: 30,
@@ -4047,7 +4050,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spiraling_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/orbit_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.2,0.3,0.4,0.1",
 		price: 30,
@@ -4068,7 +4071,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/phasing_arc.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/phasing_arc.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "0.2,0.3,0.6,0.1",
 		price: 170,
@@ -4095,7 +4098,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_bounce",
 		sprite: "data/ui_gfx/gun_actions/bounce.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bounce_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "1,1,0.4,0.2,0.2",
 		price: 50,
@@ -4112,7 +4115,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_remove_bounce",
 		sprite: "data/ui_gfx/gun_actions/remove_bounce.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bounce_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.2,0.2,1,1,1",
 		price: 50,
@@ -4131,7 +4134,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/homing.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing.xml", "data/entities/particles/tinyspark_white.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.1,0.4,0.4,0.4,0.4,0.4",
 		price: 220,
@@ -4149,7 +4152,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/homing_short.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing_short.xml", "data/entities/particles/tinyspark_white_weak.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.4,0.8,1,0.4,0.1,0.1",
 		price: 160,
@@ -4167,7 +4170,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/homing_rotate.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing_rotate.xml", "data/entities/particles/tinyspark_white.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 175,
@@ -4185,7 +4188,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/homing_shooter.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing_shooter.xml", "data/entities/particles/tinyspark_white.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.2,0.2,0.2,0.2,0.2",
 		price: 100,
@@ -4203,7 +4206,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/autoaim.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/autoaim_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/autoaim.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 150,
@@ -4220,7 +4223,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/homing_accelerating.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing_accelerating.xml", "data/entities/particles/tinyspark_white_small.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.1,0.3,0.3,0.5",
 		price: 180,
@@ -4238,7 +4241,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/homing_cursor.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing_cursor.xml", "data/entities/particles/tinyspark_white.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.7,0.7,0.4,0.4,1.0",
 		price: 175,
@@ -4256,7 +4259,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/homing_area.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing_area.xml", "data/entities/particles/tinyspark_white.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.2,0.4,0.6,0.7,0.4",
 		price: 175,
@@ -4285,7 +4288,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/piercing_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/piercing_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 190,
@@ -4305,7 +4308,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/clipping_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/clipping_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 200,
@@ -4325,7 +4328,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/damage.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_yellow.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 140,
@@ -4349,7 +4352,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
 		related_extra_entities: [ "data/entities/particles/tinyspark_yellow.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5",
 		spawn_probability: "0.6,0.6,0.6",
 		price: 200,
@@ -4377,7 +4380,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bloodlust.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5,6",
 		spawn_probability: "0.2,0.3,0.6,0.6,0.3",
 		price: 160,
@@ -4401,7 +4404,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/damage_forever.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.2,0.4,0.6,0.4,0.2",
 		price: 240,
@@ -4430,7 +4433,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_critical_hit",
 		sprite: "data/ui_gfx/gun_actions/critical_hit.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 140,
@@ -4449,7 +4452,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/area_damage.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/area_damage.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 140,
@@ -4467,7 +4470,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/spells_to_power.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/spells_to_power.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6,10",
 		spawn_probability: "0.5,0.5,0.5,0.5,0.5,0.1",
 		price: 140,
@@ -4486,7 +4489,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/essence_to_power.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/essence_to_power.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,10",
 		spawn_probability: "0.2,0.5,0.5,0.1",
 		price: 120,
@@ -4506,7 +4509,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/heavy_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/heavy_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 150,
@@ -4537,7 +4540,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/light_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/light_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.4,0.4,0.4",
 		price: 60,
@@ -4572,7 +4575,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_knockback",
 		sprite: "data/ui_gfx/gun_actions/knockback.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/knockback_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,5",
 		spawn_probability: "0.6,0.6",
 		price: 100,
@@ -4589,7 +4592,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_recoil",
 		sprite: "data/ui_gfx/gun_actions/recoil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/recoil_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4",
 		spawn_probability: "0.6,0.6",
 		price: 100,
@@ -4606,7 +4609,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_recoil_damper",
 		sprite: "data/ui_gfx/gun_actions/recoil_damper.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/recoil_damper_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,6",
 		spawn_probability: "0.6,0.6",
 		price: 100,
@@ -4623,7 +4626,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_speed",
 		sprite: "data/ui_gfx/gun_actions/speed.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/speed_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3",
 		spawn_probability: "1,0.5,0.5",
 		price: 100,
@@ -4649,7 +4652,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/accelerating_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/accelerating_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.5,0.5,1",
 		price: 190,
@@ -4678,7 +4681,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/decelerating_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/decelerating_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.5",
 		price: 80,
@@ -4707,7 +4710,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_explosive_projectile",
 		sprite: "data/ui_gfx/gun_actions/explosive_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "1,1,1",
 		price: 120,
@@ -4737,7 +4740,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/water_to_poison.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/water_to_poison.xml", "data/entities/particles/tinyspark_purple.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 80,
@@ -4756,7 +4759,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/blood_to_acid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/blood_to_acid.xml", "data/entities/particles/tinyspark_red.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 80,
@@ -4775,7 +4778,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/lava_to_blood.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/lava_to_blood.xml", "data/entities/particles/tinyspark_orange.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 80,
@@ -4794,7 +4797,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/liquid_to_explosion.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/liquid_to_explosion.xml", "data/entities/particles/tinyspark_red.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 120,
@@ -4813,7 +4816,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/toxic_to_acid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/toxic_to_acid.xml", "data/entities/particles/tinyspark_green.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 120,
@@ -4832,7 +4835,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/static_to_sand.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/static_to_sand.xml", "data/entities/particles/tinyspark_yellow.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 140,
@@ -4851,7 +4854,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/transmutation.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/transmutation.xml", "data/entities/particles/tinyspark_purple_bright.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6,10",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3,0.2",
 		price: 180,
@@ -4870,7 +4873,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/random_explosion.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/random_explosion.xml", "data/entities/particles/tinyspark_purple_bright.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,5,6",
 		spawn_probability: "0.3,0.6,1",
 		price: 240,
@@ -4889,7 +4892,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_necromancy",
 		sprite: "data/ui_gfx/gun_actions/necromancy.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "0.6,0.6,0.6,0.6",
 		price: 80,
@@ -4907,7 +4910,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_light",
 		sprite: "data/ui_gfx/gun_actions/light.png",
 		related_extra_entities: [ "data/entities/misc/light.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "1,0.8,0.6,0.4,0.2",
 		price: 20,
@@ -4924,7 +4927,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explosion.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosion_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/explosion.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,2,4,5",
 		spawn_probability: "0.5,1,1,1",
 		price: 160,
@@ -4945,7 +4948,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explosion_light.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosion_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/explosion_light.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,5,6",
 		spawn_probability: "0.5,1,1,1",
 		price: 160,
@@ -4966,7 +4969,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fire_blast.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/fire_blast_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/fireblast.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,3,5",
 		spawn_probability: "0.5,0.5,0.6,0.6",
 		price: 120,
@@ -4987,7 +4990,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/poison_blast.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/poison_blast_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/poison_blast.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,2,4,6",
 		spawn_probability: "0.5,0.6,0.6,0.5",
 		price: 140,
@@ -5008,7 +5011,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/alcohol_blast.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/poison_blast_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/alcohol_blast.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,2,4,6",
 		spawn_probability: "0.5,0.6,0.6,0.5",
 		price: 140,
@@ -5029,7 +5032,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/thunder_blast.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/thunder_blast_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/thunder_blast.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,3,5,6,10",
 		spawn_probability: "0.5,0.6,0.6,0.5,0.1",
 		price: 180,
@@ -5052,7 +5055,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/berserk_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/berserk_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/berserk_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.6,0.3",
 		price: 200,
@@ -5070,7 +5073,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/polymorph_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/polymorph_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.8,0.8,0.3,0.3",
 		price: 200,
@@ -5088,7 +5091,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/chaos_polymorph_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/chaos_polymorph_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.3,0.3,0.5,0.6,0.3,0.3",
 		price: 200,
@@ -5106,7 +5109,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/electrocution_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electrocution_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/electrocution_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,3,5,6",
 		spawn_probability: "0.3,0.6,0.8,0.3",
 		price: 200,
@@ -5124,7 +5127,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/freeze_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/freeze_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,2,4,5",
 		spawn_probability: "0.3,0.6,0.7,0.3",
 		price: 200,
@@ -5142,7 +5145,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/regeneration_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/regeneration_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/regeneration_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 250,
@@ -5161,7 +5164,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/teleportation_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleportation_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/teleportation_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.3,0.6,0.3,0.3,0.6,0.3",
 		price: 150,
@@ -5179,7 +5182,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/levitation_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/levitation_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/levitation_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.3,0.6,0.6,0.3",
 		price: 120,
@@ -5198,7 +5201,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/shield_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/shield_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/shield_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 160,
@@ -5216,7 +5219,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/projectile_transmutation_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/projectile_transmutation_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 250,
@@ -5234,7 +5237,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/projectile_thunder_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/projectile_thunder_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "3,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 300,
@@ -5252,7 +5255,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/projectile_gravity_field.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/projectile_gravity_field.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,5,6",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 250,
@@ -5270,7 +5273,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/vacuum_powder.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/vacuum_powder.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,5,6",
 		spawn_probability: "0.3,1,0.3,0.3",
 		price: 150,
@@ -5288,7 +5291,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/vacuum_liquid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/vacuum_liquid.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,5,6",
 		spawn_probability: "0.3,1,0.3,0.3",
 		price: 150,
@@ -5306,7 +5309,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/vacuum_entities.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/vacuum_liquid.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "2,3,5,6",
 		spawn_probability: "0.3,1,0.3,0.3",
 		price: 200,
@@ -5325,7 +5328,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sea_lava.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sea_lava_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/sea_lava.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "0,4,5,6",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 350,
@@ -5343,7 +5346,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sea_alcohol.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sea_lava_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/sea_alcohol.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "0,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 350,
@@ -5361,7 +5364,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sea_oil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sea_oil_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/sea_oil.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "0,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 350,
@@ -5379,7 +5382,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sea_water.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sea_water_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/sea_water.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "0,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 350,
@@ -5397,7 +5400,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sea_acid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sea_acid_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/sea_acid.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "0,4,5,6",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 350,
@@ -5415,7 +5418,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sea_acid_gas.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sea_acid_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/sea_acid_gas.xml"],
-		type: ACTION_TYPE_MATERIAL,
+		type: "material",
 		spawn_level: "0,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 200,
@@ -5433,7 +5436,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/cloud_water.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/cloud_water.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 140,
@@ -5451,7 +5454,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/cloud_oil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/cloud_oil.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 100,
@@ -5469,7 +5472,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/cloud_blood.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/cloud_blood.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3,0.3",
 		price: 200,
@@ -5487,7 +5490,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/cloud_acid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/cloud_acid.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2,0.2,0.2",
 		price: 180,
@@ -5506,7 +5509,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_cloud_thunder",
 		sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/cloud_thunder.xml"],
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3,0.3",
 		price: 190,
@@ -5524,7 +5527,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/electric_charge.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/electricity.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,4,5",
 		spawn_probability: "1,1,1,1",
 		price: 150,
@@ -5545,7 +5548,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/matter_eater.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/matter_eater.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,4,5,10",
 		spawn_probability: "0.1,1,0.1,0.1,0.2",
 		price: 280,
@@ -5564,7 +5567,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/freeze.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/freeze_charge.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "1,1,1,1",
 		price: 140,
@@ -5585,7 +5588,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/burning_critical.png",
 		sprite_unidentified: "data/entities/misc/hitfx_burning_critical_hit.xml",
 		related_extra_entities: [ "data/entities/particles/freeze_charge.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
@@ -5603,7 +5606,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/critical_water.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_critical_water.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
@@ -5621,7 +5624,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/critical_oil.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_critical_oil.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
@@ -5639,7 +5642,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/critical_blood.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_critical_blood.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
@@ -5657,7 +5660,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/charm_on_toxic.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_toxic_charm.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 150,
@@ -5675,7 +5678,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explode_on_slime.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_slime.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 140,
@@ -5693,7 +5696,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explode_on_slime_giga.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_slime_giga.xml", "data/entities/particles/tinyspark_purple.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.1,0.1,0.1,0.1",
 		price: 300,
@@ -5711,7 +5714,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explode_on_alcohol.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_alcohol.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 140,
@@ -5729,7 +5732,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/explode_on_alcohol_giga.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_alcohol_giga.xml", "data/entities/particles/tinyspark_orange.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,3,4,5",
 		spawn_probability: "0.1,0.1,0.1,0.1",
 		price: 300,
@@ -5746,7 +5749,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_petrify_a",
 		sprite: "data/ui_gfx/gun_actions/petrify.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,5,6",
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 140,
@@ -5764,7 +5767,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/rocket_downwards.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/rocket_downwards.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.2,1,1,1",
 		price: 200,
@@ -5782,7 +5785,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/rocket_octagon.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/rocket_octagon.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.5,0.5,0.5",
 		price: 200,
@@ -5800,7 +5803,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fizzle.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/fizzle.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5",
 		spawn_probability: "0.1,0.1,0.1",
 		price: 0,
@@ -5827,7 +5830,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bounce_explosion.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/bounce_explosion.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "0.2,0.6,0.8,0.8",
 		price: 180,
@@ -5848,7 +5851,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bounce_spark.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/bounce_spark.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.2,0.6,0.6,0.6",
 		price: 120,
@@ -5869,7 +5872,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bounce_laser.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/bounce_laser.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5",
 		spawn_probability: "0.4,0.8,0.4",
 		price: 180,
@@ -5890,7 +5893,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bounce_laser_emitter.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/bounce_laser_emitter.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5",
 		spawn_probability: "0.4,0.8,0.4",
 		price: 180,
@@ -5911,7 +5914,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/bounce_larpa.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/bounce_larpa.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "4,5,6",
 		spawn_probability: "0.4,0.6,0.4",
 		price: 250,
@@ -5932,7 +5935,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fireball_ray.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/fireball_ray.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,4,5",
 		spawn_probability: "0.6,0.6,0.4,0.4",
 		price: 150,
@@ -5950,7 +5953,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/lightning_ray.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/lightning_ray.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 180,
@@ -5969,7 +5972,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tentacle_ray.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/tentacle_ray.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
@@ -5987,7 +5990,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/laser_emitter_ray.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/laser_emitter_ray.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
@@ -6005,7 +6008,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fireball_ray_line.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/fireball_ray_line.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.6,0.4,0.4,0.4,1",
 		price: 120,
@@ -6023,7 +6026,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/fireball_ray_enemy.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_fireball_ray_enemy.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,4,5",
 		spawn_probability: "0.6,0.6,0.4,0.4",
 		price: 100,
@@ -6041,7 +6044,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/lightning_ray_enemy.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_lightning_ray_enemy.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
@@ -6060,7 +6063,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tentacle_ray_enemy.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_tentacle_ray_enemy.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
@@ -6078,7 +6081,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/gravity_field_enemy.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_gravity_field_enemy.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,4,5",
 		spawn_probability: "0.6,0.6,0.4,0.4",
 		price: 250,
@@ -6096,7 +6099,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/curse.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,5",
 		spawn_probability: "0.6,0.8,0.4",
 		price: 140,
@@ -6113,7 +6116,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/curse_wither_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_projectile.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5,6",
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
@@ -6130,7 +6133,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/curse_wither_explosion.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_explosion.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5",
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
@@ -6147,7 +6150,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/curse_wither_melee.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_melee.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,5,6",
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
@@ -6164,7 +6167,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/curse_wither_electricity.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_electricity.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,4,5,6",
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
@@ -6182,7 +6185,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/orbit_discs.xml" ],
 		spawn_requires_flag: "card_unlocked_dragon",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,4,5",
 		spawn_probability: "0.2,0.8,0.4,0.2",
 		price: 200,
@@ -6200,7 +6203,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/orbit_fireballs.xml" ],
 		spawn_requires_flag: "card_unlocked_dragon",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "0,1,2,4,5",
 		spawn_probability: "0.5,0.2,0.8,0.4,0.2",
 		price: 140,
@@ -6218,7 +6221,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/orbit_nukes.xml" ],
 		spawn_requires_flag: "card_unlocked_dragon",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		ai_never_uses: true,
 		spawn_level: "2,4,5,6,10",
 		spawn_probability: "0.1,0.1,0.1,0.2,1",
@@ -6238,7 +6241,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/orbit_lasers.xml" ],
 		spawn_requires_flag: "card_unlocked_dragon",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,4,5,10",
 		spawn_probability: "0.2,0.8,0.4,0.2,0.2",
 		price: 200,
@@ -6256,7 +6259,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/orbit_larpa.xml" ],
 		spawn_requires_flag: "card_unlocked_dragon",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,4,6,10",
 		spawn_probability: "0.2,0.2,0.8,0.1",
 		price: 240,
@@ -6273,7 +6276,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/chain_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/chain_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,4,5",
 		spawn_probability: "0.4,0.6,0.8",
 		price: 240,
@@ -6301,7 +6304,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/arc_electric.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/arc_electric_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/arc_electric.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.8",
 		price: 170,
@@ -6320,7 +6323,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/arc_fire.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/arc_fire.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 160,
@@ -6339,7 +6342,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/arc_gunpowder.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/arc_gunpowder.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 160,
@@ -6358,7 +6361,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/arc_poison.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/arc_poison.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 160,
@@ -6377,7 +6380,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/crumbling_earth_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/crumbling_earth_projectile.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 200,
@@ -6397,7 +6400,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/x_ray.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/x_ray_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/xray.xml"],
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "0,1,2,3,4,5,6",
 		spawn_probability: "0.8,1,1,0.8,0.6,0.4,0.2",
 		price: 230,
@@ -6415,7 +6418,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_unstable_gunpowder",
 		sprite: "data/ui_gfx/gun_actions/unstable_gunpowder.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/unstable_gunpowder_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 140,
@@ -6435,7 +6438,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_acid_trail",
 		sprite: "data/ui_gfx/gun_actions/acid_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/acid_trail_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 160,
@@ -6454,7 +6457,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_poison_trail",
 		sprite: "data/ui_gfx/gun_actions/poison_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/poison_trail_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 160,
@@ -6474,7 +6477,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_oil_trail",
 		sprite: "data/ui_gfx/gun_actions/oil_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 160,
@@ -6494,7 +6497,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_water_trail",
 		sprite: "data/ui_gfx/gun_actions/water_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4",
 		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 160,
@@ -6520,7 +6523,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_gunpowder_trail",
 		sprite: "data/ui_gfx/gun_actions/gunpowder_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 160,
@@ -6539,7 +6542,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_fire_trail",
 		sprite: "data/ui_gfx/gun_actions/fire_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/fire_trail_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "0,1,2,3,4",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 130,
@@ -6560,7 +6563,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/burn_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/burn_trail_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/burn.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "0,1,2",
 		spawn_probability: "0.3,0.3,0.3",
 		price: 100,
@@ -6579,7 +6582,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_torch",
 		sprite: "data/ui_gfx/gun_actions/torch.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
-		type: ACTION_TYPE_PASSIVE,
+		type: "passive",
 		spawn_level: "0,1,2",
 		spawn_probability: "1,1,1",
 		price: 100,
@@ -6596,7 +6599,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_torch_electric",
 		sprite: "data/ui_gfx/gun_actions/torch_electric.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
-		type: ACTION_TYPE_PASSIVE,
+		type: "passive",
 		spawn_level: "0,1,2",
 		spawn_probability: "1,1,1",
 		price: 150,
@@ -6613,7 +6616,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_energy_shield",
 		sprite: "data/ui_gfx/gun_actions/energy_shield.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_unidentified.png",
-		type: ACTION_TYPE_PASSIVE,
+		type: "passive",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.05,0.6,0.6,0.6,0.6,0.6",
 		price: 220,
@@ -6629,7 +6632,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_energy_shield_sector",
 		sprite: "data/ui_gfx/gun_actions/energy_shield_sector.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_sector_unidentified.png",
-		type: ACTION_TYPE_PASSIVE,
+		type: "passive",
 		spawn_level: "0,1,2,3,4,5",
 		spawn_probability: "0.05,0.6,0.6,0.6,0.6,0.6",
 		price: 160,
@@ -6646,7 +6649,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/energy_shield_shot.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_shot_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/energy_shield_shot.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,6",
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 180,
@@ -6670,7 +6673,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_tiny_ghost",
 		sprite: "data/ui_gfx/gun_actions/tiny_ghost.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
-		type: ACTION_TYPE_PASSIVE,
+		type: "passive",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.1,0.5,1,1,1,1",
 		price: 160,
@@ -6693,7 +6696,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_a.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_a.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6710,7 +6713,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_b.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_b.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6727,7 +6730,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_c.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_c.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6744,7 +6747,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_d.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_d.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6761,7 +6764,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_e.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_e.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6778,7 +6781,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_f.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_f.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6795,7 +6798,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_gsharp.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_gsharp.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6812,7 +6815,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_ocarina",
 		sprite: "data/ui_gfx/gun_actions/ocarina_a2.png",
 		related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_a2.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6829,7 +6832,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_kantele",
 		sprite: "data/ui_gfx/gun_actions/kantele_a.png",
 		related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_a.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6846,7 +6849,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_kantele",
 		sprite: "data/ui_gfx/gun_actions/kantele_d.png",
 		related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_d.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6863,7 +6866,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_kantele",
 		sprite: "data/ui_gfx/gun_actions/kantele_dis.png",
 		related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_dis.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6880,7 +6883,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_kantele",
 		sprite: "data/ui_gfx/gun_actions/kantele_e.png",
 		related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_e.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6897,7 +6900,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_kantele",
 		sprite: "data/ui_gfx/gun_actions/kantele_g.png",
 		related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_g.xml"],
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 10,
@@ -6914,7 +6917,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/random_spell.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "3,4,5,6,10",
 		spawn_probability: "0.2,0.3,0.1,0.1,0.5",
@@ -6946,7 +6949,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/random_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
-		type: ACTION_TYPE_PROJECTILE,
+		type: "projectile",
 		recursive: true,
 		spawn_level: "2,4,5,6,10",
 		spawn_probability: "0.2,0.4,0.1,0.1,0.5",
@@ -6960,7 +6963,7 @@ export const actions: Action[] = [
 			let safety = 0
 			let rec = check_recursion( data, recursion_level )
 			
-			while (( safety < 100 ) && ( ( data.type !== 0 ) || ( rec === -1 ) )) {
+			while (( safety < 100 ) && ( ( data.type !== "projectile" ) || ( rec === -1 ) )) {
 				rnd = Random( 1, actions.length )
 				data = actions[rnd - 1]
 				rec = check_recursion( data, recursion_level )
@@ -6978,7 +6981,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/random_modifier.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		recursive: true,
 		spawn_level: "4,5,6,10",
 		spawn_probability: "0.3,0.1,0.1,0.5",
@@ -6992,7 +6995,7 @@ export const actions: Action[] = [
 			let safety = 0
 			let rec = check_recursion( data, recursion_level )
 			
-			while (( safety < 100 ) && ( ( data.type !== 2 ) || ( rec === -1 ) )) {
+			while (( safety < 100 ) && ( ( data.type !== "modifier" ) || ( rec === -1 ) )) {
 				rnd = Random( 1, actions.length )
 				data = actions[rnd - 1]
 				rec = check_recursion( data, recursion_level )
@@ -7010,7 +7013,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/random_static_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		recursive: true,
 		spawn_level: "3,5,6,10",
 		spawn_probability: "0.2,0.1,0.1,0.5",
@@ -7024,7 +7027,7 @@ export const actions: Action[] = [
 			let safety = 0
 			let rec = check_recursion( data, recursion_level )
 			
-			while (( safety < 100 ) && ( ( data.type !== 1 ) || ( rec === -1 ) )) {
+			while (( safety < 100 ) && ( ( data.type !== "static" ) || ( rec === -1 ) )) {
 				rnd = Random( 1, actions.length )
 				data = actions[rnd - 1]
 				rec = check_recursion( data, recursion_level )
@@ -7042,7 +7045,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/draw_random.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "2,3,4,5,6,10",
 		spawn_probability: "0.3,0.2,0.2,0.1,0.1,1",
@@ -7057,7 +7060,7 @@ export const actions: Action[] = [
 				
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
-		} 	else {
+			} else {
 				data = discarded[rnd - deck.length - 1]
 			}
 			
@@ -7070,7 +7073,7 @@ export const actions: Action[] = [
 				
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
-			} 	else {
+				} else {
 					data = discarded[rnd - deck.length - 1]
 				}
 				
@@ -7098,7 +7101,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/draw_random_x3.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "3,4,5,6,10",
 		spawn_probability: "0.1,0.3,0.1,0.1,1",
@@ -7113,7 +7116,7 @@ export const actions: Action[] = [
 				
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
-		} 	else {
+			} else {
 				data = discarded[rnd - deck.length - 1]
 			}
 			
@@ -7126,7 +7129,7 @@ export const actions: Action[] = [
 				
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
-			} 	else {
+				} else {
 					data = discarded[rnd - deck.length - 1]
 				}
 				
@@ -7134,7 +7137,7 @@ export const actions: Action[] = [
 			}
 			
 			if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
-				for (let i = 1; i <= 3; i++) {
+				for (const i of luaFor(1, 3)) {
 					call_action(ActionSource.ACTION, data, c,  rec )
 				}
 				
@@ -7156,7 +7159,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/draw_3_random.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_pyramid",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "2,3,5,6,10",
 		spawn_probability: "0.1,0.2,0.1,0.1,1",
@@ -7166,14 +7169,14 @@ export const actions: Action[] = [
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			
-			for (let i = 1; i <= 3; i++) {
+			for (const i of luaFor(1, 3)) {
 				let rnd = Random( 1, datasize )
 				
 				let data: Action | null = null
 				
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
-			} 	else {
+				} else {
 					data = discarded[rnd - deck.length - 1]
 				}
 				
@@ -7186,7 +7189,7 @@ export const actions: Action[] = [
 					
 					if ( rnd <= deck.length )  {
 						data = deck[rnd - 1]
-				} 	else {
+					} else {
 						data = discarded[rnd - deck.length - 1]
 					}
 					
@@ -7216,7 +7219,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		spawn_requires_flag: "card_unlocked_alchemy",
 		never_unlimited: true,
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "6,10",
 		spawn_probability: "0.1,1",
 		price: 600,
@@ -7236,7 +7239,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/all_discs.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		spawn_requires_flag: "card_unlocked_alchemy",
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "0,6,10",
 		spawn_probability: "0.1,0.05,1",
 		price: 400,
@@ -7256,7 +7259,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		spawn_requires_flag: "card_unlocked_alchemy",
 		never_unlimited: true,
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "1,6,10",
 		spawn_probability: "0.1,0.05,1",
 		price: 400,
@@ -7276,7 +7279,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		spawn_requires_flag: "card_unlocked_alchemy",
 		never_unlimited: true,
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "2,6,10",
 		spawn_probability: "0.1,0.05,1",
 		price: 350,
@@ -7296,7 +7299,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		spawn_requires_flag: "card_unlocked_alchemy",
 		never_unlimited: true,
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "3,6,10",
 		spawn_probability: "0.1,0.05,1",
 		price: 500,
@@ -7315,7 +7318,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/all_acid.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
 		spawn_requires_flag: "card_unlocked_alchemy",
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		spawn_level: "4,6,10",
 		spawn_probability: "0.1,0.05,1",
 		price: 600,
@@ -7336,7 +7339,7 @@ export const actions: Action[] = [
 		spawn_requires_flag: "card_unlocked_everything",
 		spawn_manual_unlock: true,
 		never_unlimited: true,
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		ai_never_uses: true,
 		spawn_level: "10",
@@ -7346,11 +7349,10 @@ export const actions: Action[] = [
 		max_uses: 1,
 		action: (c: GunActionState) => {
 			let players = EntityGetWithTag( "player_unit" )
-			players.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(players, 'players')) {
 				let [x, y] = EntityGetTransform( v )
 				let eid = EntityLoad("data/entities/projectiles/deck/all_spells_loader.xml", x, y)
-				return true;
-			})
+			}
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 100)
 		},
@@ -7361,7 +7363,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_summon_portal",
 		sprite: "data/ui_gfx/gun_actions/summon_portal.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "0",
 		price: 100,
@@ -7380,7 +7382,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		spawn_requires_flag: "card_unlocked_mestari",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "3,4,5,10",
 		spawn_probability: "0.3,0.6,0.6,1",
 		price: 100,
@@ -7393,14 +7395,14 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
 			if ( data != null )  {
-				while (( deck.length >= how_many ) && ( ( data.type === ACTION_TYPE_MODIFIER ) || ( data.type === ACTION_TYPE_PASSIVE ) || ( data.type === ACTION_TYPE_OTHER ) || ( data.type === ACTION_TYPE_DRAW_MANY ) )) {
+				while (( deck.length >= how_many ) && ( ( data.type === "modifier" ) || ( data.type === "passive" ) || ( data.type === "other" ) || ( data.type === "multicast" ) )) {
 					if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
-						if ( data.type === ACTION_TYPE_MODIFIER )  {
+						if ( data.type === "modifier" )  {
 							setDontDrawActions(true)
 							call_action(ActionSource.ACTION, data, c, )
 							setDontDrawActions(false)
@@ -7414,7 +7416,7 @@ export const actions: Action[] = [
 					let target = data.related_projectiles[0]
 					let count = data.related_projectiles[1] || 1
 					
-					for (let i = 1; i <= how_many; i++) {
+					for (const i of luaFor(1, how_many)) {
 						data = deck[1 - 1]
 						discarded.push(data)
 						deck.splice(1 - 1, 1)
@@ -7422,13 +7424,12 @@ export const actions: Action[] = [
 					
 					let valid = false
 					
-					for (let i = 1; i <= deck.length; i++) {
+					for (const i of luaFor(1, deck.length)) {
 						let check = deck[i - 1]
 						
-						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
+						if (( check != null ) && ( ( check.type === "projectile" ) || ( check.type === "static" ) || ( check.type === "material" ) || ( check.type === "utility" ) ))  {
 							valid = true
-							// return false; TODO fix this in generate script
-							break;
+							break
 						}
 					}
 					
@@ -7442,10 +7443,10 @@ export const actions: Action[] = [
 					}
 					
 					if (valid ) {
-						for (let i = 1; i <= count; i++) {
+						for (const i of luaFor(1, count)) {
 							add_projectile_trigger_hit_world(target, 1)
 						}
-				} 	else {
+					} else {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c, )
 						setDontDrawActions(false)
@@ -7461,7 +7462,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/timer.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		spawn_requires_flag: "card_unlocked_mestari",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "3,4,5,10",
 		spawn_probability: "0.3,0.6,0.6,1",
 		price: 150,
@@ -7474,14 +7475,14 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
 			if ( data != null )  {
-				while (( deck.length >= how_many ) && ( ( data.type === ACTION_TYPE_MODIFIER ) || ( data.type === ACTION_TYPE_PASSIVE ) || ( data.type === ACTION_TYPE_OTHER ) || ( data.type === ACTION_TYPE_DRAW_MANY ) )) {
+				while (( deck.length >= how_many ) && ( ( data.type === "modifier" ) || ( data.type === "passive" ) || ( data.type === "other" ) || ( data.type === "multicast" ) )) {
 					if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
-						if ( data.type === ACTION_TYPE_MODIFIER )  {
+						if ( data.type === "modifier" )  {
 							setDontDrawActions(true)
 							call_action(ActionSource.ACTION, data, c, )
 							setDontDrawActions(false)
@@ -7495,7 +7496,7 @@ export const actions: Action[] = [
 					let target = data.related_projectiles[0]
 					let count = data.related_projectiles[1] || 1
 					
-					for (let i = 1; i <= how_many; i++) {
+					for (const i of luaFor(1, how_many)) {
 						data = deck[1 - 1]
 						discarded.push(data)
 						deck.splice(1 - 1, 1)
@@ -7503,13 +7504,12 @@ export const actions: Action[] = [
 					
 					let valid = false
 					
-					for (let i = 1; i <= deck.length; i++) {
+					for (const i of luaFor(1, deck.length)) {
 						let check = deck[i - 1]
 						
-						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
+						if (( check != null ) && ( ( check.type === "projectile" ) || ( check.type === "static" ) || ( check.type === "material" ) || ( check.type === "utility" ) ))  {
 							valid = true
-							// return false; TODO fix this in generate script
-							break;
+							break
 						}
 					}
 					
@@ -7523,10 +7523,10 @@ export const actions: Action[] = [
 					}
 					
 					if (valid ) {
-						for (let i = 1; i <= count; i++) {
+						for (const i of luaFor(1, count)) {
 							add_projectile_trigger_timer(target, 20, 1)
 						}
-				} 	else {
+					} else {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c, )
 						setDontDrawActions(false)
@@ -7542,7 +7542,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/death_trigger.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		spawn_requires_flag: "card_unlocked_mestari",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "3,4,5,10",
 		spawn_probability: "0.3,0.6,0.6,1",
 		price: 150,
@@ -7555,14 +7555,14 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
 			if ( data != null )  {
-				while (( deck.length >= how_many ) && ( ( data.type === ACTION_TYPE_MODIFIER ) || ( data.type === ACTION_TYPE_PASSIVE ) || ( data.type === ACTION_TYPE_OTHER ) || ( data.type === ACTION_TYPE_DRAW_MANY ) )) {
+				while (( deck.length >= how_many ) && ( ( data.type === "modifier" ) || ( data.type === "passive" ) || ( data.type === "other" ) || ( data.type === "multicast" ) )) {
 					if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
-						if ( data.type === ACTION_TYPE_MODIFIER )  {
+						if ( data.type === "modifier" )  {
 							setDontDrawActions(true)
 							call_action(ActionSource.ACTION, data, c, )
 							setDontDrawActions(false)
@@ -7576,7 +7576,7 @@ export const actions: Action[] = [
 					let target = data.related_projectiles[0]
 					let count = data.related_projectiles[1] || 1
 					
-					for (let i = 1; i <= how_many; i++) {
+					for (const i of luaFor(1, how_many)) {
 						data = deck[1 - 1]
 						discarded.push(data)
 						deck.splice(1 - 1, 1)
@@ -7584,13 +7584,12 @@ export const actions: Action[] = [
 					
 					let valid = false
 					
-					for (let i = 1; i <= deck.length; i++) {
+					for (const i of luaFor(1, deck.length)) {
 						let check = deck[i - 1]
 						
-						if (( check != null ) && ( ( check.type === ACTION_TYPE_PROJECTILE ) || ( check.type === ACTION_TYPE_STATIC_PROJECTILE ) || ( check.type === ACTION_TYPE_MATERIAL ) || ( check.type === ACTION_TYPE_UTILITY ) ))  {
+						if (( check != null ) && ( ( check.type === "projectile" ) || ( check.type === "static" ) || ( check.type === "material" ) || ( check.type === "utility" ) ))  {
 							valid = true
-							// return false; TODO fix this in generate script
-							break;
+							break
 						}
 					}
 					
@@ -7604,10 +7603,10 @@ export const actions: Action[] = [
 					}
 					
 					if (valid ) {
-						for (let i = 1; i <= count; i++) {
+						for (const i of luaFor(1, count)) {
 							add_projectile_trigger_death(target, 1)
 						}
-				} 	else {
+					} else {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c, )
 						setDontDrawActions(false)
@@ -7623,7 +7622,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/larpa_chaos.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/larpa_chaos.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,10",
 		spawn_probability: "0.1,0.2,0.3,0.4,0.2",
 		price: 260,
@@ -7642,7 +7641,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/larpa_downwards.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/larpa_downwards.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,10",
 		spawn_probability: "0.1,0.3,0.2,0.2,0.2",
 		price: 290,
@@ -7661,7 +7660,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/larpa_upwards.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/larpa_upwards.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,10",
 		spawn_probability: "0.1,0.1,0.2,0.4,0.2",
 		price: 290,
@@ -7681,7 +7680,7 @@ export const actions: Action[] = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		spawn_requires_flag: "card_unlocked_alchemy",
 		related_extra_entities: [ "data/entities/misc/larpa_chaos_2.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "3,5,10",
 		spawn_probability: "0.1,0.4,0.1",
 		price: 300,
@@ -7700,7 +7699,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/larpa_death.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/larpa_death.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4,5,10",
 		spawn_probability: "0.1,0.1,0.3,0.2,0.2",
 		price: 150,
@@ -7719,7 +7718,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/alpha.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
@@ -7736,7 +7735,7 @@ export const actions: Action[] = [
 				data = hand[1 - 1]
 			} else if ( deck.length > 0 )  {
 				data = deck[1 - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -7756,7 +7755,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/gamma.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
@@ -7771,7 +7770,7 @@ export const actions: Action[] = [
 				data = deck[deck.length - 1]
 			} else if ( hand.length > 0 )  {
 				data = hand[hand.length - 1]
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -7791,7 +7790,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/tau.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
@@ -7809,14 +7808,14 @@ export const actions: Action[] = [
 			if ( deck.length > 0 )  {
 				s1 = "deck"
 				data1 = deck[1 - 1]
-		} 	else {
+			} else {
 				data1 = null
 			}
 			
 			if ( deck.length > 0 )  {
 				s2 = "deck 2"
 				data2 = deck[2 - 1]
-		} 	else {
+			} else {
 				data2 = null
 			}
 			
@@ -7843,7 +7842,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/omega.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
@@ -7853,39 +7852,36 @@ export const actions: Action[] = [
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded, 'discarded')) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand, 'hand')) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( ( data.recursive == null ) || ( data.recursive === false ) ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck, 'deck')) {
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 		},
 	},
@@ -7896,7 +7892,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/mu.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
@@ -7910,39 +7906,36 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded, 'discarded')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand, 'hand')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck, 'deck')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 2 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			c.fire_rate_wait = firerate
@@ -7959,7 +7952,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/phi.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
@@ -7973,39 +7966,36 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded, 'discarded')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand, 'hand')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck, 'deck')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 0 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			c.fire_rate_wait = firerate
@@ -8020,7 +8010,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/sigma.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		recursive: true,
 		spawn_level: "4,5,10",
 		spawn_probability: "0.1,0.1,1",
@@ -8034,39 +8024,36 @@ export const actions: Action[] = [
 			let mana_ = mana
 			
 			if ( discarded != null )  {
-				discarded.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(discarded, 'discarded')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( hand != null )  {
-				hand.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(hand, 'hand')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( deck != null )  {
-				deck.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(deck, 'deck')) {
 					let rec = check_recursion( data, recursion_level )
-					if (( data != null ) && ( data.type === 1 ) && ( rec > -1 ))  {
+					if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
 						call_action(ActionSource.ACTION, data, c,  rec )
 						setDontDrawActions(false)
 					}
-					return true;
-				})
+				}
 			}
 			
 			c.fire_rate_wait = firerate
@@ -8083,7 +8070,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/zeta.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_duplicate",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_manual_unlock: true,
 		recursive: true,
 		spawn_level: "1,2,3,10",
@@ -8101,17 +8088,17 @@ export const actions: Action[] = [
 			if (( children != null ) && ( inventory != null ))  {
 				let active_wand = ComponentGetValue2( inventory, "mActiveItem" )
 				
-				children.every((child_id: any, i: any) => {
+				for (const [i, child_id] of ipairs(children, 'children')) {
 					if ( EntityGetName( child_id ) === "inventory_quick" )  {
 						let wands = EntityGetAllChildren( child_id )
 						
 						if ( wands != null )  {
-							wands.every((wand_id: any, k: any) => {
+							for (const [k, wand_id] of ipairs(wands, 'wands')) {
 								if (( wand_id !== active_wand ) && EntityHasTag( wand_id, "wand" ))  {
 									let spells = EntityGetAllChildren( wand_id )
 									
 									if ( spells != null )  {
-										spells.every((spell_id: any, j: any) => {
+										for (const [j, spell_id] of ipairs(spells, 'spells')) {
 											let comp = EntityGetFirstComponentIncludingDisabled( spell_id, "ItemActionComponent" )
 											
 											if ( comp != null )  {
@@ -8119,16 +8106,13 @@ export const actions: Action[] = [
 												
 												options.push(action_id)
 											}
-											return true;
-										})
+										}
 									}
 								}
-								return true;
-							})
+							}
 						}
 					}
-					return true;
-				})
+				}
 			}
 			
 			if ( options.length > 0 )  {
@@ -8137,7 +8121,7 @@ export const actions: Action[] = [
 				let rnd = Random( 1, options.length )
 				let action_id = options[rnd]
 				
-				actions.every((data: any, i: any) => {
+				for (const [i, data] of ipairs(actions, 'actions')) {
 					if ( data.id === action_id )  {
 						let rec = check_recursion( data, recursion_level )
 						if ( rec > -1 )  {
@@ -8145,10 +8129,9 @@ export const actions: Action[] = [
 							call_action(ActionSource.ACTION, data, c,  rec )
 							setDontDrawActions(false)
 						}
-						return false;
+						break
 					}
-					return true;
-				})
+				}
 			}
 			
 			draw_actions( 1, true )
@@ -8161,7 +8144,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/divide_2.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_musicbox",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "3,5,6,10",
 		spawn_probability: "0.2,0.3,0.2,1",
 		price: 200,
@@ -8176,7 +8159,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8191,7 +8174,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8215,7 +8198,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8243,7 +8226,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/divide_3.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_musicbox",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "4,5,6,10",
 		spawn_probability: "0.1,0.1,0.2,1",
 		price: 250,
@@ -8258,7 +8241,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8273,7 +8256,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8297,7 +8280,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8325,7 +8308,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/divide_4.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_musicbox",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "5,6,10",
 		spawn_probability: "0.1,0.1,1",
 		price: 300,
@@ -8340,7 +8323,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8355,7 +8338,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8379,7 +8362,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8407,7 +8390,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/divide_10.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_divide",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 400,
@@ -8424,7 +8407,7 @@ export const actions: Action[] = [
 			
 			if ( deck.length > 0 )  {
 				data = deck[iter - 1] || null
-		} 	else {
+			} else {
 				data = null
 			}
 			
@@ -8439,7 +8422,7 @@ export const actions: Action[] = [
 				let firerate = c.fire_rate_wait
 				let reload = current_reload_time
 				
-				for (let i = 1; i <= count; i++) {
+				for (const i of luaFor(1, count)) {
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
@@ -8463,7 +8446,7 @@ export const actions: Action[] = [
 					c.fire_rate_wait = firerate
 					setCurrentReloadTime(reload)
 					
-					for (let i = 1; i <= iter_max; i++) {
+					for (const i of luaFor(1, iter_max)) {
 						if (deck.length > 0)  {
 							let d = deck[1 - 1]
 							discarded.push(d)
@@ -8494,7 +8477,7 @@ export const actions: Action[] = [
 		related_extra_entities: [ "data/entities/misc/effect_meteor_rain.xml" ],
 		spawn_requires_flag: "card_unlocked_rain",
 		never_unlimited: true,
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "6,10",
 		spawn_probability: "0.1,1",
 		price: 300,
@@ -8517,7 +8500,7 @@ export const actions: Action[] = [
 		related_projectiles: ["data/entities/animals/worm_big.xml"],
 		spawn_requires_flag: "card_unlocked_rain",
 		never_unlimited: true,
-		type: ACTION_TYPE_STATIC_PROJECTILE,
+		type: "static",
 		spawn_level: "6,10",
 		spawn_probability: "0.1,1",
 		price: 300,
@@ -8537,7 +8520,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/reset.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		spawn_requires_flag: "card_unlocked_mestari",
-		type: ACTION_TYPE_UTILITY,
+		type: "utility",
 		recursive: true,
 		spawn_level: "10",
 		spawn_probability: "1",
@@ -8546,17 +8529,15 @@ export const actions: Action[] = [
 		action: (c: GunActionState) => {
 			setCurrentReloadTime(current_reload_time - 25)
 			
-			hand.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(hand, 'hand')) {
 				
 				discarded.push(v)
-				return true;
-			})
+			}
 			
-			deck.every((v: any, i: any) => {
+			for (const [i, v] of ipairs(deck, 'deck')) {
 				
 				discarded.push(v)
-				return true;
-			})
+			}
 			
 			clearHand()
 			clearDeck()
@@ -8575,7 +8556,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/if_enemy.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_maths",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 100,
@@ -8592,11 +8573,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck, 'deck')) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8606,11 +8587,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8622,7 +8602,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 						
 						if ( v != null )  {
@@ -8630,17 +8610,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {
@@ -8662,7 +8642,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/if_projectile.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_maths",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 100,
@@ -8679,11 +8659,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck, 'deck')) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8693,11 +8673,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8709,7 +8688,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 						
 						if ( v != null )  {
@@ -8717,17 +8696,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {
@@ -8749,7 +8728,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/if_hp.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_maths",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 100,
@@ -8774,11 +8753,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck, 'deck')) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8788,11 +8767,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8804,7 +8782,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 						
 						if ( v != null )  {
@@ -8812,17 +8790,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {
@@ -8844,7 +8822,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/if_half.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_maths",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 100,
@@ -8866,11 +8844,11 @@ export const actions: Action[] = [
 			}
 			
 			if ( deck.length > 0 )  {
-				deck.every((v: any, i: any) => {
+				for (const [i, v] of ipairs(deck, 'deck')) {
 					if ( v != null )  {
 						if ((  v.id.substring( 1-1, 3 ) === "IF_" ) && ( v.id !== "IF_END" ) && ( v.id !== "IF_ELSE" ))  {
 							endpoint = -1
-							return false;
+							break
 						}
 						
 						if ( v.id === "IF_ELSE" )  {
@@ -8880,11 +8858,10 @@ export const actions: Action[] = [
 						
 						if ( v.id === "IF_END" )  {
 							endpoint = i + 1
-							return false;
+							break
 						}
 					}
-					return true;
-				})
+				}
 				
 				let envelope_min = 1
 				let envelope_max = 1
@@ -8896,7 +8873,7 @@ export const actions: Action[] = [
 						envelope_max = endpoint
 					}
 					
-					for (let i = envelope_min; i <= envelope_max; i++) {
+					for (const i of luaFor(envelope_min, envelope_max)) {
 						let v = deck[envelope_min - 1]
 					
 						if ( v != null )  {
@@ -8904,17 +8881,17 @@ export const actions: Action[] = [
 							deck.splice(envelope_min - 1, 1)
 						}
 					}
-			} 	else {
+				} else {
 					if ( elsepoint > 0 )  {
 						envelope_min = elsepoint
 						
 						if ( endpoint > 0 )  {
 							envelope_max = endpoint
-					} 	else {
+						} else {
 							envelope_max = deck.length
 						}
 						
-						for (let i = envelope_min; i <= envelope_max; i++) {
+						for (const i of luaFor(envelope_min, envelope_max)) {
 							let v = deck[envelope_min - 1]
 							
 							if ( v != null )  {
@@ -8936,7 +8913,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/if_end.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_maths",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 10,
@@ -8952,7 +8929,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/if_else.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		spawn_requires_flag: "card_unlocked_maths",
-		type: ACTION_TYPE_OTHER,
+		type: "other",
 		spawn_level: "10",
 		spawn_probability: "1",
 		price: 10,
@@ -8968,7 +8945,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_red.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_red.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
 		spawn_probability: "0.2,0.2,0.2,0.2,0.2,0.2",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -8992,7 +8969,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_orange.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_orange.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -9016,7 +8993,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_green.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_green.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -9040,7 +9017,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_yellow.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_yellow.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -9064,7 +9041,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_purple.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_purple.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -9088,7 +9065,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_blue.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_blue.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -9112,7 +9089,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_rainbow.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_rainbow.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -9136,7 +9113,7 @@ export const actions: Action[] = [
 		sprite: "data/ui_gfx/gun_actions/colour_invis.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/colour_invis.xml" ],
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "2,3,4",
 		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
@@ -9159,7 +9136,7 @@ export const actions: Action[] = [
 		description: "$actiondesc_rainbow_trail",
 		sprite: "data/ui_gfx/gun_actions/rainbow_trail.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-		type: ACTION_TYPE_MODIFIER,
+		type: "modifier",
 		spawn_level: "10",
 		spawn_probability: "0",
 		spawn_requires_flag: "card_unlocked_rainbow_trail",

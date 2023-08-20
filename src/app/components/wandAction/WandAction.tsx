@@ -1,31 +1,45 @@
-import styled from 'styled-components';
-import { DeckIndexAnnotation } from './annotations/DeckIndexAnnotation';
-import { ActionSourceAnnotation } from './annotations/ActionSourceAnnotation';
-import { ActionProxyAnnotation } from './annotations/ActionProxyAnnotation';
-import { DeleteSpellAnnotation } from './annotations/DeleteSpellAnnotation';
+import styled from 'styled-components/macro';
 import { useState } from 'react';
+import { actionTypeInfoMap } from '../../calc/extra/types';
+import {
+  ActionProxyAnnotation,
+  ActionSourceAnnotation,
+  DeckIndexAnnotation,
+  DeleteSpellAnnotation,
+  DontDrawAnnotation,
+  FriendlyFireAnnotation,
+  NoManaAnnotation,
+  RecursionAnnotation,
+} from './annotations/';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
-import { RecursionAnnotation } from './annotations/RecursionAnnotation';
 import { iterativeActions, recursiveActions } from '../../calc/eval/lookups';
-import { DontDrawAnnotation } from './annotations/DontDrawAnnotation';
 
 export const DEFAULT_SIZE = 48;
 
 const ImageBackgroundDiv = styled.div<{
   size: number;
-  imgUrl: string;
+  actionImgUrl: string;
+  typeImgUrl?: string;
+  mouseOver: boolean;
 }>`
   position: relative;
-  background-color: #111;
-  min-width: ${(props) => props.size}px;
-  width: ${(props) => props.size}px;
-  height: ${(props) => props.size}px;
-  background-image: url(${(props) => props.imgUrl});
+  min-width: ${({ size }) => size}px;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
+  background-image: url(/${({ actionImgUrl }) => actionImgUrl})
+    ${({ typeImgUrl }) => (typeImgUrl ? `, url(/${typeImgUrl})` : ``)};
   background-size: cover;
   font-family: monospace;
   font-weight: bold;
   user-select: none;
   image-rendering: pixelated;
+
+  &:hover {
+    transform-origin: center;
+    transform: scale(109%);
+    transition: transform var(--anim-basic-in);
+    cursor: move;
+  }
 `;
 
 type Props = {
@@ -40,15 +54,25 @@ export function WandAction(props: Props) {
   const size = props.size || DEFAULT_SIZE;
 
   if (!props.action) {
-    return <ImageBackgroundDiv size={size} imgUrl="" />;
+    return (
+      <ImageBackgroundDiv
+        size={size}
+        onMouseEnter={() => setMouseOver(true)}
+        onMouseLeave={() => setMouseOver(false)}
+        actionImgUrl=""
+        mouseOver={mouseOver}
+      />
+    );
   }
 
   return (
     <ImageBackgroundDiv
       size={size}
-      imgUrl={props.action.sprite}
+      actionImgUrl={props.action.sprite}
+      typeImgUrl={actionTypeInfoMap[props.action.type]?.src}
       onMouseEnter={() => setMouseOver(true)}
       onMouseLeave={() => setMouseOver(false)}
+      mouseOver={mouseOver}
     >
       <DeckIndexAnnotation size={size} deckIndex={props.deckIndex} />
       <RecursionAnnotation
@@ -65,6 +89,8 @@ export function WandAction(props: Props) {
         visible={mouseOver}
         deleteSpell={props.onDeleteSpell}
       />
+      <NoManaAnnotation size={size} />
+      <FriendlyFireAnnotation size={size} />
       <DontDrawAnnotation
         size={size}
         dontDrawActions={props.dont_draw_actions}

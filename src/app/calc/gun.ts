@@ -17,13 +17,6 @@ import {
   ShotEffects,
 } from './extra/types';
 import { Random } from './extra/util';
-import {
-  ACTION_TYPE_MATERIAL,
-  ACTION_TYPE_OTHER,
-  ACTION_TYPE_PROJECTILE,
-  ACTION_TYPE_STATIC_PROJECTILE,
-  ACTION_TYPE_UTILITY,
-} from './gun_enums';
 import { extra_modifiers } from './gun_extra_modifiers';
 import {
   ActionUsed,
@@ -45,7 +38,7 @@ import {
   StartReload,
 } from './extra/ext_functions';
 import { init_state_from_game } from './extra/init';
-import { actions } from './__generated__/gun_actions';
+import { actions } from './gun_actions';
 import { ActionSource } from './eval/types';
 
 // constants
@@ -70,19 +63,19 @@ export let state_from_game: GunActionState = init_state_from_game();
 export let discarded: Action[] = [];
 
 export function clearDiscarded() {
-  discarded = []
+  discarded = [];
 }
 
 export let deck: Action[] = [];
 
 export function clearDeck() {
-  deck = []
+  deck = [];
 }
 
 export let hand: Action[] = [];
 
 export function clearHand() {
-  hand = []
+  hand = [];
 }
 
 export let c: GunActionState;
@@ -274,17 +267,17 @@ function play_action(action: Action) {
 
   let is_projectile = false;
 
-  if (action.type === ACTION_TYPE_PROJECTILE) {
+  if (action.type === 'projectile') {
     is_projectile = true;
     got_projectiles = true;
   }
 
-  if (action.type === ACTION_TYPE_STATIC_PROJECTILE) {
+  if (action.type === 'static') {
     is_projectile = true;
     got_projectiles = true;
   }
 
-  if (action.type === ACTION_TYPE_MATERIAL) {
+  if (action.type === 'material') {
     is_projectile = true;
     got_projectiles = true;
   }
@@ -473,11 +466,11 @@ function move_hand_to_discarded() {
   hand.forEach((action) => {
     let identify = false;
 
-    // ACTION_TYPE_MATERIAL, ACTION_TYPE_PROJECTILE are handled via got_projectiles
+    // 'material', 'projectile'  are handled via got_projectiles
     if (
       got_projectiles ||
-      action.type === ACTION_TYPE_OTHER ||
-      action.type === ACTION_TYPE_UTILITY
+      action.type === 'other' ||
+      action.type === 'utility'
     ) {
       if (action.uses_remaining && action.uses_remaining > 0) {
         if (action.custom_uses_logic) {

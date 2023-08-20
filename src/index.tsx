@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './fonts/NoitaPixel.ttf';
+import './fonts/NoitaGlyphScaled.ttf';
 import App from './app/App';
 import reportWebVitals from './reportWebVitals';
 

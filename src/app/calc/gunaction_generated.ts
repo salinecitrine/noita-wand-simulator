@@ -1,4 +1,3 @@
-import { ACTION_TYPE_PROJECTILE } from './gun_enums';
 import { GunActionState } from './extra/types';
 import { RegisterGunAction } from './extra/ext_functions';
 
@@ -9,7 +8,7 @@ export const defaultGunActionState: GunActionState = {
   action_sprite_filename: '',
   action_unidentified_sprite_filename:
     'data/ui_gfx/gun_actions/unidentified.png',
-  action_type: ACTION_TYPE_PROJECTILE,
+  action_type: 'projectile',
   action_spawn_level: '',
   action_spawn_probability: '',
   action_spawn_requires_flag: '',
@@ -39,6 +38,7 @@ export const defaultGunActionState: GunActionState = {
   damage_electricity_add: 0.0,
   damage_fire_add: 0.0,
   damage_explosion_add: 0.0,
+  damage_explosion: 0.0,
   damage_ice_add: 0.0,
   damage_slice_add: 0.0,
   damage_healing_add: 0.0,
@@ -46,6 +46,7 @@ export const defaultGunActionState: GunActionState = {
   damage_drill_add: 0.0,
   damage_critical_chance: 0,
   damage_critical_multiplier: 0.0,
+  damage_null_all: 0,
   explosion_damage_to_materials: 0,
   knockback_force: 0,
   reload_time: 0,
@@ -81,7 +82,10 @@ export function ConfigGunActionInfo_PassToGame(value: GunActionState) {
 // ext function
 function ConfigGunActionInfo_ReadToLua(...args: any[]) {}
 
-export function ConfigGunActionInfo_Copy(source: any, dest: any) {
+export function ConfigGunActionInfo_Copy<T extends GunActionState>(
+  source: T,
+  dest: T,
+): void {
   dest.action_id = source.action_id;
   dest.action_name = source.action_name;
   dest.action_description = source.action_description;
@@ -118,6 +122,7 @@ export function ConfigGunActionInfo_Copy(source: any, dest: any) {
   dest.damage_electricity_add = source.damage_electricity_add;
   dest.damage_fire_add = source.damage_fire_add;
   dest.damage_explosion_add = source.damage_explosion_add;
+  dest.damage_explosion = source.damage_explosion;
   dest.damage_ice_add = source.damage_ice_add;
   dest.damage_slice_add = source.damage_slice_add;
   dest.damage_healing_add = source.damage_healing_add;
@@ -125,6 +130,7 @@ export function ConfigGunActionInfo_Copy(source: any, dest: any) {
   dest.damage_drill_add = source.damage_drill_add;
   dest.damage_critical_chance = source.damage_critical_chance;
   dest.damage_critical_multiplier = source.damage_critical_multiplier;
+  dest.damage_null_all = source.damage_null_all;
   dest.explosion_damage_to_materials = source.explosion_damage_to_materials;
   dest.knockback_force = source.knockback_force;
   dest.reload_time = source.reload_time;

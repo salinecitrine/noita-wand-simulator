@@ -1,4 +1,4 @@
-import { Action, GunActionState } from './types';
+import { Action, ComponentID, EntityID, GunActionState } from './types';
 
 // listener logic
 
@@ -157,7 +157,7 @@ export function EntityGetWithTag(tag: string): any {
   return {};
 }
 
-export function GetUpdatedEntityID(): string {
+export function GetUpdatedEntityID(): EntityID {
   const result = onEvent('GetUpdatedEntityID');
   if (result !== undefined) {
     return result;
@@ -165,12 +165,15 @@ export function GetUpdatedEntityID(): string {
   return 'dummy entity';
 }
 
-export function EntityGetComponent(entity_id: any, component: string): any {
+export function EntityGetComponent(
+  entity_id: string,
+  component: string,
+): ComponentID[] {
   const result = onEvent('EntityGetComponent', entity_id, component);
   if (result !== undefined) {
     return result;
   }
-  return {};
+  return [component];
 }
 
 export function EntityGetFirstComponent(
@@ -266,7 +269,7 @@ export function EntityGetAllChildren(entityId: any): any {
   if (result !== undefined) {
     return result;
   }
-  return {};
+  return [];
 }
 
 export function EntityGetName(childId: any): any {

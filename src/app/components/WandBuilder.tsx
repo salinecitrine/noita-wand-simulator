@@ -1,19 +1,32 @@
+import styled from 'styled-components/macro';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
-import styled from 'styled-components';
-import SectionHeader from './SectionHeader';
-import { SaveImageButton } from './generic/SaveImageButton';
+import { WandBorder } from './WandBorder';
+import { SaveImageButton } from './generic';
 import React, { useRef } from 'react';
 
 const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #555;
+  background-color: #0f0e0e;
+  margin: 10px 6px;
 `;
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: row;
-  background-color: #555;
+  align-items: center;
+  background-color: #000;
+  padding: 10px;
+`;
+
+const CopySpells = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: end;
+  font-family: 'noita', '04b03', sans-serif;
+  font-variant: small-caps;
+  color: #929292;
 `;
 
 const WandActionEditorWrapper = styled.div`
@@ -29,34 +42,27 @@ export function WandBuilder(props: Props) {
 
   return (
     <MainDiv>
-      <SectionHeader
-        title={'Wand'}
-        rightChildren={
-          <>
-            <SaveImageButton
-              targetRef={spellsRef}
-              fileName={'spells'}
-              enabled={true}
-            />
-            (spells only)
-            <SaveImageButton
-              targetRef={wandRef}
-              fileName={'wand'}
-              enabled={true}
-            />
-            (both)
-          </>
-        }
-      />
-      <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
-        <WandStatsEditor />
-        <WandActionEditorWrapper
-          ref={spellsRef as any}
-          className={'saveImageRoot'}
-        >
-          <WandActionEditor />
-        </WandActionEditorWrapper>
-      </ContentDiv>
+      <WandBorder>
+        <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
+          <WandStatsEditor />
+          <WandActionEditorWrapper
+            ref={spellsRef as any}
+            className={'saveImageRoot'}
+          >
+            <WandActionEditor />
+          </WandActionEditorWrapper>
+        </ContentDiv>
+      </WandBorder>
+      <CopySpells>
+        <SaveImageButton
+          targetRef={spellsRef}
+          fileName={'spells'}
+          enabled={true}
+        />
+        <span>Spells</span>
+        <SaveImageButton targetRef={wandRef} fileName={'wand'} enabled={true} />
+        <span>Wand</span>
+      </CopySpells>
     </MainDiv>
   );
 }

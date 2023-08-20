@@ -1,18 +1,33 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
+import { useState } from 'react';
 
 type Props = {};
 
-const HeaderDiv = styled.div`
+const logoVariants = [
+  '/logo/logo-blue.png',
+  '/logo/logo-green.png',
+  '/logo/logo-orange.png',
+  '/logo/logo-purple.png',
+  '/logo/logo-red.png',
+  '/logo/logo-teal.png',
+  '/logo/logo-yellow.png',
+];
+
+const getRandomInteger = (max: number) => Math.floor(Math.random() * max);
+
+const HeaderDiv = styled.div<{
+  imgUrl?: string;
+}>`
   display: flex;
   flex-direction: row;
-  color: #111;
-  background-color: #bbb;
+  color: #eee;
   justify-content: space-between;
-
-  h2 {
-    font-weight: bold;
-    margin: 0 0 0 20px;
-  }
+  background-image: url(${({ imgUrl = '/logo/logo.png' }) => imgUrl});
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 60px;
+  image-rendering: pixelated;
+  margin: 14px 16px;
 `;
 
 const SpacerDiv = styled.div`
@@ -22,17 +37,19 @@ const SpacerDiv = styled.div`
 
 const ExtraDiv = styled.div`
   display: flex;
-  align-self: center;
-  width: 220px;
+  align-self: end;
   margin-right: 15px;
 `;
 
-export function MainHeader(props: React.PropsWithChildren<Props>) {
+export function MainHeader({ children }: React.PropsWithChildren<Props>) {
+  const [logoVariant, setLogoVariant] = useState(
+    logoVariants[getRandomInteger(logoVariants.length)],
+  );
+
   return (
-    <HeaderDiv>
-      <h2>Noita Wand Simulator</h2>
+    <HeaderDiv imgUrl={logoVariant}>
       <SpacerDiv />
-      <ExtraDiv>{props.children}</ExtraDiv>
+      <ExtraDiv>{children}</ExtraDiv>
     </HeaderDiv>
   );
 }

@@ -1,21 +1,23 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Action } from '../../../calc/extra/types';
 import { useAppSelector } from '../../../redux/hooks';
 import { selectConfig } from '../../../redux/configSlice';
 
-const ProxyDiv = styled.div<{
+export const ProxyDiv = styled.div<{
   size: number;
   imgUrl: string;
 }>`
+  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
-  width: ${(props) => props.size / 3}px;
-  height: ${(props) => props.size / 3}px;
+  width: ${({ size }) => size / 3}px;
+  height: ${({ size }) => size / 3}px;
   border: 1px solid #999;
-  background-image: url(${(props) => props.imgUrl});
+  background-image: url(/${({ imgUrl }) => imgUrl});
   background-size: cover;
   background-color: #111;
+  font-family: var(--font-family-noita-default);
 `;
 
 type Props = {

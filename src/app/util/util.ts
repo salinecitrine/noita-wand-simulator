@@ -65,16 +65,11 @@ export const lazy = <T>(callback: () => T) => {
   };
 };
 
-export const ACTION_TYPES = [
-  'PROJECTILE',
-  'STATIC_PROJECTILE',
-  'MODIFIER',
-  'DRAW_MANY',
-  'MATERIAL',
-  'OTHER',
-  'UTILITY',
-  'PASSIVE',
-];
+export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
+  Object.keys(obj) as (keyof T)[];
+export type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+export const objectEntries = <T extends object>(obj: T): Entries<T>[] =>
+  Object.entries(obj) as Entries<T>[];
 
 export function groupBy<T, K extends string>(arr: T[], keyFn: (x: T) => K) {
   return arr.reduce((acc, cur) => {

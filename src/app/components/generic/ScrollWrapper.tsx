@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { PropsWithChildren } from 'react';
 
 const ParentDiv = styled.div`
+  padding: 12px 8px;
   overflow-x: auto;
   transform: rotateX(180deg);
 `;

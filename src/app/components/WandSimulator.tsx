@@ -1,17 +1,15 @@
 import { WandBuilder } from './WandBuilder';
 import { ShotResultList } from './shotResult/ShotResultList';
-import { WandPresetButton } from './presetMenu/WandPresetButton';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
+import SectionHeader from './SectionHeader';
 import { SpellSelector } from './SpellSelector';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import styled from 'styled-components';
-import { ConfigButton } from './config/ConfigButton';
-import { ResetButton } from './ResetButton';
+import { ConfigButton } from './buttons';
 import { useEffect } from 'react';
-import { ActionCreators } from 'redux-undo';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 
@@ -32,39 +30,17 @@ type Props = {};
 
 export function WandSimulator(props: Props) {
   const { config } = useAppSelector(selectConfig);
-  const dispatch = useAppDispatch();
+  useAppDispatch();
 
   useEffect(() => {
     forceDisableCanvasSmoothing();
   }, []);
 
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'z') {
-        dispatch(ActionCreators.undo());
-      }
-    };
-    window.addEventListener('keydown', listener);
-    return () => window.removeEventListener('keydown', listener);
-  }, [dispatch]);
-
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'z') {
-        dispatch(ActionCreators.redo());
-      }
-    };
-    window.addEventListener('keydown', listener);
-    return () => window.removeEventListener('keydown', listener);
-  }, [dispatch]);
-
   return (
     <Column>
       <MainHeader>
         <Row>
-          <ResetButton />
           <ConfigButton />
-          <WandPresetButton />
         </Row>
       </MainHeader>
       <Column>
@@ -72,10 +48,14 @@ export function WandSimulator(props: Props) {
           <Row>
             <SpellSelector />
           </Row>
-          <CastConfigEditor />
           <WandBuilder />
+          <CastConfigEditor />
         </DndProvider>
       </Column>
+      <SectionHeader
+        title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
+        rightChildren={<div>Status: Running</div>}
+      />
       {!config.pauseCalculations && <ShotResultList {...config} />}
     </Column>
   );

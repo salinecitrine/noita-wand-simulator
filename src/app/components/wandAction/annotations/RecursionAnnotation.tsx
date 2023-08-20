@@ -5,9 +5,10 @@ import { selectConfig } from '../../../redux/configSlice';
 const RecursionDiv = styled.div<{
   size: number;
 }>`
+  pointer-events: none;
   position: absolute;
-  top: 0;
-  right: 0;
+  bottom: -7px;
+  left: 0;
   width: ${(props) => props.size / 4}px;
   height: ${(props) => props.size / 4}px;
   border: 1px solid #999;
@@ -16,6 +17,7 @@ const RecursionDiv = styled.div<{
   font-size: 10px;
   line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
+  font-family: var(--font-family-noita-default);
 `;
 
 const IterationDiv = styled.div<{
@@ -23,8 +25,8 @@ const IterationDiv = styled.div<{
   offset: number;
 }>`
   position: absolute;
-  top: 0;
-  right: ${(props) =>
+  bottom: -7px;
+  left: ${(props) =>
     (props.size * props.offset) / 4 + (props.offset > 0 ? 1 : 0)}px;
   width: ${(props) => props.size / 4}px;
   height: ${(props) => props.size / 4}px;
@@ -34,6 +36,7 @@ const IterationDiv = styled.div<{
   font-size: 10px;
   line-height: ${(props) => props.size / 3 - 2}px;
   text-align: center;
+  font-family: var(--font-family-noita-default);
 `;
 
 type Props = {

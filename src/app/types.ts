@@ -6,6 +6,9 @@ export type Wand = Gun & {
   mana_max: number;
   mana_charge_speed: number;
   spread: number;
+  name: string;
+  pic: string;
+  speed: number;
 };
 
 export type Preset = {

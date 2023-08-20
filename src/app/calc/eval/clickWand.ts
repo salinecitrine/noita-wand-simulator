@@ -1,13 +1,6 @@
 import { Action, Gun } from '../extra/types';
 import { override, subscribe } from '../extra/ext_functions';
 import {
-  ACTION_TYPE_MATERIAL,
-  ACTION_TYPE_OTHER,
-  ACTION_TYPE_PROJECTILE,
-  ACTION_TYPE_STATIC_PROJECTILE,
-  ACTION_TYPE_UTILITY,
-} from '../gun_enums';
-import {
   _add_card_to_deck,
   _clear_deck,
   _draw_actions_for_shot,
@@ -85,9 +78,9 @@ export function clickWand(
       override('ComponentGetValue2', (args) => {
         if (args[0] === 'IF_HP') {
           if (args[1] === 'hp') {
-            return requirements.hp ? 25 : 100;
+            return requirements.hp ? 25000 / 25 : 100000 / 25;
           } else if (args[1] === 'max_hp') {
-            return 100;
+            return 100000 / 25;
           }
         }
       }),
@@ -113,11 +106,11 @@ export function clickWand(
       case 'BeginProjectile':
         const validSourceActionCalls = calledActions.filter((a) => {
           return [
-            ACTION_TYPE_PROJECTILE,
-            ACTION_TYPE_STATIC_PROJECTILE,
-            ACTION_TYPE_MATERIAL,
-            ACTION_TYPE_OTHER,
-            ACTION_TYPE_UTILITY,
+            'projectile',
+            'static',
+            'material',
+            'other',
+            'utility',
           ].includes(a.action.type);
         });
 
@@ -242,9 +235,8 @@ export function clickWand(
 
     if (
       !fireUntilReload ||
-      (endOnRefresh &&
-        calledActions!.filter((a) => a.action.id === 'RESET').length > 0) ||
-      calledActions!.length === 0
+      calledActions!.length === 0 ||
+      (endOnRefresh && calledActions!.some((a) => a.action.id === 'RESET'))
     ) {
       break;
     }
