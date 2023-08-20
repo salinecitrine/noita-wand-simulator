@@ -97,7 +97,7 @@ def processFile(srcFile, dstFile):
   return '\n'.join(lines)
 
 with open(dstFile, 'w') as outFile:
-  outFile.write(processFiles(srcFile))
+  outFile.write(processFile(srcFile))
 
 with open(dstFileBeta, 'w') as outFile:
-  outFile.write(processFiles(srcFileBeta))
+  outFile.write(processFile(srcFileBeta))

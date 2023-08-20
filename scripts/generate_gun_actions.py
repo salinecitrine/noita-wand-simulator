@@ -255,7 +255,7 @@ def processFile(srcFile):
       variances.append(f'{subCount:>8} {sign}{delta:<7} | \'{pattern.pattern}\' >> \'{pattern.replace}\'')
 
   if len(variances) > 0:
-    print(f'substitution count variances ({srcFile})')
+    print(f'\n\nsubstitution count variances ({srcFile})\n')
     print('   found change   | substitution')
     for variance in variances:
       print(f'{variance}')
