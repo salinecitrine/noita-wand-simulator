@@ -1,7 +1,7 @@
 ## Branches
 
-- ~~ `master` is deployed to https://noita-wand-simulator.salinecitrine.com/ ~~
-- ~~ `develop` is deployed to https://beta.noita-wand-simulator.salinecitrine.com/ ~~
+- `master` is deployed to https://noita-wand-simulator.salinecitrine.com/
+- `develop` is deployed to https://beta.noita-wand-simulator.salinecitrine.com/
 
 ## Available Scripts
 
