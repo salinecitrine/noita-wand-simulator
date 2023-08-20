@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 // import { useAppSelector } from '../../../redux/hooks';
 // import { selectConfig } from '../../../redux/configSlice';
 
-const SourceDiv = styled.div<{
+export const SourceDiv = styled.div<{
   size: number;
   colors: [string, string];
 }>`

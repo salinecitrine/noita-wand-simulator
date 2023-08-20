@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Action } from '../../../calc/extra/types';
 import { useAppSelector } from '../../../redux/hooks';
 import { selectConfig } from '../../../redux/configSlice';
 
-const ProxyDiv = styled.div<{
+export const ProxyDiv = styled.div<{
   size: number;
   imgUrl: string;
 }>`

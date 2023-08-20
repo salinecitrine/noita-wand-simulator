@@ -1,21 +1,22 @@
+import styled from 'styled-components/macro';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
 import { SaveImageButton } from './generic';
-import styled from 'styled-components';
 import React, { useRef } from 'react';
 
 const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #0f0e0e;
-  margin: 10px 0px;
+  margin: 10px 6px;
 `;
 const ContentDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   background-color: #000;
+  padding: 10px;
 `;
 
 const CopySpells = styled.div`

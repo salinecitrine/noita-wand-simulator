@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { DEFAULT_SIZE, WandAction } from './WandAction';
 import { NextActionArrow } from '../shotResult/TreeArrows';
 import {
@@ -11,7 +11,9 @@ import {
 import WandActionBorder from './WandActionBorder';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 
-const MainDiv = styled.div`
+const MainDiv = styled.div.attrs({
+  className: 'MainDiv',
+})`
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -20,7 +22,9 @@ const MainDiv = styled.div`
   font-size: 12px;
 `;
 
-const GroupDiv = styled.div`
+const GroupDiv = styled.div.attrs({
+  className: 'GroupDiv',
+})`
   display: flex;
   flex-direction: row;
 `;

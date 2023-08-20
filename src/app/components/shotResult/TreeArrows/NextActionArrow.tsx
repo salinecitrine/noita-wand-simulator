@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Action } from '../../../calc/extra/types';
 import { DEFAULT_SIZE } from '../../wandAction/WandAction';
 import { ActionTreeShotResultNodeDiv } from '../../shotResult/ActionTreeShotResult';

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useState } from 'react';
 import { actionTypeInfoMap } from '../../calc/extra/types';
 import {
