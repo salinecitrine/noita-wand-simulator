@@ -8,16 +8,21 @@ import { fixArraySize } from '../util/util';
 export interface WandState {
   wand: Wand;
   spells: (string | null)[];
+  messages: string[];
 }
 
 const stateFromUrl = generateWandStateFromSearch(window.location.search);
+
+// TODO these could be surfaced in the UI for debugging wand urls
+console.debug(stateFromUrl.messages);
 
 const initialState: WandState = {
   wand: {
     ...defaultWand,
     ...stateFromUrl.wand,
   },
-  spells: stateFromUrl.spells || Array(defaultWand.deck_capacity).fill(null),
+  spells: fixArraySize(stateFromUrl.spells, stateFromUrl.wand.deck_capacity ?? defaultWand.deck_capacity),
+  messages: stateFromUrl.messages || [],
 };
 
 export const wandSlice = createSlice({

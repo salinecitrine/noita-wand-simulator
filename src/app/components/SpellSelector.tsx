@@ -8,7 +8,14 @@ import WandActionBorder from './wandAction/WandActionBorder';
 import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
 import { Action } from '../calc/extra/types';
-import { ACTION_TYPES, constToDisplayString, groupBy } from '../util/util';
+import {
+  ActionType,
+  ActionTypeId,
+  groupBy,
+  actionTypeToIdMap,
+  actionTypeInfoMap,
+  objectEntries,
+} from '../util/util';
 import { Tabs } from './generic/Tabs';
 
 const MainDiv = styled.div`
@@ -28,8 +35,6 @@ const isSpellUnlocked = (
 ) => {
   return !spell.spawn_requires_flag || unlocks[spell.spawn_requires_flag];
 };
-
-const categoryDisplayNames = ACTION_TYPES.map((c) => constToDisplayString(c));
 
 type WandActionSelectProps = {
   action: Action;
@@ -53,21 +58,38 @@ export function SpellSelector(props: Props) {
     () => actions.filter((a) => isSpellUnlocked(config.unlocks, a)),
     [config.unlocks],
   );
-
   const actionsByType = useMemo(() => {
-    if (config.showSpellsInCategories) {
-      return groupBy(unlockedActions, (a) => categoryDisplayNames[a.type]);
-    } else {
-      return {
-        'All Spells': unlockedActions,
-      };
-    }
-  }, [config.showSpellsInCategories, unlockedActions]);
+    return groupBy(
+      unlockedActions,
+      ({ type }) => actionTypeToIdMap.get(type as ActionTypeId) as ActionType,
+    );
+  }, [unlockedActions]);
 
-  const tabs = useMemo(() => {
-    return Object.entries(actionsByType).map(([category, actions]) => {
-      return {
-        title: category,
+  const tabPerType = useMemo(() => {
+    return objectEntries(actionsByType)
+      .reverse()
+      .map(([actionType, actions]) => {
+        const actionTypeMapping = actionTypeInfoMap[actionType];
+
+        return {
+          title: actionTypeMapping?.name,
+          iconSrc: actionTypeMapping?.src,
+          content: (
+            <SpellCategorySpellsDiv>
+              {actions.map((a) => (
+                <WandActionSelect action={a} size={32} key={a.id} />
+              ))}
+            </SpellCategorySpellsDiv>
+          ),
+        };
+      });
+  }, [actionsByType]);
+
+  const allInOneTab = useMemo(() => {
+    return [
+      {
+        title: 'All Spells',
+        iconSrc: '',
         content: (
           <SpellCategorySpellsDiv>
             {actions.map((a) => (
@@ -75,9 +97,17 @@ export function SpellSelector(props: Props) {
             ))}
           </SpellCategorySpellsDiv>
         ),
-      };
-    });
-  }, [actionsByType]);
+      },
+    ];
+  }, []);
+
+  const tabs = useMemo(() => {
+    if (config.showSpellsInCategories) {
+      return tabPerType;
+    } else {
+      return allInOneTab;
+    }
+  }, [allInOneTab, config.showSpellsInCategories, tabPerType]);
 
   return (
     <MainDiv>

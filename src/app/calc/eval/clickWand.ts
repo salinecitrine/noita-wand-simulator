@@ -242,9 +242,8 @@ export function clickWand(
 
     if (
       !fireUntilReload ||
-      (endOnRefresh &&
-        calledActions!.filter((a) => a.action.id === 'RESET').length > 0) ||
-      calledActions!.length === 0
+      calledActions!.length === 0 ||
+      (endOnRefresh && calledActions!.some((a) => a.action.id === 'RESET'))
     ) {
       break;
     }

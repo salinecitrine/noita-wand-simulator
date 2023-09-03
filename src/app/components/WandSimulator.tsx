@@ -11,9 +11,10 @@ import styled from 'styled-components';
 import { ConfigButton } from './config/ConfigButton';
 import { ResetButton } from './ResetButton';
 import { useEffect } from 'react';
-import { ActionCreators } from 'redux-undo';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
+import { UndoButton } from './UndoButton';
+import { RedoButton } from './RedoButton';
 
 const Column = styled.div`
   display: flex;
@@ -38,30 +39,12 @@ export function WandSimulator(props: Props) {
     forceDisableCanvasSmoothing();
   }, []);
 
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'z') {
-        dispatch(ActionCreators.undo());
-      }
-    };
-    window.addEventListener('keydown', listener);
-    return () => window.removeEventListener('keydown', listener);
-  }, [dispatch]);
-
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'z') {
-        dispatch(ActionCreators.redo());
-      }
-    };
-    window.addEventListener('keydown', listener);
-    return () => window.removeEventListener('keydown', listener);
-  }, [dispatch]);
-
   return (
     <Column>
       <MainHeader>
         <Row>
+          <UndoButton />
+          <RedoButton />
           <ResetButton />
           <ConfigButton />
           <WandPresetButton />

@@ -23,7 +23,7 @@ const SpacerDiv = styled.div`
 const ExtraDiv = styled.div`
   display: flex;
   align-self: center;
-  width: 220px;
+  width: 340px;
   margin-right: 15px;
 `;
 
