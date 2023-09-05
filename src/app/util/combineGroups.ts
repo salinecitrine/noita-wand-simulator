@@ -1,7 +1,7 @@
 import { chunk } from './util';
 import _ from 'lodash';
 
-export type MultipleObject<T> = {
+export type MultipleObject<T extends Object> = {
   first: GroupedObject<T>;
   count: number;
 };
@@ -49,7 +49,7 @@ export function simplifyMultipleObject<T extends Object>(
   return grouped;
 }
 
-export function combineGroups<T>(
+export function combineGroups<T extends Object>(
   arr: T[],
   keyFn?: (o: T) => any,
   merge?: (o: GroupedObject<T>[]) => GroupedObject<T>,
@@ -63,7 +63,7 @@ export function combineGroups<T>(
   return result;
 }
 
-function mergeMatches<T, U extends GroupedObject<T>[]>(
+function mergeMatches<T extends Object, U extends GroupedObject<T>[]>(
   matches: U[],
   merge: (o: GroupedObject<T>[]) => GroupedObject<T>,
 ) {
@@ -79,7 +79,7 @@ function mergeMatches<T, U extends GroupedObject<T>[]>(
   return result;
 }
 
-export function _combineGroups<T>(
+export function _combineGroups<T extends Object>(
   arr: GroupedObject<T>[],
   keyFn?: (o: T) => any,
   merge?: (o: GroupedObject<T>[]) => GroupedObject<T>,

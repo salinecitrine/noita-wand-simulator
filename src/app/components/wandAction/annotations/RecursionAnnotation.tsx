@@ -52,7 +52,10 @@ export function RecursionAnnotation(props: Props) {
 
   const rec =
     props.recursion !== undefined &&
-    (props.recursive || (props.iterative && props.recursion > 0));
+    (props.recursive ||
+      (props.iterative &&
+        typeof props.recursion === 'number' &&
+        props.recursion > 0));
   const itr = props.iteration !== undefined && props.iterative;
 
   return (
